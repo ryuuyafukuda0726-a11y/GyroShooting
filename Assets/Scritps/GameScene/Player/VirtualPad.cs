@@ -10,7 +10,12 @@ public class VirtualPad : MonoBehaviour
     //パッド用変数
     [SerializeField]
     private GameObject padObject;
-    private const float inputRange = 1.0f;
+    private const float inputRange = 200.0f;
+    //移動用変数
+    private bool isMove = false;
+    //レイ用変数
+    private Ray ray;
+    private RaycastHit hit;
     //プラットフォーム用変数
     private Platform myPlatformInsctance;
 
@@ -31,15 +36,15 @@ public class VirtualPad : MonoBehaviour
     private void doInput()
     {
         TouchControl touch = Touchscreen.current.primaryTouch;
+        if (!touch.press.wasPressedThisFrame) return;
         
     }
 
     //プレイ用メソッド
     public Vector3 doPlay()
     {
-        Vector3 padVec = padObject.GetComponent<RectTransform>().anchoredPosition3D;
-        Vector3 virtualPadVec = GetComponent<RectTransform>().anchoredPosition3D;
-        Vector3 vec = padVec - virtualPadVec;
-        return vec.normalized;
+        Vector3 vec = padObject.GetComponent<RectTransform>().anchoredPosition3D;
+        float value = Vector3.Distance(Vector3.zero, vec);
+        return value > inputRange ? vec.normalized : vec / inputRange;
     }
 }
