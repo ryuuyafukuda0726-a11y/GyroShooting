@@ -35,36 +35,36 @@ public class TitleManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        myPlatformInstance = Platform.doGetPlatformInstance;
+        myPlatformInstance = Platform.GetPlatformInstance;
         touchScreenScript = touchScreenUI.GetComponent<TouchScreenImage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
-        doMyTitleDelegate = doInit;
+        doMyTitleDelegate = Init;
     }
 
     //初期設定用メソッド
-    private void doInit()
+    private void Init()
     {
-        touchScreenScript.doInit();
-        sceneChangeUIScript.doInit();
-        doMyTitleDelegate = doTitleEasing;
+        touchScreenScript.Init();
+        sceneChangeUIScript.Init();
+        doMyTitleDelegate = TitleEasing;
     }
 
     //タイトルへのイージング用メソッド
-    private void doTitleEasing()
+    private void TitleEasing()
     {
-        if (!sceneChangeUIScript.doEasingControl("Open")) return;
-        doMyTitleDelegate = doTitle;
+        if (!sceneChangeUIScript.EasingControl("Open")) return;
+        doMyTitleDelegate = Title;
     }
 
     //PCでの入力確認用メソッド
-    private void doCheckInputPCPlatform()
+    private void CheckInputPCPlatform()
     {
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
         sceneChange = true;
     }
 
     //デバイスでの入力確認用メソッド
-    private void doCheckInputMobilePlatform()
+    private void CheckInputMobilePlatform()
     {
         TouchControl touch = Touchscreen.current.primaryTouch;
         if (!touch.press.wasPressedThisFrame) return;
@@ -74,24 +74,24 @@ public class TitleManager : MonoBehaviour
     //入力確認用メソッド
     private void doCheckInput()
     {
-        if (!myPlatformInstance.doCheckPlatform()) doCheckInputPCPlatform();
-        else doCheckInputMobilePlatform();
+        if (!myPlatformInstance.CheckPlatform()) CheckInputPCPlatform();
+        else CheckInputMobilePlatform();
     }
 
     //GameSceneへの遷移用メソッド
-    private void doChengeGameScene()
+    private void ChengeGameScene()
     {
         if (!sceneChange) return;
-        if (!sceneChangeUIScript.doEasingControl("Close")) return;
+        if (!sceneChangeUIScript.EasingControl("Close")) return;
         SceneManager.LoadScene("GameScene");
     }
 
     //タイトル用メソッド
-    private void doTitle()
+    private void Title()
     {
-        doChengeGameScene();
+        ChengeGameScene();
         if (sceneChange) return;
-        touchScreenScript.doDisplayUI();
+        touchScreenScript.DisplayUI();
         doCheckInput();
     }
 

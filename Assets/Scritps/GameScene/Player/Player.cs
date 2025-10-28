@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     }
 
     //入力用メソッド
-    private void doInput()
+    private void Input()
     {
         Vector3 cameraCorrection = new Vector3(1.0f, 0.0f, 1.0f);
         inputMoveAxis = move.ReadValue<Vector2>();
@@ -37,22 +37,22 @@ public class Player : MonoBehaviour
     }
 
     //移動用メソッド
-    private void doMove()
+    private void Move()
     {
         transform.Translate(moveDirection * speed * Time.deltaTime);
     }
 
     //PCプレイ用メソッド
-    public void doPCPlay()
+    public void PCPlay()
     {
-        doInput();
-        doMove();
+        Input();
+        Move();
     }
 
     //Mobileプレイ用メソッド
-    public void doMobilePlay(Vector3 inputVec)
+    public void MobilePlay(Vector3 inputVec)
     {
         moveDirection = inputVec;
-        doMove();
+        Move();
     }
 }

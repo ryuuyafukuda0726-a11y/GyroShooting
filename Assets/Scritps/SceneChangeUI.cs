@@ -8,7 +8,7 @@ public class SceneChangeUI : MonoBehaviour
     private Material myMaterial;
     private int holeRadiusID;
     //イージング用変数
-    private EasingControl easing = EasingControl.SetEasing;
+    private EasingControl easing = global::EasingControl.SetEasing;
     private float aRadius, bRadius;
     private float radius = 0.0f;
     private const float maxRadius = 0.5f;
@@ -25,13 +25,13 @@ public class SceneChangeUI : MonoBehaviour
     }
 
     //初期設定用メソッド
-    public void doInit()
+    public void Init()
     {
         myMaterial.SetFloat(holeRadiusID, minRadius);
     }
 
     //イージング設定用メソッド
-    private void doSetEasing(string inMove)
+    private void SetEasing(string inMove)
     {
         //引数で設定をswitch
         switch (inMove)
@@ -51,7 +51,7 @@ public class SceneChangeUI : MonoBehaviour
     }
 
     //イージング用メソッド
-    private bool doEasing()
+    private bool Easing()
     {
         percent += Time.deltaTime;
 
@@ -63,21 +63,21 @@ public class SceneChangeUI : MonoBehaviour
     }
 
     //イージング管理用変数
-    public bool doEasingControl(string inMove)
+    public bool EasingControl(string inMove)
     {
         //イージングの進行状態でswitch
         switch(easing)
         {
-            case EasingControl.SetEasing:
-                doSetEasing(inMove);
+            case global::EasingControl.SetEasing:
+                SetEasing(inMove);
                 easing++;
                 break;
-            case EasingControl.Easing:
+            case global::EasingControl.Easing:
                 //イージングの実行状態を確認
-                if (doEasing()) easing++;
+                if (Easing()) easing++;
                 break;
-            case EasingControl.EasingEnd:
-                easing = EasingControl.SetEasing;
+            case global::EasingControl.EasingEnd:
+                easing = global::EasingControl.SetEasing;
                 return true;
             default:
                 break;

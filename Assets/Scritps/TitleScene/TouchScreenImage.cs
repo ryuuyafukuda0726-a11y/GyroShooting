@@ -20,13 +20,13 @@ public class TouchScreenImage : MonoBehaviour
     }
 
     //初期設定用メソッド
-    public void doInit()
+    public void Init()
     {
         myImage.material.color = Color.clear;
     }
 
     //UIの表示用メソッド
-    public void doDisplayUI()
+    public void DisplayUI()
     {
         value += flag ? Time.deltaTime : -Time.deltaTime;
         float alpha = Mathf.Sqrt(Mathf.Pow(1.0f, 2.0f) - Mathf.Pow(value * displaySpeed, 2.0f));

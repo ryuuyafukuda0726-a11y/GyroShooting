@@ -9,7 +9,7 @@ public class Platform : MonoBehaviour
     private bool mobile = false;
 
     //プラットフォームをDontDestroyOnLoadへの登録用メソッド
-    private void doSetDontDestroyPlatformInstance()
+    private void SetDontDestroyPlatformInstance()
     {
         //インスタンスのDontDestroyOnLoadの登録状態を確認
         if (myPlatformInstance == null)
@@ -26,18 +26,18 @@ public class Platform : MonoBehaviour
     //起動時メソッド
     private void Awake()
     {
-        doSetDontDestroyPlatformInstance();
+        SetDontDestroyPlatformInstance();
         mobile = UnityEngine.Device.Application.isMobilePlatform;
     }
 
     //プラットフォームの確認用メソッド
-    public bool doCheckPlatform()
+    public bool CheckPlatform()
     {
         return mobile;
     }
 
     //プラットフォームインスタンスの取得用メソッド
-    public static Platform doGetPlatformInstance
+    public static Platform GetPlatformInstance
     {
         get
         {

@@ -24,33 +24,33 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        myPlatformInstance = Platform.doGetPlatformInstance;
+        myPlatformInstance = Platform.GetPlatformInstance;
         playerScript = playerObject.GetComponent<Player>();
         virtualPadScript = virtualPadObject.GetComponent<VirtualPad>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
-        doMyGameDelegate = doInit;
+        doMyGameDelegate = Init;
     }
 
     //初期設定用メソッド
-    private void doInit()
+    private void Init()
     {
-        virtualPadScript.doInit();
-        sceneChangeUIScript.doInit();
-        doMyGameDelegate = doInGameEasing;
+        virtualPadScript.Init();
+        sceneChangeUIScript.Init();
+        doMyGameDelegate = InGameEasing;
     }
 
     //インゲームへのイージング用メソッド
-    private void doInGameEasing()
+    private void InGameEasing()
     {
-        if (!sceneChangeUIScript.doEasingControl("Open")) return;
-        doMyGameDelegate = doInGame;
+        if (!sceneChangeUIScript.EasingControl("Open")) return;
+        doMyGameDelegate = InGame;
     }
 
     //インゲーム用メソッド
-    private void doInGame()
+    private void InGame()
     {
-        if (!myPlatformInstance.doCheckPlatform()) playerScript.doPCPlay();
-        else playerScript.doMobilePlay(virtualPadScript.doPlay());
+        if (!myPlatformInstance.CheckPlatform()) playerScript.PCPlay();
+        else playerScript.MobilePlay(virtualPadScript.Play());
     }
 
     // Update is called once per frame
