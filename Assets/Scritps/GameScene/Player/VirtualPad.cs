@@ -47,7 +47,7 @@ public class VirtualPad : MonoBehaviour
     {
         if (isMove) return;
         if (!touch.press.wasPressedThisFrame) return;
-        float value = Mathf.Min(2.0f, distance.magnitude);
+        float value = Vector3.Distance(tapPoint, transform.position);
         if (value < inputRange) isMove = true;
     }
 

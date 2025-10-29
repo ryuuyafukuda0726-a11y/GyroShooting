@@ -23,11 +23,19 @@ public class Platform : MonoBehaviour
         }
     }
 
+    //カーソルの設定用メソッド
+    private void SetCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
     //起動時メソッド
     private void Awake()
     {
         SetDontDestroyPlatformInstance();
         mobile = UnityEngine.Device.Application.isMobilePlatform;
+        if (!mobile) SetCursor();
     }
 
     //プラットフォームの確認用メソッド

@@ -18,17 +18,19 @@ public class Player : MonoBehaviour
     //カメラ用変数
     [SerializeField]
     private CinemachineCamera playerCamera;
+    private PlayerCamera playerCameraScript;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         move = GetComponent<PlayerInput>().actions["Move"];
+        playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
     }
 
     //入力用メソッド
     private void Input()
     {
-        Vector3 cameraCorrection = new Vector3(1.0f, 0.0f, 1.0f);
+        Vector3 cameraCorrection = new Vector3(1.0f, 0.0f, 1.0f).normalized;
         inputMoveAxis = move.ReadValue<Vector2>();
         inputDirection.z = inputMoveAxis.x;
         inputDirection.x = inputMoveAxis.y;
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour
     {
         Input();
         Move();
+        playerCameraScript.Play(transform.position);
     }
 
     //Mobileプレイ用メソッド
