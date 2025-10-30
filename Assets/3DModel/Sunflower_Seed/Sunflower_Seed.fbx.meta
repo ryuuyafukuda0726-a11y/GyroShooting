@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: f05cbd5d5ac62b744b4b7e5faa42ecd9
+guid: 983bcc3996b8a1440bf9e2b532a2fac7
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: specular
-    second: {fileID: 2100000, guid: e3eae3c0dbdd27740a7a27427ce21ac9, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

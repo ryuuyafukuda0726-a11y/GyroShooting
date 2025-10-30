@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using Unity.VisualScripting;
+using System;
 
 //バーチャルパッド用変数
 public class VirtualPad : MonoBehaviour
@@ -18,20 +19,17 @@ public class VirtualPad : MonoBehaviour
     private const float inputRange = 150.0f;
     //移動用変数
     private bool isMove = false;
+    //モバイル操作のコールバック用変数
+    [NonSerialized]
+    public Action<Vector3> mobileControlCallBack;
     //プラットフォーム用変数
     private Platform myPlatformInsctance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        EnhancedTouchSupport.Enable();
         myPlatformInsctance = Platform.GetPlatformInstance;   
-    }
-
-    //初期設定用メソッド
-    public void Init()
-    {
-        if (myPlatformInsctance.CheckPlatform()) return;
-        transform.gameObject.SetActive(false);
     }
 
     //入力地点の取得用メソッド
@@ -80,12 +78,13 @@ public class VirtualPad : MonoBehaviour
     }
 
     //プレイ用メソッド
-    public Vector3 Play()
+    public void Play()
     {
+        if (!myPlatformInsctance.CheckPlatform()) return;
         GetTapPoint();
         InputStart();
         Input();
-        InputRelease();        
-        return CreateMoveVec();
+        InputRelease();
+        mobileControlCallBack(CreateMoveVec());
     }
 }

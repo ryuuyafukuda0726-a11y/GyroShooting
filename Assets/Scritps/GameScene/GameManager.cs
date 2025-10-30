@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject virtualPadObject;
     private VirtualPad virtualPadScript;
+    //発射ボタン用変数
+    [SerializeField]
+    private GameObject shotButtonObject;
     //シーン遷移時UI用変数
     [SerializeField]
     private GameObject sceneChangeUI;
@@ -31,10 +34,25 @@ public class GameManager : MonoBehaviour
         doMyGameDelegate = Init;
     }
 
+    //モバイル操作のコールバック設定用メソッド
+    private void SetMobileControlCallBack()
+    {
+        virtualPadScript.mobileControlCallBack = playerScript.MobileControlCallBack;
+    }
+
+    //PC操作時の初期設定用メソッド
+    private void ShotButtonInit()
+    {
+        if (myPlatformInstance.CheckPlatform()) return;
+        virtualPadObject.SetActive(false);
+        shotButtonObject.SetActive(false);
+    }
+
     //初期設定用メソッド
     private void Init()
     {
-        virtualPadScript.Init();
+        SetMobileControlCallBack();
+        ShotButtonInit();
         sceneChangeUIScript.Init();
         doMyGameDelegate = InGameEasing;
     }
@@ -49,8 +67,9 @@ public class GameManager : MonoBehaviour
     //インゲーム用メソッド
     private void InGame()
     {
-        if (!myPlatformInstance.CheckPlatform()) playerScript.PCPlay();
-        else playerScript.MobilePlay(virtualPadScript.Play());
+        playerScript.Play();
+        if (!myPlatformInstance.CheckPlatform()) return;
+        virtualPadScript.Play();
     }
 
     // Update is called once per frame

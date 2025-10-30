@@ -1,3 +1,4 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,21 +16,28 @@ public class Player : MonoBehaviour
     //移動速度用変数
     [SerializeField]
     private float speed = 0.0f;
+    //種用変数
+    [SerializeField]
+    private GameObject seedPrefab;
     //カメラ用変数
     [SerializeField]
     private CinemachineCamera playerCamera;
     private PlayerCamera playerCameraScript;
+    //プラットフォーム用変数
+    private Platform myPlatformInstance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         move = GetComponent<PlayerInput>().actions["Move"];
         playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
+        myPlatformInstance = Platform.GetPlatformInstance;
     }
 
     //入力用メソッド
     private void Input()
     {
+        if (myPlatformInstance.CheckPlatform()) return;
         Vector3 cameraCorrection = new Vector3(1.0f, 0.0f, 1.0f).normalized;
         inputMoveAxis = move.ReadValue<Vector2>();
         inputDirection.z = inputMoveAxis.x;
@@ -44,18 +52,31 @@ public class Player : MonoBehaviour
         transform.Translate(moveDirection * speed * Time.deltaTime);
     }
 
-    //PCプレイ用メソッド
-    public void PCPlay()
+    //種の生成用メソッド
+    public void CreateSeed()
+    {
+        GameObject.Instantiate(seedPrefab);
+    }
+
+    //種の発射用メソッド
+    private void ShotSeed()
+    {
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        CreateSeed();
+    }
+
+    //プレイ用メソッド
+    public void Play()
     {
         Input();
         Move();
         playerCameraScript.Play(transform.position);
+        ShotSeed();
     }
 
-    //Mobileプレイ用メソッド
-    public void MobilePlay(Vector3 inputVec)
+    //モバイル操作のコールバック用メソッド
+    public void MobileControlCallBack(Vector3 inputVec)
     {
         moveDirection = inputVec;
-        Move();
     }
 }
