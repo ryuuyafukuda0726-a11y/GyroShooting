@@ -43,7 +43,8 @@ public class Player : MonoBehaviour
         inputDirection.z = inputMoveAxis.x;
         inputDirection.x = inputMoveAxis.y;
         cameraForward = Vector3.Scale(playerCamera.transform.forward, cameraCorrection);
-        moveDirection = cameraForward * inputDirection.x + playerCamera.transform.right * inputDirection.z;
+        moveDirection = cameraForward * inputDirection.x 
+            + playerCamera.transform.right * inputDirection.z;
     }
 
     //移動用メソッド
@@ -55,7 +56,9 @@ public class Player : MonoBehaviour
     //種の生成用メソッド
     public void CreateSeed()
     {
-        GameObject.Instantiate(seedPrefab);
+        Vector3 createPos = transform.position + Vector3.up * 0.5f;
+        Quaternion createRot = transform.rotation;
+        GameObject.Instantiate(seedPrefab, createPos, createRot);
     }
 
     //種の発射用メソッド
