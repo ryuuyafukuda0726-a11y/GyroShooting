@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -14,6 +13,8 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 public class PlayerCamera : MonoBehaviour
 {
     //ÉåÉCópïœêî
+    Ray ray;
+    RaycastHit hit;
     [SerializeField]
     private GameObject canvas;
     private GraphicRaycaster raycaster;

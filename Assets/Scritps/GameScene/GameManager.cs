@@ -14,6 +14,14 @@ public class GameManager : MonoBehaviour
     //発射ボタン用変数
     [SerializeField]
     private GameObject shotButtonObject;
+    //ライフ用変数
+    [SerializeField]
+    private GameObject lifeGageImage;
+    private LifeGage lifeGageScript;
+    //残弾用変数
+    [SerializeField]
+    private GameObject bulletGageImage;
+    private BulletGage bulletGageScript;
     //シーン遷移時UI用変数
     [SerializeField]
     private GameObject sceneChangeUI;
@@ -30,6 +38,8 @@ public class GameManager : MonoBehaviour
         myPlatformInstance = Platform.GetPlatformInstance;
         playerScript = playerObject.GetComponent<Player>();
         virtualPadScript = virtualPadObject.GetComponent<VirtualPad>();
+        lifeGageScript = lifeGageImage.GetComponent<LifeGage>();
+        bulletGageScript = bulletGageImage.GetComponent<BulletGage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
         doMyGameDelegate = Init;
     }
@@ -53,6 +63,8 @@ public class GameManager : MonoBehaviour
     {
         SetMobileControlCallBack();
         ShotButtonInit();
+        lifeGageScript.Init();
+        bulletGageScript.Init();
         sceneChangeUIScript.Init();
         doMyGameDelegate = InGameEasing;
     }

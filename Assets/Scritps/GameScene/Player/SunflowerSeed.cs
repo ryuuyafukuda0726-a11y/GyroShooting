@@ -8,10 +8,17 @@ public class SunflowerSeed : MonoBehaviour
     private float bulletSpeed = 0.0f;
     [SerializeField]
     private float rotSpeed = 0.0f;
+    //重力加速度用変数
+    private const float g = -9.8f;
+    //移動用変数
+    private Vector3 value;
+    private float moveTime = 0.0f;
     //存在する時間用変数
     [SerializeField]
     private float lifeTime = 0.0f;
     private float myTime = 0.0f;
+    //発射確認用変数
+    private bool isShot = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,11 +26,31 @@ public class SunflowerSeed : MonoBehaviour
         
     }
 
+    //初速用メソッド
+    private void InitialVelocity()
+    {
+        if (isShot) return;
+        float dot = Vector3.Dot((transform.position - transform.forward).normalized, Vector3.up);
+        float y = bulletSpeed * dot;
+        dot = Vector3.Dot(transform.forward, Vector3.forward);
+        float z = (bulletSpeed - y) * dot;
+        float x = (bulletSpeed - y) * (1.0f - dot);
+        value = new Vector3(x, y, z);
+        isShot = true;
+    }
+
     //前進用メソッド
     private void MoveForward()
     {
-        transform.Translate(transform.forward * bulletSpeed * Time.deltaTime);
-        transform.Rotate(transform.forward * rotSpeed * Time.deltaTime);
+        
+        transform.Translate(value * Time.deltaTime);
+        //transform.Rotate(transform.forward * rotSpeed * Time.deltaTime);
+    }
+
+    //重力加速度用メソッド
+    private void GravitationalAcceleration()
+    {
+        transform.Translate(Vector3.up * g * Time.deltaTime);
     }
 
     //存在している時間の確認用メソッド
@@ -37,7 +64,9 @@ public class SunflowerSeed : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        InitialVelocity();
         MoveForward();
+        GravitationalAcceleration();
         CheckLifeTime();
     }
 }

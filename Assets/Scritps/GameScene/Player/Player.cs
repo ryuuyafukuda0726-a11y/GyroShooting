@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 //プレイヤー用スクリプトクラス
 public class Player : MonoBehaviour
 {
+    //
+    private float correctionX;
     //軸入力用変数
     private InputAction move;
     private Vector2 inputMoveAxis;
@@ -32,6 +34,7 @@ public class Player : MonoBehaviour
         move = GetComponent<PlayerInput>().actions["Move"];
         playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
         myPlatformInstance = Platform.GetPlatformInstance;
+        correctionX = playerCamera.transform.rotation.x;
     }
 
     //入力用メソッド
@@ -57,8 +60,11 @@ public class Player : MonoBehaviour
     public void CreateSeed()
     {
         Vector3 createPos = transform.position + Vector3.up * 0.5f;
-        Quaternion createRot = transform.rotation;
-        GameObject.Instantiate(seedPrefab, createPos, createRot);
+        float x = playerCamera.transform.rotation.x;
+        float y = playerCamera.transform.rotation.y;
+        float z = playerCamera.transform.rotation.z;
+        Quaternion createRot = Quaternion.Euler(x, y, z);
+        GameObject.Instantiate(seedPrefab, createPos, playerCamera.transform.rotation);
     }
 
     //種の発射用メソッド
