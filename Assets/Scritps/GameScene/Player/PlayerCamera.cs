@@ -29,6 +29,8 @@ public class PlayerCamera : MonoBehaviour
     private bool isControl = false;
     private CinemachineFollow follow;
     private Vector3 targetPos;
+    //ターゲットの設定コールバック用変数
+    public Action<Transform> SetTargetCallBack;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -127,6 +129,18 @@ public class PlayerCamera : MonoBehaviour
         SetPos(targetPos, Vector3.right, angle.y);
     }
 
+    //エイム用メソッド
+    private void Aim()
+    {
+        Camera camera = Camera.main;
+        int centerX = camera.pixelWidth / 2;
+        int centerY = camera.pixelHeight / 2;
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        ray = camera.ScreenPointToRay(new Vector3(centerX, centerY, 0));
+        if (!Physics.Raycast(ray, out hit, Mathf.Infinity)) return;
+        SetTargetCallBack(hit.collider.tag == "Humster" ? hit.collider.transform : null);
+    }
+
     //プレイ用メソッド
     public void Play(Vector3 inPos)
     {
@@ -134,5 +148,6 @@ public class PlayerCamera : MonoBehaviour
         if (!myPlatformInstance.CheckPlatform()) PCInputCameraOperation();
         else MobileInputCameraControl();
         CameraOperation();
+        Aim();
     }
 }

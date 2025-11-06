@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 //プレイヤー用スクリプトクラス
 public class Player : MonoBehaviour
 {
-    //
-    private float correctionX;
     //軸入力用変数
     private InputAction move;
     private Vector2 inputMoveAxis;
@@ -21,6 +19,8 @@ public class Player : MonoBehaviour
     //種用変数
     [SerializeField]
     private GameObject seedPrefab;
+    //ターゲット用変数
+    private Transform targetTransform;
     //カメラ用変数
     [SerializeField]
     private CinemachineCamera playerCamera;
@@ -28,13 +28,19 @@ public class Player : MonoBehaviour
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
+    //コールバックの設定用メソッド
+    private void SetCallBack()
+    {
+        playerCameraScript.SetTargetCallBack = SetTargetTransform;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         move = GetComponent<PlayerInput>().actions["Move"];
         playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
+        SetCallBack();
         myPlatformInstance = Platform.GetPlatformInstance;
-        correctionX = playerCamera.transform.rotation.x;
     }
 
     //入力用メソッド
@@ -87,5 +93,11 @@ public class Player : MonoBehaviour
     public void MobileControlCallBack(Vector3 inputVec)
     {
         moveDirection = inputVec;
+    }
+
+    //ターゲットの設定コールバック用メソッド
+    private void SetTargetTransform(Transform target)
+    {
+        targetTransform = target;
     }
 }

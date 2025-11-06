@@ -9,16 +9,18 @@ public class SunflowerSeed : MonoBehaviour
     [SerializeField]
     private float rotSpeed = 0.0f;
     //重力加速度用変数
-    private const float g = -9.8f;
+    private const float g = -3.2f;
     //移動用変数
     private Vector3 value;
-    private float moveTime = 0.0f;
     //存在する時間用変数
     [SerializeField]
     private float lifeTime = 0.0f;
     private float myTime = 0.0f;
     //発射確認用変数
     private bool isShot = false;
+    //ひまわりのモデル用変数
+    [SerializeField]
+    private GameObject sunflowerSeedObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,12 +32,14 @@ public class SunflowerSeed : MonoBehaviour
     private void InitialVelocity()
     {
         if (isShot) return;
-        float dot = Vector3.Dot((transform.position - transform.forward).normalized, Vector3.up);
-        float y = bulletSpeed * dot;
-        dot = Vector3.Dot(transform.forward, Vector3.forward);
-        float z = (bulletSpeed - y) * dot;
-        float x = (bulletSpeed - y) * (1.0f - dot);
-        value = new Vector3(x, y, z);
+        value = transform.forward;
+        Debug.Log(value);
+        //float dot = Vector3.Dot((transform.position - transform.forward).normalized, Vector3.up);
+        //float y = bulletSpeed * dot;
+        //dot = Vector3.Dot(transform.forward, Vector3.forward);
+        //float z = (bulletSpeed - y) * dot;
+        //float x = (bulletSpeed - y) * (1.0f - dot);
+        //value = new Vector3(x, y, z);
         isShot = true;
     }
 
@@ -43,14 +47,14 @@ public class SunflowerSeed : MonoBehaviour
     private void MoveForward()
     {
         
-        transform.Translate(value * Time.deltaTime);
-        //transform.Rotate(transform.forward * rotSpeed * Time.deltaTime);
+        transform.Translate(value * bulletSpeed * Time.deltaTime);
+        sunflowerSeedObject.transform.Rotate(transform.forward * rotSpeed * Time.deltaTime);
     }
 
     //重力加速度用メソッド
     private void GravitationalAcceleration()
     {
-        transform.Translate(Vector3.up * g * Time.deltaTime);
+        value.y += g * Time.deltaTime;
     }
 
     //存在している時間の確認用メソッド
