@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SunflowerSeed
   bulletSpeed: 100
-  rotSpeed: 1000
+  rotSpeed: 100
   lifeTime: 5
   sunflowerSeedObject: {fileID: 3374123073403814573}
 --- !u!1001 &4886641189775397169

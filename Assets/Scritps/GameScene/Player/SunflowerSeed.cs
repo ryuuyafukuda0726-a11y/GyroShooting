@@ -9,7 +9,7 @@ public class SunflowerSeed : MonoBehaviour
     [SerializeField]
     private float rotSpeed = 0.0f;
     //重力加速度用変数
-    private const float g = -3.2f;
+    private const float g = -2.5f;
     //移動用変数
     private Vector3 value;
     //存在する時間用変数
@@ -32,8 +32,7 @@ public class SunflowerSeed : MonoBehaviour
     private void InitialVelocity()
     {
         if (isShot) return;
-        value = transform.forward;
-        Debug.Log(value);
+        value = Vector3.forward;
         //float dot = Vector3.Dot((transform.position - transform.forward).normalized, Vector3.up);
         //float y = bulletSpeed * dot;
         //dot = Vector3.Dot(transform.forward, Vector3.forward);
@@ -43,12 +42,12 @@ public class SunflowerSeed : MonoBehaviour
         isShot = true;
     }
 
-    //前進用メソッド
-    private void MoveForward()
+    //移動用メソッド
+    private void Move()
     {
-        
         transform.Translate(value * bulletSpeed * Time.deltaTime);
-        sunflowerSeedObject.transform.Rotate(transform.forward * rotSpeed * Time.deltaTime);
+        sunflowerSeedObject.transform.Rotate(Vector3.forward * rotSpeed * Time.deltaTime);
+        
     }
 
     //重力加速度用メソッド
@@ -69,7 +68,7 @@ public class SunflowerSeed : MonoBehaviour
     void Update()
     {
         InitialVelocity();
-        MoveForward();
+        Move();
         GravitationalAcceleration();
         CheckLifeTime();
     }

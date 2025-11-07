@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 //プレイヤーのカメラ用スクリプトクラス
@@ -29,8 +30,9 @@ public class PlayerCamera : MonoBehaviour
     private bool isControl = false;
     private CinemachineFollow follow;
     private Vector3 targetPos;
-    //ターゲットの設定コールバック用変数
+    //コールバック用変数
     public Action<Transform> SetTargetCallBack;
+    public Action ShotCallBack;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -129,16 +131,27 @@ public class PlayerCamera : MonoBehaviour
         SetPos(targetPos, Vector3.right, angle.y);
     }
 
-    //エイム用メソッド
-    private void Aim()
+    //ターゲット設定用メソッド
+    private void SetTarget()
     {
         Camera camera = Camera.main;
         int centerX = camera.pixelWidth / 2;
         int centerY = camera.pixelHeight / 2;
-        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
         ray = camera.ScreenPointToRay(new Vector3(centerX, centerY, 0));
-        if (!Physics.Raycast(ray, out hit, Mathf.Infinity)) return;
+        if (!Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            SetTargetCallBack(null);
+            return;
+        }
         SetTargetCallBack(hit.collider.tag == "Humster" ? hit.collider.transform : null);
+    }
+
+    //エイム用メソッド
+    private void Aim()
+    {
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        SetTarget();
+        ShotCallBack();
     }
 
     //プレイ用メソッド

@@ -20,7 +20,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject seedPrefab;
     //ターゲット用変数
-    private Transform targetTransform;
+    private bool isTarget = false;
+    private Vector3 targetVec;
+    private float correctionX = 0.0f;
     //カメラ用変数
     [SerializeField]
     private CinemachineCamera playerCamera;
@@ -32,6 +34,7 @@ public class Player : MonoBehaviour
     private void SetCallBack()
     {
         playerCameraScript.SetTargetCallBack = SetTargetTransform;
+        playerCameraScript.ShotCallBack = CreateSeed;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,6 +42,7 @@ public class Player : MonoBehaviour
     {
         move = GetComponent<PlayerInput>().actions["Move"];
         playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
+        correctionX = playerCamera.transform.rotation.x;
         SetCallBack();
         myPlatformInstance = Platform.GetPlatformInstance;
     }
@@ -62,31 +66,12 @@ public class Player : MonoBehaviour
         transform.Translate(moveDirection * speed * Time.deltaTime);
     }
 
-    //種の生成用メソッド
-    public void CreateSeed()
-    {
-        Vector3 createPos = transform.position + Vector3.up * 0.5f;
-        float x = playerCamera.transform.rotation.x;
-        float y = playerCamera.transform.rotation.y;
-        float z = playerCamera.transform.rotation.z;
-        Quaternion createRot = Quaternion.Euler(x, y, z);
-        GameObject.Instantiate(seedPrefab, createPos, playerCamera.transform.rotation);
-    }
-
-    //種の発射用メソッド
-    private void ShotSeed()
-    {
-        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
-        CreateSeed();
-    }
-
     //プレイ用メソッド
     public void Play()
     {
         Input();
         Move();
         playerCameraScript.Play(transform.position);
-        ShotSeed();
     }
 
     //モバイル操作のコールバック用メソッド
@@ -98,6 +83,22 @@ public class Player : MonoBehaviour
     //ターゲットの設定コールバック用メソッド
     private void SetTargetTransform(Transform target)
     {
-        targetTransform = target;
+        isTarget = false;
+        if (target == null) return;
+        isTarget = true;
+        targetVec = (target.position + Vector3.up * 0.5f - (transform.position + Vector3.up * 0.5f)).normalized;
+    }
+
+    //種の生成コールバック用メソッド
+    private void CreateSeed()
+    {
+        Vector3 createPos = transform.position + Vector3.up * 0.5f;
+        float rotX = Camera.main.transform.rotation.x - correctionX;
+        float rotY = Camera.main.transform.rotation.y;
+        float rotZ = Camera.main.transform.rotation.z;
+        float rotW = Camera.main.transform.rotation.w;
+        Quaternion createRot = isTarget ? Quaternion.LookRotation(targetVec) :
+                                          new Quaternion(rotX, rotY, rotZ, rotW);
+        GameObject.Instantiate(seedPrefab, createPos, createRot);
     }
 }
