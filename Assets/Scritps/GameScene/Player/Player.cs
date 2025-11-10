@@ -84,9 +84,10 @@ public class Player : MonoBehaviour
     private void SetTargetTransform(Transform target)
     {
         isTarget = false;
+        //Debug.Log(inHit.collider.gameObject);
         if (target == null) return;
         isTarget = true;
-        targetVec = (target.position + Vector3.up * 0.5f - (transform.position + Vector3.up * 0.5f)).normalized;
+        targetVec = (target.position - (transform.position + Vector3.up * 0.5f)).normalized;
     }
 
     //種の生成コールバック用メソッド

@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 //プレイヤーのカメラ用スクリプトクラス
@@ -56,35 +55,40 @@ public class PlayerCamera : MonoBehaviour
     //操作開始用メソッド
     private void OperationStart()
     {
-        if (!touch.press.wasPressedThisFrame || isControl) return;
-        tapPoint = touch.position.ReadValue();
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = tapPoint;
-        List<RaycastResult> results = new List<RaycastResult>();
-        raycaster.Raycast(eventData, results);               
-        isControl = results.Count <= 0 ? true : false;
+        if (touch.press.wasPressedThisFrame && !isControl)
+        {
+            tapPoint = touch.position.ReadValue();
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = tapPoint;
+            List<RaycastResult> results = new List<RaycastResult>();
+            raycaster.Raycast(eventData, results);
+            isControl = results.Count <= 0 ? true : false;
+        }
     }
 
     //入力用メソッド
     private void InputOperationValue()
     {
-        if (!touch.press.isPressed || !isControl) return;
-        //if (touch.position.ReadValue() == tapPoint) return;
-        vert = -cameraAction.ReadValue<Vector2>().y;
-        horiz = cameraAction.ReadValue<Vector2>().x;
-        //Vector2 value = (touch.position.ReadValue() - tapPoint);
-        //vert = value.y * valueCorrection;
-        //horiz = value.x * valueCorrection;
-        //Debug.Log(value);
+        if (touch.press.isPressed && isControl)
+        {
+            if (touch.position.ReadValue() == tapPoint) return;
+            //vert = -cameraAction.ReadValue<Vector2>().y;
+            //horiz = cameraAction.ReadValue<Vector2>().x;
+            Vector2 value = (touch.position.ReadValue() - tapPoint);
+            vert = value.y * valueCorrection;
+            horiz = value.x * valueCorrection;
+        }
     }
 
     //操作終了用メソッド
     private void OperationEnd()
     {
-        if (!touch.press.wasReleasedThisFrame || !isControl) return;
-        isControl = false;
-        vert = 0.0f;
-        horiz = 0.0f;
+        if (touch.press.wasReleasedThisFrame && isControl)
+        {
+            isControl = false;
+            vert = 0.0f;
+            horiz = 0.0f;
+        }
     }
 
     //モバイルでのカメラ操作入力用メソッド
@@ -143,13 +147,22 @@ public class PlayerCamera : MonoBehaviour
             SetTargetCallBack(null);
             return;
         }
-        SetTargetCallBack(hit.collider.tag == "Humster" ? hit.collider.transform : null);
+        //Physics.Raycast(ray, out hit, Mathf.Infinity);
+        SetTargetCallBack(hit.collider.tag == "Humster" ? hit.collider.gameObject.transform : null);
     }
 
-    //エイム用メソッド
-    private void Aim()
+    //発射用メソッド
+    private void Shot()
     {
+        if (myPlatformInstance.CheckPlatform()) return;
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        SetTarget();
+        ShotCallBack();
+    }
+
+    //モバイルの発射用メソッド
+    public void MobileShot()
+    {
         SetTarget();
         ShotCallBack();
     }
@@ -161,6 +174,6 @@ public class PlayerCamera : MonoBehaviour
         if (!myPlatformInstance.CheckPlatform()) PCInputCameraOperation();
         else MobileInputCameraControl();
         CameraOperation();
-        Aim();
+        Shot();
     }
 }
