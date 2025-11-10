@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject bulletGageImage;
     private BulletGage bulletGageScript;
+    //ハムスターのナビ用変数
+    [SerializeField]
+    private Transform target;
     //シーン遷移時UI用変数
     [SerializeField]
     private GameObject sceneChangeUI;
