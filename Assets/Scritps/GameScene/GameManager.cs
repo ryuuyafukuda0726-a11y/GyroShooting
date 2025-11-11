@@ -3,6 +3,12 @@ using UnityEngine;
 //ゲームシーンを管理するマネージャースクリプトクラス
 public class GameManager : MonoBehaviour
 {
+    //ハムスター用変数
+    [SerializeField]
+    private GameObject hamsterPrefab;
+    private HamusuterManager hamsterManagerScript;
+    [SerializeField]
+    private int spawnCount = 0;
     //プレイヤー用変数
     [SerializeField]
     private GameObject playerObject;
@@ -61,11 +67,19 @@ public class GameManager : MonoBehaviour
         shotButtonObject.SetActive(false);
     }
 
+    //ハムスターの初期設定用メソッド
+    private void HamsterInit()
+    {
+        hamsterManagerScript = new HamusuterManager(target, spawnCount, hamsterPrefab, playerObject.transform);
+        hamsterManagerScript.Init();
+    }
+
     //初期設定用メソッド
     private void Init()
     {
         SetMobileControlCallBack();
         ShotButtonInit();
+        HamsterInit();
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();
@@ -83,6 +97,7 @@ public class GameManager : MonoBehaviour
     private void InGame()
     {
         playerScript.Play();
+        hamsterManagerScript.Play();
         if (!myPlatformInstance.CheckPlatform()) return;
         virtualPadScript.Play();
     }
