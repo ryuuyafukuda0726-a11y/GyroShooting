@@ -9,7 +9,7 @@ public class HamusuterManager
     //プレイヤー用変数
     private Transform player;
     //スポーン位置用変数
-    private const float spawnLength = 8.0f;
+    private Transform spawnPoint;
     //スポーンインターバル用変数
     private const float spawnInterval = 5.0f;
     private float myTime = 0.0f;
@@ -41,9 +41,8 @@ public class HamusuterManager
     //配置用メソッド
     private Vector3 SetPos()
     {
-        float x = UnityEngine.Random.Range(-spawnLength, spawnLength);
-        float z = UnityEngine.Random.Range(-spawnLength, spawnLength);
-        Vector3 pos = new Vector3(x, 0.0f, z);
+        int index = Random.Range(0, spawnPoint.childCount);
+        Vector3 pos = spawnPoint.GetChild(index).position;
         return pos;
     }
 
@@ -59,19 +58,35 @@ public class HamusuterManager
         hamsterScripts.Add(hamsterScript);
     }
 
+    //ハムスターのプレイ中処理用メソッド
+    private void HamsterPlay()
+    {
+        int size = hamsters.Count;
+        for(int i = 0; i < size; i++)
+        {
+            hamsterScripts[i].Play();
+        }
+    }
+
     //プレイ用メソッド
     public void Play()
     {
+        HamsterPlay();
         if (hamsters.Count >= spawnMonsterCount) return;
         if (SpawnInterval()) SpawnHamster();
     }
 
     //コンストラクター
-    public HamusuterManager(Transform inTargets, int inSpawnLength, GameObject inHamsterPrefab, Transform inPlayer)
+    public HamusuterManager(Transform inTargets, 
+                            int inSpawnCount, 
+                            GameObject inHamsterPrefab, 
+                            Transform inPlayer, 
+                            Transform inSpawnPoint)
     {
         target = inTargets;
-        spawnMonsterCount = inSpawnLength;
+        spawnMonsterCount = inSpawnCount;
         hamsterPrefab = inHamsterPrefab;
         player = inPlayer;
+        spawnPoint = inSpawnPoint;
     }
 }

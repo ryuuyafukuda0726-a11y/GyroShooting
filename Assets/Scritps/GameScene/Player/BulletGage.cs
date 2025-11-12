@@ -4,6 +4,8 @@ using UnityEngine.UI;
 //残弾ゲージ用スクリプトクラス
 public class BulletGage : MonoBehaviour
 {
+    //残弾用変数
+    private const int maxSeed = 100;
     //ソースイメージ用変数
     private Sprite[] mySprite;
     //イメージコンポーネント用変数
@@ -20,6 +22,13 @@ public class BulletGage : MonoBehaviour
     public void Init()
     {
         myImage.sprite = mySprite[0];
+    }
+
+    //表示用メソッド
+    public void Display(int inSeed)
+    {
+        int index = maxSeed - inSeed;
+        myImage.sprite = mySprite[index / 10];
     }
 
     // Update is called once per frame

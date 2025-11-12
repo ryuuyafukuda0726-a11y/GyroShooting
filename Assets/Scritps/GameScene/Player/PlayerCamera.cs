@@ -29,9 +29,9 @@ public class PlayerCamera : MonoBehaviour
     private bool isControl = false;
     private CinemachineFollow follow;
     private Vector3 targetPos;
-    //コールバック用変数
-    public Action<Transform> SetTargetCallBack;
-    public Action ShotCallBack;
+    ////コールバック用変数
+    //public Action<Transform> SetTargetCallBack;
+    //public Action ShotCallBack;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -43,6 +43,16 @@ public class PlayerCamera : MonoBehaviour
         raycaster = canvas.GetComponent<GraphicRaycaster>();
         myPlatformInstance = Platform.GetPlatformInstance;
         EnhancedTouchSupport.Enable();
+    }
+
+    //初期設定用メソッド
+    public void Init()
+    {
+        //cameraAction = GetComponent<PlayerInput>().actions["Look"];
+        //follow = GetComponent<CinemachineFollow>();
+        //raycaster = canvas.GetComponent<GraphicRaycaster>();
+        //myPlatformInstance = Platform.GetPlatformInstance;
+        //EnhancedTouchSupport.Enable();
     }
 
     //PCでのカメラ操作入力用メソッド
@@ -135,8 +145,8 @@ public class PlayerCamera : MonoBehaviour
         SetPos(targetPos, Vector3.right, angle.y);
     }
 
-    //ターゲット設定用メソッド
-    private void SetTarget()
+    //ターゲット取得用メソッド
+    public Transform GetTarget()
     {
         Camera camera = Camera.main;
         int centerX = camera.pixelWidth / 2;
@@ -144,28 +154,27 @@ public class PlayerCamera : MonoBehaviour
         ray = camera.ScreenPointToRay(new Vector3(centerX, centerY, 0));
         if (!Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            SetTargetCallBack(null);
-            return;
+            return null;
         }
         //Physics.Raycast(ray, out hit, Mathf.Infinity);
-        SetTargetCallBack(hit.collider.tag == "Humster" ? hit.collider.gameObject.transform : null);
+        return hit.collider.tag == "Humster" ? hit.collider.gameObject.transform : null;
     }
 
-    //発射用メソッド
-    private void Shot()
-    {
-        if (myPlatformInstance.CheckPlatform()) return;
-        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
-        SetTarget();
-        ShotCallBack();
-    }
+    ////発射用メソッド
+    //private void Shot()
+    //{
+    //    if (myPlatformInstance.CheckPlatform()) return;
+    //    if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+    //    GetTarget();
+    //    ShotCallBack();
+    //}
 
-    //モバイルの発射用メソッド
-    public void MobileShot()
-    {
-        SetTarget();
-        ShotCallBack();
-    }
+    ////モバイルの発射用メソッド
+    //public void MobileShot()
+    //{
+    //    GetTarget();
+    //    ShotCallBack();
+    //}
 
     //プレイ用メソッド
     public void Play(Vector3 inPos)
@@ -174,6 +183,6 @@ public class PlayerCamera : MonoBehaviour
         if (!myPlatformInstance.CheckPlatform()) PCInputCameraOperation();
         else MobileInputCameraControl();
         CameraOperation();
-        Shot();
+        //Shot();
     }
 }

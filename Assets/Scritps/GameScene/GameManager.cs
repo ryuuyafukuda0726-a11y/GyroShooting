@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private int spawnCount = 0;
     //プレイヤー用変数
     [SerializeField]
+    //private GameObject playerPrefab;
     private GameObject playerObject;
     private Player playerScript;
     //バーチャルパッド用変数
@@ -28,6 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject bulletGageImage;
     private BulletGage bulletGageScript;
+    //スポーン地点用変数
+    [SerializeField]
+    private Transform spawnPoint;
     //ハムスターのナビ用変数
     [SerializeField]
     private Transform target;
@@ -41,11 +45,19 @@ public class GameManager : MonoBehaviour
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
+    //プレイヤーの生成
+    private void CreatePlayer()
+    {
+        //playerObject = GameObject.Instantiate(playerPrefab);
+        playerScript = playerObject.GetComponent<Player>();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         myPlatformInstance = Platform.GetPlatformInstance;
         playerScript = playerObject.GetComponent<Player>();
+        //CreatePlayer();
         virtualPadScript = virtualPadObject.GetComponent<VirtualPad>();
         lifeGageScript = lifeGageImage.GetComponent<LifeGage>();
         bulletGageScript = bulletGageImage.GetComponent<BulletGage>();
@@ -59,6 +71,12 @@ public class GameManager : MonoBehaviour
         virtualPadScript.mobileControlCallBack = playerScript.MobileControlCallBack;
     }
 
+    //プレイヤーのコールバック設定用メソッド
+    private void SetPlayerCallBack()
+    {
+        playerScript.bulletGageDisplayCallBack = bulletGageScript.Display;
+    }
+
     //PC操作時の初期設定用メソッド
     private void ShotButtonInit()
     {
@@ -70,16 +88,22 @@ public class GameManager : MonoBehaviour
     //ハムスターの初期設定用メソッド
     private void HamsterInit()
     {
-        hamsterManagerScript = new HamusuterManager(target, spawnCount, hamsterPrefab, playerObject.transform);
+        hamsterManagerScript = new HamusuterManager(target, 
+                                                    spawnCount, 
+                                                    hamsterPrefab, 
+                                                    playerObject.transform, 
+                                                    spawnPoint);
         hamsterManagerScript.Init();
     }
 
     //初期設定用メソッド
     private void Init()
     {
+        SetPlayerCallBack();
         SetMobileControlCallBack();
         ShotButtonInit();
         HamsterInit();
+        //playerScript.Init();
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();

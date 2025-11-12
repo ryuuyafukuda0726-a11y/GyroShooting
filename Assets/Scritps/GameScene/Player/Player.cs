@@ -16,9 +16,14 @@ public class Player : MonoBehaviour
     //移動速度用変数
     [SerializeField]
     private float speed = 0.0f;
+    //ライフ用変数
+    private const int maxLife = 10;
+    private int life = maxLife;
     //種用変数
     [SerializeField]
     private GameObject seedPrefab;
+    private const int maxSeed = 100;
+    private int seed = maxSeed;
     //ターゲット用変数
     private bool isTarget = false;
     private Vector3 targetVec;
@@ -27,24 +32,38 @@ public class Player : MonoBehaviour
     [SerializeField]
     private CinemachineCamera playerCamera;
     private PlayerCamera playerCameraScript;
+    //コールバック用変数
+    public Action<int> bulletGageDisplayCallBack;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
-    //コールバックの設定用メソッド
-    private void SetCallBack()
-    {
-        playerCameraScript.SetTargetCallBack = SetTargetTransform;
-        playerCameraScript.ShotCallBack = CreateSeed;
-    }
+    ////コールバックの設定用メソッド
+    //private void SetCallBack()
+    //{
+    //    playerCameraScript.SetTargetCallBack = SetTargetTransform;
+    //    playerCameraScript.ShotCallBack = CreateSeed;
+    //}
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         move = GetComponent<PlayerInput>().actions["Move"];
         playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
+        //playerCameraScript.Init();
         correctionX = playerCamera.transform.rotation.x;
-        SetCallBack();
+        //SetCallBack();
         myPlatformInstance = Platform.GetPlatformInstance;
+    }
+
+    //初期設定用メソッド
+    public void Init()
+    {
+        //move = GetComponent<PlayerInput>().actions["Move"];
+        //playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
+        //playerCameraScript.Init();
+        //correctionX = playerCamera.transform.rotation.x;
+        ////SetCallBack();
+        //myPlatformInstance = Platform.GetPlatformInstance;
     }
 
     //入力用メソッド
@@ -66,12 +85,34 @@ public class Player : MonoBehaviour
         transform.Translate(moveDirection * speed * Time.deltaTime);
     }
 
+    //発射用メソッド
+    private void Shot()
+    {
+        if (seed <= 0) return;
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        SetTargetTransform(playerCameraScript.GetTarget());
+        CreateSeed();
+        seed--;
+    }
+
+    //モバイルの発射用メソッド
+    public void MobileShot()
+    {
+        if (seed <= 0) return;
+        SetTargetTransform(playerCameraScript.GetTarget());
+        CreateSeed();
+        seed--;
+    }
+
     //プレイ用メソッド
     public void Play()
     {
+        bulletGageDisplayCallBack(seed);
         Input();
         Move();
         playerCameraScript.Play(transform.position);
+        if (myPlatformInstance.CheckPlatform()) return;
+        Shot();
     }
 
     //モバイル操作のコールバック用メソッド
@@ -80,17 +121,16 @@ public class Player : MonoBehaviour
         moveDirection = inputVec;
     }
 
-    //ターゲットの設定コールバック用メソッド
+    //ターゲットの設定用メソッド
     private void SetTargetTransform(Transform target)
     {
         isTarget = false;
-        //Debug.Log(inHit.collider.gameObject);
         if (target == null) return;
         isTarget = true;
         targetVec = (target.position - (transform.position + Vector3.up * 0.5f)).normalized;
     }
 
-    //種の生成コールバック用メソッド
+    //種の生成用メソッド
     private void CreateSeed()
     {
         Vector3 createPos = transform.position + Vector3.up * 0.5f;
