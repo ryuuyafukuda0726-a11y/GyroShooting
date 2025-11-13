@@ -29,9 +29,6 @@ public class PlayerCamera : MonoBehaviour
     private bool isControl = false;
     private CinemachineFollow follow;
     private Vector3 targetPos;
-    ////コールバック用変数
-    //public Action<Transform> SetTargetCallBack;
-    //public Action ShotCallBack;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -43,16 +40,6 @@ public class PlayerCamera : MonoBehaviour
         raycaster = canvas.GetComponent<GraphicRaycaster>();
         myPlatformInstance = Platform.GetPlatformInstance;
         EnhancedTouchSupport.Enable();
-    }
-
-    //初期設定用メソッド
-    public void Init()
-    {
-        //cameraAction = GetComponent<PlayerInput>().actions["Look"];
-        //follow = GetComponent<CinemachineFollow>();
-        //raycaster = canvas.GetComponent<GraphicRaycaster>();
-        //myPlatformInstance = Platform.GetPlatformInstance;
-        //EnhancedTouchSupport.Enable();
     }
 
     //PCでのカメラ操作入力用メソッド
@@ -82,8 +69,6 @@ public class PlayerCamera : MonoBehaviour
         if (touch.press.isPressed && isControl)
         {
             if (touch.position.ReadValue() == tapPoint) return;
-            //vert = -cameraAction.ReadValue<Vector2>().y;
-            //horiz = cameraAction.ReadValue<Vector2>().x;
             Vector2 value = (touch.position.ReadValue() - tapPoint);
             vert = value.y * valueCorrection;
             horiz = value.x * valueCorrection;
@@ -133,14 +118,14 @@ public class PlayerCamera : MonoBehaviour
         {
             angle.y = 0.0f;
         }
-        if (transform.rotation.y > 0.5f && angle.x > 0.0f)
-        {
-            angle.x = 0.0f;
-        }
-        else if (transform.rotation.y < -0.5f && angle.x < 0.0f)
-        {
-            angle.x = 0.0f;
-        }
+        //if (transform.rotation.y > 0.5f && angle.x > 0.0f)
+        //{
+        //    angle.x = 0.0f;
+        //}
+        //else if (transform.rotation.y < -0.5f && angle.x < 0.0f)
+        //{
+        //    angle.x = 0.0f;
+        //}
         SetPos(targetPos, Vector3.up, angle.x);
         SetPos(targetPos, Vector3.right, angle.y);
     }
@@ -156,25 +141,8 @@ public class PlayerCamera : MonoBehaviour
         {
             return null;
         }
-        //Physics.Raycast(ray, out hit, Mathf.Infinity);
         return hit.collider.tag == "Humster" ? hit.collider.gameObject.transform : null;
     }
-
-    ////発射用メソッド
-    //private void Shot()
-    //{
-    //    if (myPlatformInstance.CheckPlatform()) return;
-    //    if (!Mouse.current.leftButton.wasPressedThisFrame) return;
-    //    GetTarget();
-    //    ShotCallBack();
-    //}
-
-    ////モバイルの発射用メソッド
-    //public void MobileShot()
-    //{
-    //    GetTarget();
-    //    ShotCallBack();
-    //}
 
     //プレイ用メソッド
     public void Play(Vector3 inPos)
@@ -183,6 +151,5 @@ public class PlayerCamera : MonoBehaviour
         if (!myPlatformInstance.CheckPlatform()) PCInputCameraOperation();
         else MobileInputCameraControl();
         CameraOperation();
-        //Shot();
     }
 }
