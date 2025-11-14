@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     private PlayerCamera playerCameraScript;
     //コールバック用変数
     public Action<int> bulletGageDisplayCallBack;
+    public Action<int> lifeGageDisplayCallBack;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -108,6 +109,7 @@ public class Player : MonoBehaviour
     public void Play()
     {
         bulletGageDisplayCallBack(seed);
+        lifeGageDisplayCallBack(life);
         Input();
         Move();
         playerCameraScript.Play(transform.position);
@@ -128,6 +130,16 @@ public class Player : MonoBehaviour
         if (target == null) return;
         isTarget = true;
         targetVec = (target.position - (transform.position + Vector3.up * 0.5f)).normalized;
+    }
+
+    //ダメージ用メソッド
+    public void Damage()
+    {
+        if (life <= 0) return;
+        //if (Keyboard.current.downArrowKey.wasPressedThisFrame)
+        //{
+        //}
+        life--;
     }
 
     //種の生成用メソッド

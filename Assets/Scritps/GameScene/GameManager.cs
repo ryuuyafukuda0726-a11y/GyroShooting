@@ -32,9 +32,13 @@ public class GameManager : MonoBehaviour
     //スポーン地点用変数
     [SerializeField]
     private Transform spawnPoint;
-    //ハムスターのナビ用変数
+    //ひまわり用変数
     [SerializeField]
-    private Transform target;
+    private Transform sunFlower;
+    private SunFlower sunFlowerScript;
+    [SerializeField]
+    private GameObject sunFlowerGage;
+    private SunFlowerGage sunFlowerGageScript;
     //シーン遷移時UI用変数
     [SerializeField]
     private GameObject sceneChangeUI;
@@ -56,6 +60,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         myPlatformInstance = Platform.GetPlatformInstance;
+        sunFlowerScript = sunFlower.GetComponent<SunFlower>();
+        sunFlowerGageScript = sunFlowerGage.GetComponent<SunFlowerGage>();
         playerScript = playerObject.GetComponent<Player>();
         //CreatePlayer();
         virtualPadScript = virtualPadObject.GetComponent<VirtualPad>();
@@ -75,6 +81,13 @@ public class GameManager : MonoBehaviour
     private void SetPlayerCallBack()
     {
         playerScript.bulletGageDisplayCallBack = bulletGageScript.Display;
+        playerScript.lifeGageDisplayCallBack = lifeGageScript.Display;
+    }
+
+    //ひまわりのコールバック設定用メソッド
+    private void SetSunFlowerCallBack()
+    {
+        sunFlowerScript.sunFlowerGageDisplayCallBack = sunFlowerGageScript.Display;
     }
 
     //PC操作時の初期設定用メソッド
@@ -88,7 +101,7 @@ public class GameManager : MonoBehaviour
     //ハムスターの初期設定用メソッド
     private void HamsterInit()
     {
-        hamsterManagerScript = new HamusuterManager(target, 
+        hamsterManagerScript = new HamusuterManager(sunFlower, 
                                                     spawnCount, 
                                                     hamsterPrefab, 
                                                     playerObject.transform, 
@@ -101,6 +114,7 @@ public class GameManager : MonoBehaviour
     {
         SetPlayerCallBack();
         SetMobileControlCallBack();
+        SetSunFlowerCallBack();
         ShotButtonInit();
         HamsterInit();
         //playerScript.Init();
@@ -120,6 +134,7 @@ public class GameManager : MonoBehaviour
     //インゲーム用メソッド
     private void InGame()
     {
+        sunFlowerScript.Play();
         playerScript.Play();
         hamsterManagerScript.Play();
         if (!myPlatformInstance.CheckPlatform()) return;

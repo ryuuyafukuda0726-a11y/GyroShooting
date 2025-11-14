@@ -22,6 +22,12 @@ public class LifeGage : MonoBehaviour
         myImage.sprite = mySprite[10];
     }
 
+    //表示用メソッド
+    public void Display(int index)
+    {
+        myImage.sprite = mySprite[index];
+    }
+
     // Update is called once per frame
     void Update()
     {

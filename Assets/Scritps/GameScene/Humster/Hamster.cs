@@ -26,6 +26,8 @@ public class Hamster : MonoBehaviour
     //攻撃用変数
     [SerializeField]
     private float attackDistance = 0.0f;
+    private bool isAttack = false;
+    private Transform attackTarget;
     //時間管理用変数
     private float myTime = 0.0f;
 
@@ -71,7 +73,7 @@ public class Hamster : MonoBehaviour
     {
         if (isWalk) return;
         if (!myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) return;
-        // アニメーションの再生が終了した場合
+        // アニメーションが再生中の場合
         if (myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1) return;
         agent.speed = moveSpeed;
         idleInterval = Random.Range(minInterval, maxInterval);
@@ -88,7 +90,6 @@ public class Hamster : MonoBehaviour
             agent.speed = 0.0f;
             isWalk = false;
         }
-        Debug.Log("インターバル : " + idleInterval + ", 現在時間 : " + myTime);
     } 
 
     //移動用メソッド
@@ -112,26 +113,41 @@ public class Hamster : MonoBehaviour
         return null;
     }
 
+    //攻撃開始用メソッド
+    private void AttackStart()
+    {
+        attackTarget = CheckDistance();
+        if (attackTarget == null) return;
+        agent.speed = 0.0f;
+        transform.rotation = Quaternion.LookRotation(attackTarget.position - transform.position);
+        isAttack = true;
+        if (myAnimator.GetBool("Attack")) return;
+        Damage();
+    }
+
+    //ダメージ用メソッド
+    public void Damage()
+    {
+        //Debug.Log("Damage");
+        if (attackTarget == player) player.GetComponent<Player>().Damage();
+        else if (attackTarget == target) target.GetComponent<SunFlower>().Damage();
+    }
+
     //攻撃用メソッド
     private void Attack()
     {
-        Transform attackTarget = CheckDistance();
-        if (attackTarget != null)
-        {
-            myAnimator.SetBool("Attack", true);
-            agent.speed = 0.0f;
-            transform.rotation = Quaternion.LookRotation(attackTarget.position - transform.position);
-        }
-        else myAnimator.SetBool("Attack", false);
+        isAttack = false;
+        AttackStart();
+        myAnimator.SetBool("Attack", isAttack);
     }
 
     //プレイ用メソッド
     public void Play()
     {
         SetDestination();
+        Attack();
         Move();
         Idle();
-        Attack();
     }
 
     // Update is called once per frame

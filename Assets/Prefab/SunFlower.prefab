@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 421658410912974619}
+  - component: {fileID: 6902263385679380352}
   m_Layer: 0
   m_Name: SunFlower
   m_TagString: Untagged
@@ -32,6 +33,19 @@ Transform:
   - {fileID: 2804153176016632562}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6902263385679380352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8507164393571605626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e862849a3d4d5ab4aba3075c2b2bf6ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SunFlower
+  hp: 0
 --- !u!1001 &2405171831477394713
 PrefabInstance:
   m_ObjectHideFlags: 0
