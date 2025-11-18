@@ -54,6 +54,7 @@ public class HamusuterManager
         hamster.transform.position = SetPos();
         hamsterScript.SetTarget(target);
         hamsterScript.SetPlayer(player);
+        hamsterScript.SetCallBack();
         hamsters.Add(hamster);
         hamsterScripts.Add(hamsterScript);
     }

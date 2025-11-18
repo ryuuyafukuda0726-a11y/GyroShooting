@@ -136,10 +136,14 @@ public class Player : MonoBehaviour
     public void Damage()
     {
         if (life <= 0) return;
-        //if (Keyboard.current.downArrowKey.wasPressedThisFrame)
-        //{
-        //}
         life--;
+    }
+
+    //残弾補充用メソッド
+    public void ChargeBullet()
+    {
+        if (seed >= maxSeed) return;
+        seed++;
     }
 
     //種の生成用メソッド

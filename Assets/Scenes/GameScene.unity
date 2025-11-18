@@ -607,6 +607,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &392135732 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8286818995187452995, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+  m_PrefabInstance: {fileID: 1279750758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -3507,6 +3512,18 @@ PrefabInstance:
     - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: hp
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 392135732}
+    - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
+      propertyPath: chargeDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
+      propertyPath: chargeBulletInterval
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8507164393571605626, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: m_Name

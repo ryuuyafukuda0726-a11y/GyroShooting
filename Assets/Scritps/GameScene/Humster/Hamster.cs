@@ -1,4 +1,3 @@
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,6 +35,12 @@ public class Hamster : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         myAnimator = transform.GetChild(0).GetComponent<Animator>();
+    }
+
+    //コールバックの設定用メソッド
+    public void SetCallBack()
+    {
+        transform.GetChild(0).GetComponent<Hamster_Model>().AttackCallBack = Damage;
     }
 
     //ターゲットの設定用メソッド
@@ -121,12 +126,13 @@ public class Hamster : MonoBehaviour
         agent.speed = 0.0f;
         transform.rotation = Quaternion.LookRotation(attackTarget.position - transform.position);
         isAttack = true;
-        if (myAnimator.GetBool("Attack")) return;
-        Damage();
+        //transform.GetChild(0).GetComponent<Hamster_Model>().SetAttackTarget(attackTarget);
+        //if (myAnimator.GetBool("Attack")) return;
+        //Damage();
     }
 
     //ダメージ用メソッド
-    public void Damage()
+    private void Damage()
     {
         //Debug.Log("Damage");
         if (attackTarget == player) player.GetComponent<Player>().Damage();
