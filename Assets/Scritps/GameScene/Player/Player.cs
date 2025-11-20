@@ -17,13 +17,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float speed = 0.0f;
     //ライフ用変数
-    private const int maxLife = 10;
-    private int life = maxLife;
+    [SerializeField]
+    private int maxLife = 0;
+    private int life = 0;
     //種用変数
     [SerializeField]
     private GameObject seedPrefab;
-    private const int maxSeed = 100;
-    private int seed = maxSeed;
+    [SerializeField]
+    private int maxSeed = 0;
+    private int seed = 0;
     //ターゲット用変数
     private bool isTarget = false;
     private Vector3 targetVec;
@@ -53,6 +55,8 @@ public class Player : MonoBehaviour
         //playerCameraScript.Init();
         correctionX = playerCamera.transform.rotation.x;
         //SetCallBack();
+        life = maxLife;
+        seed = maxSeed;
         myPlatformInstance = Platform.GetPlatformInstance;
     }
 

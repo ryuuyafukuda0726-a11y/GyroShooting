@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
     private void SetSunFlowerCallBack()
     {
         sunFlowerScript.sunFlowerGageDisplayCallBack = sunFlowerGageScript.Display;
+        sunFlowerScript.chargeBulletCallBack = playerScript.ChargeBullet;
     }
 
     //PC操作時の初期設定用メソッド

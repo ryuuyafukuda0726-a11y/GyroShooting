@@ -46,8 +46,7 @@ public class SunflowerSeed : MonoBehaviour
     private void Move()
     {
         transform.Translate(value * bulletSpeed * Time.deltaTime);
-        sunflowerSeedObject.transform.Rotate(Vector3.forward * rotSpeed * Time.deltaTime);
-        
+        sunflowerSeedObject.transform.Rotate(Vector3.forward * rotSpeed * Time.deltaTime);        
     }
 
     //重力加速度用メソッド

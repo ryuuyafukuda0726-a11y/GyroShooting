@@ -96,13 +96,13 @@ public class PlayerCamera : MonoBehaviour
     }
 
     //配置用メソッド
-    private void SetPos(Vector3 point, Vector3 axis, float angle)
+    private void SetPos(Vector3 axis, float angle)
     {
         Vector3 vector = follow.FollowOffset;
         Quaternion quaternion = Quaternion.AngleAxis(angle, axis);
-        Vector3 vector2 = vector - point;
+        Vector3 vector2 = vector - targetPos;
         vector2 = quaternion * vector2;
-        vector = point + vector2;
+        vector = targetPos + vector2;
         follow.FollowOffset = vector;
     }
 
@@ -110,6 +110,7 @@ public class PlayerCamera : MonoBehaviour
     private void CameraOperation()
     {
         Vector3 angle = new Vector3(horiz * 100.0f * Time.deltaTime, vert * 100.0f * Time.deltaTime, 0.0f);
+        Debug.Log(angle);
         if (transform.rotation.x > 0.5f && angle.y > 0.0f)
         {
             angle.y = 0.0f;
@@ -126,8 +127,10 @@ public class PlayerCamera : MonoBehaviour
         //{
         //    angle.x = 0.0f;
         //}
-        SetPos(targetPos, Vector3.up, angle.x);
-        SetPos(targetPos, Vector3.right, angle.y);
+        transform.RotateAround(targetPos, Vector3.up, angle.x);
+        transform.RotateAround(targetPos, Vector3.right, angle.y);
+        //SetPos(Vector3.up, angle.x);
+        //SetPos(Vector3.right, angle.y);
     }
 
     //ターゲット取得用メソッド

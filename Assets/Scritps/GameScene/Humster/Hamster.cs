@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,10 @@ public class Hamster : MonoBehaviour
     private NavMeshAgent agent;
     private Transform target;
     private Transform player;
+    //HP用変数
+    [SerializeField]
+    private int maxHp = 0;
+    private int hp = 0;
     //移動用変数
     private float idleInterval = 0.0f;
     [SerializeField]
@@ -27,6 +32,8 @@ public class Hamster : MonoBehaviour
     private float attackDistance = 0.0f;
     private bool isAttack = false;
     private Transform attackTarget;
+    //コールバック用メソッド
+    public Action<Transform> destroyCallBack;
     //時間管理用変数
     private float myTime = 0.0f;
 
@@ -35,6 +42,7 @@ public class Hamster : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         myAnimator = transform.GetChild(0).GetComponent<Animator>();
+        hp = maxHp;
     }
 
     //コールバックの設定用メソッド
@@ -81,7 +89,7 @@ public class Hamster : MonoBehaviour
         // アニメーションが再生中の場合
         if (myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1) return;
         agent.speed = moveSpeed;
-        idleInterval = Random.Range(minInterval, maxInterval);
+        idleInterval = UnityEngine.Random.Range(minInterval, maxInterval);
         isWalk = true;
     }
 
@@ -154,6 +162,20 @@ public class Hamster : MonoBehaviour
         Attack();
         Move();
         Idle();
+    }
+
+    //当たり判定用メソッド
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.tag);
+        if (collision.gameObject.tag == "Bullet")
+        {
+            Destroy(collision.gameObject);
+            hp--;
+            if (hp > 0) return;
+            destroyCallBack(transform);
+            Destroy(transform.gameObject);
+        }
     }
 
     // Update is called once per frame

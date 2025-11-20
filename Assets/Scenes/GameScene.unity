@@ -2401,6 +2401,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: maxLife
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: maxSeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3394745482602633972, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: TrackerSettings.BindingMode
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4690720320646877523, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: canvas
       value: 
@@ -3511,6 +3527,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: hp
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
+      propertyPath: maxHp
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}

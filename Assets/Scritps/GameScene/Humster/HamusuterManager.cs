@@ -9,7 +9,7 @@ public class HamusuterManager
     //プレイヤー用変数
     private Transform player;
     //スポーン位置用変数
-    private Transform spawnPoint;
+    private Transform spawnPoints;
     //スポーンインターバル用変数
     private const float spawnInterval = 5.0f;
     private float myTime = 0.0f;
@@ -41,8 +41,8 @@ public class HamusuterManager
     //配置用メソッド
     private Vector3 SetPos()
     {
-        int index = Random.Range(0, spawnPoint.childCount);
-        Vector3 pos = spawnPoint.GetChild(index).position;
+        int index = Random.Range(0, spawnPoints.childCount);
+        Vector3 pos = spawnPoints.GetChild(index).position;
         return pos;
     }
 
@@ -55,6 +55,7 @@ public class HamusuterManager
         hamsterScript.SetTarget(target);
         hamsterScript.SetPlayer(player);
         hamsterScript.SetCallBack();
+        hamsterScript.destroyCallBack = DestroyHamster;
         hamsters.Add(hamster);
         hamsterScripts.Add(hamsterScript);
     }
@@ -77,6 +78,17 @@ public class HamusuterManager
         if (SpawnInterval()) SpawnHamster();
     }
 
+    //撃破時用メソッド
+    private void DestroyHamster(Transform inTransform)
+    {
+        for(int i = 0; i < hamsters.Count; i++)
+        {
+            if (hamsters[i].gameObject != inTransform.gameObject) continue;
+            hamsters.RemoveAt(i);
+            hamsterScripts.RemoveAt(i);
+        }
+    }
+
     //コンストラクター
     public HamusuterManager(Transform inTargets, 
                             int inSpawnCount, 
@@ -88,6 +100,6 @@ public class HamusuterManager
         spawnMonsterCount = inSpawnCount;
         hamsterPrefab = inHamsterPrefab;
         player = inPlayer;
-        spawnPoint = inSpawnPoint;
+        spawnPoints = inSpawnPoint;
     }
 }

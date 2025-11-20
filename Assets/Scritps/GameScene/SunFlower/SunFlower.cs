@@ -12,8 +12,9 @@ public class SunFlower : MonoBehaviour
     private float chargeDistance = 0.0f;
     private float myTime = 0.0f;
     //耐久値用変数
-    private const int maxHp = 100;
-    private int hp = maxHp;
+    [SerializeField]
+    private int  maxHp = 0;
+    private int hp = 0;
     //プレイヤー用変数
     [SerializeField]
     private Transform player;
@@ -24,7 +25,7 @@ public class SunFlower : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        hp = maxHp;
     }
 
     //距離の判定用メソッド

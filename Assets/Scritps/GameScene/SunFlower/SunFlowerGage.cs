@@ -17,7 +17,6 @@ public class SunFlowerGage : MonoBehaviour
     public void Display(float inHp)
     {
         Vector2 size = new Vector2(gage.sizeDelta.x, 300.0f * ((100.0f - inHp) / 100.0f));
-        Debug.Log(inHp);
         gage.sizeDelta = size;
     }
 
