@@ -30,6 +30,8 @@ public class Hamster : MonoBehaviour
     //攻撃用変数
     [SerializeField]
     private float attackDistance = 0.0f;
+    [SerializeField]
+    private int power = 0;
     private bool isAttack = false;
     private Transform attackTarget;
     //コールバック用メソッド
@@ -143,8 +145,8 @@ public class Hamster : MonoBehaviour
     private void Damage()
     {
         //Debug.Log("Damage");
-        if (attackTarget == player) player.GetComponent<Player>().Damage();
-        else if (attackTarget == target) target.GetComponent<SunFlower>().Damage();
+        if (attackTarget == player) player.GetComponent<Player>().Damage(power);
+        else if (attackTarget == target) target.GetComponent<SunFlower>().Damage(power);
     }
 
     //攻撃用メソッド

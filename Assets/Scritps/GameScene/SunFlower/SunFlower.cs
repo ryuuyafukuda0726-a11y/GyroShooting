@@ -55,10 +55,10 @@ public class SunFlower : MonoBehaviour
     }
 
     //ダメージ用メソッド
-    public void Damage()
+    public void Damage(int inDamage)
     {
         if (hp <= 0) return;
-        hp--;
+        hp -= inDamage;
     }
 
     // Update is called once per frame

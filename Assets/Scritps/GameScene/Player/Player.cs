@@ -137,10 +137,10 @@ public class Player : MonoBehaviour
     }
 
     //ダメージ用メソッド
-    public void Damage()
+    public void Damage(int inDamage)
     {
         if (life <= 0) return;
-        life--;
+        life -= inDamage;
     }
 
     //残弾補充用メソッド

@@ -52,6 +52,7 @@ MonoBehaviour:
   maxInterval: 4
   minInterval: 10
   attackDistance: 2
+  power: 1
 --- !u!195 &-1058807561750839395
 NavMeshAgent:
   m_ObjectHideFlags: 0
