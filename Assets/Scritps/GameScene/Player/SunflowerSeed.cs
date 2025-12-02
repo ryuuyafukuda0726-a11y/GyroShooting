@@ -28,10 +28,10 @@ public class SunflowerSeed : MonoBehaviour
         
     }
 
-    //初速用メソッド
-    private void InitialVelocity()
+    //発射用メソッド
+    public void Shot()
     {
-        if (isShot) return;
+        myTime = 0.0f;
         value = Vector3.forward;
         //float dot = Vector3.Dot((transform.position - transform.forward).normalized, Vector3.up);
         //float y = bulletSpeed * dot;
@@ -60,13 +60,21 @@ public class SunflowerSeed : MonoBehaviour
     {
         myTime += Time.deltaTime;
         if (myTime < lifeTime) return;
-        Destroy(this.gameObject);
+        DisappearanceAndHitDetection();
+    }
+
+    //消滅及び当たり判定時用メソッド
+    public void DisappearanceAndHitDetection()
+    {
+        isShot = false;
+        transform.position = transform.parent.position;
+        transform.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        InitialVelocity();
+        if (!isShot) return;
         Move();
         GravitationalAcceleration();
         CheckLifeTime();

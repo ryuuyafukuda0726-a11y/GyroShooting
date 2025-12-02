@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
         SetSunFlowerCallBack();
         ShotButtonInit();
         HamsterInit();
-        //playerScript.Init();
+        playerScript.Init();
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();

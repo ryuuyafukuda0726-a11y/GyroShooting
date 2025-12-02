@@ -14,16 +14,31 @@ public class HamusuterManager
     private const float spawnInterval = 5.0f;
     private float myTime = 0.0f;
     //ハムスター用変数
-    private int spawnMonsterCount;
+    private int spawnHamsterCount;
+    private int hamsterMaxCount = 0;
+    private int hamsterNumber = 0;
     private GameObject hamsterPrefab;
+    private GameObject[] hamsterObjects;
+    private GameObject hamsterParent;
     private List<GameObject> hamsters = new List<GameObject>();
     private List<Hamster> hamsterScripts = new List<Hamster>();
-    private GameObject hamsterParent;
+
+    //ハムスターの生成用メソッド
+    private void CreateHamster()
+    {
+        hamsterParent = new GameObject("HamsterParent");
+        hamsterObjects = new GameObject[hamsterMaxCount];
+        for(int i = 0; i < hamsterMaxCount; i++)
+        {
+            hamsterObjects[i] = GameObject.Instantiate(hamsterPrefab, hamsterParent.transform);
+            hamsterObjects[i].SetActive(false);
+        }
+    }
 
     //初期設定用メソッド
     public void Init()
     {
-        hamsterParent = new GameObject("HamsterParent");
+        CreateHamster();
     }
 
     //生成インターバル用メソッド
@@ -46,18 +61,42 @@ public class HamusuterManager
         return pos;
     }
 
-    //ハムスターの生成用メソッド
-    private void SpawnHamster()
+    //ハムスターが出現済みかの確認用メソッド
+    private bool CheckActiveHamster()
     {
-        GameObject hamster = GameObject.Instantiate(hamsterPrefab, hamsterParent.transform);
-        Hamster hamsterScript = hamster.GetComponent<Hamster>();
-        hamster.transform.position = SetPos();
+        if (hamsters.Count == 0) return true;
+        for (int i = 0; i < hamsters.Count; i++)
+        {
+            if (hamsters[i] == hamsterObjects[hamsterNumber]) return true;
+        }
+        return false;
+    }
+
+    //出現したハムスターのリスト登録用メソッド
+    private void SetListSpawnHamster()
+    {
+        hamsterObjects[hamsterNumber].SetActive(true);
+        Hamster hamsterScript = hamsterObjects[hamsterNumber].GetComponent<Hamster>();
+        hamsterObjects[hamsterNumber].transform.position = SetPos();
         hamsterScript.SetTarget(target);
         hamsterScript.SetPlayer(player);
         hamsterScript.SetCallBack();
         hamsterScript.destroyCallBack = DestroyHamster;
-        hamsters.Add(hamster);
+        hamsters.Add(hamsterObjects[hamsterNumber]);
         hamsterScripts.Add(hamsterScript);
+    }
+
+    //ハムスターの出現用メソッド
+    private void SpawnHamster()
+    {
+        bool isFlag = false;
+        while (!isFlag)
+        {
+            isFlag = CheckActiveHamster();
+            hamsterNumber++;
+            if (hamsterNumber == hamsterMaxCount) hamsterNumber = 0;
+        }
+        SetListSpawnHamster();
     }
 
     //ハムスターのプレイ中処理用メソッド
@@ -74,8 +113,10 @@ public class HamusuterManager
     public void Play()
     {
         HamsterPlay();
-        if (hamsters.Count >= spawnMonsterCount) return;
-        if (SpawnInterval()) SpawnHamster();
+        if (hamsters.Count < spawnHamsterCount)
+        {
+            if (SpawnInterval()) SpawnHamster();
+        }
     }
 
     //撃破時用メソッド
@@ -97,7 +138,8 @@ public class HamusuterManager
                             Transform inSpawnPoint)
     {
         target = inTargets;
-        spawnMonsterCount = inSpawnCount;
+        spawnHamsterCount = inSpawnCount;
+        hamsterMaxCount = spawnHamsterCount * 2;
         hamsterPrefab = inHamsterPrefab;
         player = inPlayer;
         spawnPoints = inSpawnPoint;

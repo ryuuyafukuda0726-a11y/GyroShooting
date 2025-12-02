@@ -3,7 +3,6 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
-using Unity.VisualScripting;
 using System;
 
 //バーチャルパッド用変数

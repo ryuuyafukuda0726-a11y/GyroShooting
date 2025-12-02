@@ -1363,7 +1363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   hamsterPrefab: {fileID: 3524578030236818814, guid: 2dd2271434aabff43a46361f66723f56, type: 3}
-  spawnCount: 1
+  spawnCount: 5
   playerObject: {fileID: 392135725}
   virtualPadObject: {fileID: 1161459610}
   shotButtonObject: {fileID: 997101561}
@@ -2408,6 +2408,10 @@ PrefabInstance:
     - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: maxSeed
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: seedCount
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 1335536527192778672, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalPosition.y

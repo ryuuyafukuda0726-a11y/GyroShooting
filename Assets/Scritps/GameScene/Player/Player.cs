@@ -26,6 +26,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int maxSeed = 0;
     private int seed = 0;
+    [SerializeField]
+    private int seedCount = 0;
+    private int seedNumber = 0;
+    private GameObject[] seedObjects;
+    private GameObject seedParent;
     //ターゲット用変数
     private bool isTarget = false;
     private Vector3 targetVec;
@@ -60,9 +65,22 @@ public class Player : MonoBehaviour
         myPlatformInstance = Platform.GetPlatformInstance;
     }
 
+    //種の生成用メソッド
+    private void Seed()
+    {
+        seedParent = new GameObject("SeedParent");
+        seedObjects = new GameObject[seedCount];
+        for(int i = 0; i < seedCount; i++)
+        {
+            seedObjects[i] = GameObject.Instantiate(seedPrefab, seedParent.transform);
+            seedObjects[i].SetActive(false);
+        }
+    }
+
     //初期設定用メソッド
     public void Init()
     {
+        Seed();
         //move = GetComponent<PlayerInput>().actions["Move"];
         //playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
         //playerCameraScript.Init();
@@ -96,7 +114,7 @@ public class Player : MonoBehaviour
         if (seed <= 0) return;
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
         SetTargetTransform(playerCameraScript.GetTarget());
-        CreateSeed();
+        ShotSeed();
         seed--;
     }
 
@@ -105,7 +123,7 @@ public class Player : MonoBehaviour
     {
         if (seed <= 0) return;
         SetTargetTransform(playerCameraScript.GetTarget());
-        CreateSeed();
+        ShotSeed();
         seed--;
     }
 
@@ -136,6 +154,25 @@ public class Player : MonoBehaviour
         targetVec = (target.position - (transform.position + Vector3.up * 0.5f)).normalized;
     }
 
+    //種の発射用メソッド
+    private void ShotSeed()
+    {
+        seedObjects[seedNumber].SetActive(true);
+        Vector3 shotPos = transform.position + Vector3.up * 0.5f;
+        float rotX = Camera.main.transform.rotation.x - correctionX;
+        float rotY = Camera.main.transform.rotation.y;
+        float rotZ = Camera.main.transform.rotation.z;
+        float rotW = Camera.main.transform.rotation.w;
+        Quaternion shotRot = isTarget ? Quaternion.LookRotation(targetVec) :
+                                          new Quaternion(rotX, rotY, rotZ, rotW);
+        seedObjects[seedNumber].transform.position = shotPos;
+        seedObjects[seedNumber].transform.rotation = shotRot;
+        seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot();
+        seedNumber++;
+        if (seedNumber < seedCount) return;
+        seedNumber = 0;
+    }
+
     //ダメージ用メソッド
     public void Damage(int inDamage)
     {
@@ -148,18 +185,5 @@ public class Player : MonoBehaviour
     {
         if (seed >= maxSeed) return;
         seed++;
-    }
-
-    //種の生成用メソッド
-    private void CreateSeed()
-    {
-        Vector3 createPos = transform.position + Vector3.up * 0.5f;
-        float rotX = Camera.main.transform.rotation.x - correctionX;
-        float rotY = Camera.main.transform.rotation.y;
-        float rotZ = Camera.main.transform.rotation.z;
-        float rotW = Camera.main.transform.rotation.w;
-        Quaternion createRot = isTarget ? Quaternion.LookRotation(targetVec) :
-                                          new Quaternion(rotX, rotY, rotZ, rotW);
-        GameObject.Instantiate(seedPrefab, createPos, createRot);
     }
 }

@@ -5,6 +5,7 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem.Controls;
 using UnityEditor;
+using System.Collections;
 
 enum EasingControl
 {
@@ -24,6 +25,8 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     private GameObject sceneChangeUI;
     private SceneChangeUI sceneChangeUIScript;
+    [SerializeField]
+    private GameObject loadBar;
     //シーン遷移用変数
     private bool sceneChange = false;
     //進行管理用デリゲート変数
@@ -35,10 +38,12 @@ public class TitleManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        EnhancedTouchSupport.Enable();
         myPlatformInstance = Platform.GetPlatformInstance;
         touchScreenScript = touchScreenUI.GetComponent<TouchScreenImage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
         doMyTitleDelegate = Init;
+        loadBar.transform.localScale = new Vector3(0.0f, 1.0f, 1.0f);
     }
 
     //初期設定用メソッド
@@ -78,12 +83,35 @@ public class TitleManager : MonoBehaviour
         else CheckInputMobilePlatform();
     }
 
+    //シーン遷移のコルーチン呼び出し用メソッド
+    private void LoadSceneAsync()
+    {
+        StartCoroutine(LoadSceneCoroutine());
+    }
+
+    //シーン遷移のコルーチン用メソッド
+    private IEnumerator LoadSceneCoroutine()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameScene");
+
+        while (!asyncLoad.isDone)
+        {
+            float value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+            loadBar.transform.localScale = new Vector3(value, 1.0f, 1.0f);
+            Debug.Log("進行度 : " + value + "%");
+            yield return null;
+        }
+
+        Debug.Log("遷移完了");
+    }
+
     //GameSceneへの遷移用メソッド
     private void ChengeGameScene()
     {
         if (!sceneChange) return;
         if (!sceneChangeUIScript.EasingControl("Close")) return;
-        SceneManager.LoadScene("GameScene");
+        //SceneManager.LoadScene("GameScene");
+        LoadSceneAsync();
     }
 
     //タイトル用メソッド

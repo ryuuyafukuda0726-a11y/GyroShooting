@@ -136,15 +136,11 @@ public class Hamster : MonoBehaviour
         agent.speed = 0.0f;
         transform.rotation = Quaternion.LookRotation(attackTarget.position - transform.position);
         isAttack = true;
-        //transform.GetChild(0).GetComponent<Hamster_Model>().SetAttackTarget(attackTarget);
-        //if (myAnimator.GetBool("Attack")) return;
-        //Damage();
     }
 
     //ダメージ用メソッド
     private void Damage()
     {
-        //Debug.Log("Damage");
         if (attackTarget == player) player.GetComponent<Player>().Damage(power);
         else if (attackTarget == target) target.GetComponent<SunFlower>().Damage(power);
     }
@@ -172,11 +168,12 @@ public class Hamster : MonoBehaviour
         Debug.Log(collision.gameObject.tag);
         if (collision.gameObject.tag == "Bullet")
         {
-            Destroy(collision.gameObject);
+            collision.transform.GetComponent<SunflowerSeed>().DisappearanceAndHitDetection();
             hp--;
             if (hp > 0) return;
             destroyCallBack(transform);
-            Destroy(transform.gameObject);
+            transform.position = transform.parent.position;
+            gameObject.SetActive(false);
         }
     }
 
