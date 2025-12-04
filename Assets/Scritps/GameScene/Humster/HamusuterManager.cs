@@ -4,6 +4,8 @@ using UnityEngine;
 //ハムスターを管理するマネージャースクリプトクラス
 public class HamusuterManager
 {
+    //キャンバス用変数
+    private Transform canvas;
     //ターゲット用変数
     private Transform target;
     //プレイヤー用変数
@@ -31,6 +33,7 @@ public class HamusuterManager
         for(int i = 0; i < hamsterMaxCount; i++)
         {
             hamsterObjects[i] = GameObject.Instantiate(hamsterPrefab, hamsterParent.transform);
+            hamsterObjects[i].GetComponent<Hamster>().Init(canvas);
             hamsterObjects[i].SetActive(false);
         }
     }
@@ -135,7 +138,8 @@ public class HamusuterManager
                             int inSpawnCount, 
                             GameObject inHamsterPrefab, 
                             Transform inPlayer, 
-                            Transform inSpawnPoint)
+                            Transform inSpawnPoint,
+                            Transform inCanvas)
     {
         target = inTargets;
         spawnHamsterCount = inSpawnCount;
@@ -143,5 +147,6 @@ public class HamusuterManager
         hamsterPrefab = inHamsterPrefab;
         player = inPlayer;
         spawnPoints = inSpawnPoint;
+        canvas = inCanvas;
     }
 }

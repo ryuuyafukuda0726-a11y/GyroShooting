@@ -178,3 +178,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c2cf6d1f97bb342baea1049c511e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HungryGage
+  gageImage: {fileID: 5177143170289415067}
+  correctionPos: {x: 0, y: 200, z: 0}

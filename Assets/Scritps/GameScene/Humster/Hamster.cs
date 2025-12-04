@@ -34,6 +34,11 @@ public class Hamster : MonoBehaviour
     private int power = 0;
     private bool isAttack = false;
     private Transform attackTarget;
+    //空腹度UI用変数
+    [SerializeField]
+    private GameObject hungryGagePrefab;
+    private GameObject hungryGage;
+    private HungryGage hungryGageScript;
     //コールバック用メソッド
     public Action<Transform> destroyCallBack;
     //時間管理用変数
@@ -45,6 +50,15 @@ public class Hamster : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         myAnimator = transform.GetChild(0).GetComponent<Animator>();
         hp = maxHp;
+    }
+
+    //初期設定用メソッド
+    public void Init(Transform inCanvas)
+    {
+        hungryGage = GameObject.Instantiate(hungryGagePrefab, inCanvas);
+        hungryGageScript = hungryGage.GetComponent<HungryGage>();
+        hungryGageScript.Init();
+        hungryGage.SetActive(false);
     }
 
     //コールバックの設定用メソッド
@@ -95,7 +109,7 @@ public class Hamster : MonoBehaviour
         isWalk = true;
     }
 
-    //移動のインターバル用変数
+    //移動のインターバル用メソッド
     private void MoveInterval()
     {
         myTime += Time.deltaTime;
@@ -153,6 +167,13 @@ public class Hamster : MonoBehaviour
         myAnimator.SetBool("Attack", isAttack);
     }
 
+    //空腹ゲージ用メソッド
+    private void HungryGage()
+    {
+        hungryGageScript.SetPos(transform);
+        hungryGageScript.ControlDisplayTime();
+    }
+
     //プレイ用メソッド
     public void Play()
     {
@@ -160,6 +181,7 @@ public class Hamster : MonoBehaviour
         Attack();
         Move();
         Idle();
+        HungryGage();
     }
 
     //当たり判定用メソッド
@@ -170,9 +192,11 @@ public class Hamster : MonoBehaviour
         {
             collision.transform.GetComponent<SunflowerSeed>().DisappearanceAndHitDetection();
             hp--;
+            hungryGageScript.Display(hp * 10);
             if (hp > 0) return;
             destroyCallBack(transform);
             transform.position = transform.parent.position;
+            hungryGage.SetActive(false);
             gameObject.SetActive(false);
         }
     }

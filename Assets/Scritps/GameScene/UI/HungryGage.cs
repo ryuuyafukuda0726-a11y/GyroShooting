@@ -5,9 +5,13 @@ using UnityEngine;
 public class HungryGage : MonoBehaviour
 {
     //ゲージ用変数
+    private RectTransform gageRt;
     [SerializeField]
     private GameObject gageImage;
     private float maxHungry = 100.0f;
+    private Transform canvas;
+    [SerializeField]
+    private Vector3 correctionPos;
     //表示時間管理用変数
     private const float displayTime = 5.0f;
     private float myTime = 0.0f;
@@ -22,21 +26,22 @@ public class HungryGage : MonoBehaviour
     //初期設定用メソッド
     public void Init()
     {
-        RectTransform gageRt = gageImage.GetComponent<RectTransform>();
+        gageRt = gageImage.GetComponent<RectTransform>();
         Vector2 size = new Vector2(gageRt.sizeDelta.x, maxHungry);
         gageRt.sizeDelta = size;
     }
 
     //表示用メソッド
-    private void Display()
+    public void Display(float inValue)
     {
         gameObject.SetActive(true);
+        gageRt.sizeDelta = new Vector2(gageRt.sizeDelta.x, inValue);
         myTime = 0.0f;
         displayFlag = true;
     }
 
     //表示時間管理用メソッド
-    private void ControlDisplayTime()
+    public void ControlDisplayTime()
     {
         if (!displayFlag) return;
         myTime += Time.deltaTime;
@@ -44,12 +49,21 @@ public class HungryGage : MonoBehaviour
         {
             myTime = 0.0f;
             gameObject.SetActive(false);
+            displayFlag = false;
         }
+    }
+
+    //配置用メソッド
+    public void SetPos(Transform inTransform)
+    {
+        RectTransform rt = GetComponent<RectTransform>();
+        Vector3 pos = Camera.main.WorldToScreenPoint(inTransform.position);
+        rt.transform.position = pos + correctionPos;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

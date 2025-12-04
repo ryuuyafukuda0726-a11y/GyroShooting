@@ -1362,6 +1362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d3e47b9893cd94eb896e2bf3a8ed6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  canvas: {fileID: 812165827}
   hamsterPrefab: {fileID: 3524578030236818814, guid: 2dd2271434aabff43a46361f66723f56, type: 3}
   spawnCount: 5
   playerObject: {fileID: 392135725}

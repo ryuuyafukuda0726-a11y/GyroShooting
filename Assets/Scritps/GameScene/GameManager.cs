@@ -3,6 +3,9 @@ using UnityEngine;
 //ゲームシーンを管理するマネージャースクリプトクラス
 public class GameManager : MonoBehaviour
 {
+    //キャンバス用変数
+    [SerializeField]
+    private Transform canvas;
     //ハムスター用変数
     [SerializeField]
     private GameObject hamsterPrefab;
@@ -106,7 +109,8 @@ public class GameManager : MonoBehaviour
                                                     spawnCount, 
                                                     hamsterPrefab, 
                                                     playerObject.transform, 
-                                                    spawnPoint);
+                                                    spawnPoint,
+                                                    canvas);
         hamsterManagerScript.Init();
     }
 
