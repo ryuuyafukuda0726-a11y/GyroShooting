@@ -159,7 +159,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   speed: 5
+  maxLife: 0
   seedPrefab: {fileID: 7549976707407912971, guid: 7b5b75d8837948644aa1f23adbee035d, type: 3}
+  maxSeed: 0
+  seedCount: 0
+  trapCount: 0
   playerCamera: {fileID: 5138390800436094662}
 --- !u!114 &1560653690228142369
 MonoBehaviour:

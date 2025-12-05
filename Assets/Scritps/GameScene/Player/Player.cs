@@ -1,3 +1,4 @@
+using Fusion;
 using System;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -25,16 +26,17 @@ public class Player : MonoBehaviour
     private GameObject seedPrefab;
     [SerializeField]
     private int maxSeed = 0;
-    private int seed = 0;
     [SerializeField]
     private int seedCount = 0;
-    private int seedNumber = 0;
-    private GameObject[] seedObjects;
-    private GameObject seedParent;
-    //ターゲット用変数
-    private bool isTarget = false;
-    private Vector3 targetVec;
-    private float correctionX = 0.0f;
+    private SeedManager seedManagerScript;
+    //餌箱トラップ用変数
+    [SerializeField]
+    private GameObject feedingBoxPrefab;
+    [SerializeField]
+    private int maxTrap = 0;
+    [SerializeField]
+    private int trapCount = 0;
+    private FeedingBoxManager feedingBoxManagerScript;
     //カメラ用変数
     [SerializeField]
     private CinemachineCamera playerCamera;
@@ -58,29 +60,38 @@ public class Player : MonoBehaviour
         move = GetComponent<PlayerInput>().actions["Move"];
         playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
         //playerCameraScript.Init();
-        correctionX = playerCamera.transform.rotation.x;
+        //correctionX = playerCamera.transform.rotation.x;
         //SetCallBack();
         life = maxLife;
-        seed = maxSeed;
         myPlatformInstance = Platform.GetPlatformInstance;
     }
 
-    //種の生成用メソッド
-    private void Seed()
+    //種の初期設定用メソッド
+    private void SeedInit()
     {
-        seedParent = new GameObject("SeedParent");
-        seedObjects = new GameObject[seedCount];
-        for(int i = 0; i < seedCount; i++)
-        {
-            seedObjects[i] = GameObject.Instantiate(seedPrefab, seedParent.transform);
-            seedObjects[i].SetActive(false);
-        }
+        seedManagerScript = new SeedManager(transform,
+                                            seedPrefab,
+                                            maxSeed,
+                                            seedCount,
+                                            playerCamera.transform.rotation.x);
+        seedManagerScript.Init();
+        seedManagerScript.getTargetCallBack = playerCameraScript.GetTarget;
+    }
+
+    //餌箱の初期設定用メソッド
+    private void FeedingBoxInit()
+    {
+        feedingBoxManagerScript = new FeedingBoxManager(feedingBoxPrefab,
+                                                        maxTrap,
+                                                        trapCount);
+        feedingBoxManagerScript.Init();
     }
 
     //初期設定用メソッド
     public void Init()
     {
-        Seed();
+        SeedInit();
+        FeedingBoxInit();
         //move = GetComponent<PlayerInput>().actions["Move"];
         //playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
         //playerCameraScript.Init();
@@ -108,69 +119,30 @@ public class Player : MonoBehaviour
         transform.Translate(moveDirection * speed * Time.deltaTime);
     }
 
-    //発射用メソッド
-    private void Shot()
+    //餌箱の設置用メソッド
+    private void InstallationTrap()
     {
-        if (seed <= 0) return;
-        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
-        SetTargetTransform(playerCameraScript.GetTarget());
-        ShotSeed();
-        seed--;
-    }
-
-    //モバイルの発射用メソッド
-    public void MobileShot()
-    {
-        if (seed <= 0) return;
-        SetTargetTransform(playerCameraScript.GetTarget());
-        ShotSeed();
-        seed--;
+        if (!Keyboard.current.tKey.wasPressedThisFrame) return;
+        feedingBoxManagerScript.InputInstallation(transform.position);
     }
 
     //プレイ用メソッド
     public void Play()
     {
-        bulletGageDisplayCallBack(seed);
+        bulletGageDisplayCallBack(seedManagerScript.GetSeed());
         lifeGageDisplayCallBack(life);
         Input();
         Move();
+        InstallationTrap();
         playerCameraScript.Play(transform.position);
         if (myPlatformInstance.CheckPlatform()) return;
-        Shot();
+        seedManagerScript.Shot();
     }
 
     //モバイル操作のコールバック用メソッド
     public void MobileControlCallBack(Vector3 inputVec)
     {
         moveDirection = inputVec;
-    }
-
-    //ターゲットの設定用メソッド
-    private void SetTargetTransform(Transform target)
-    {
-        isTarget = false;
-        if (target == null) return;
-        isTarget = true;
-        targetVec = (target.position - (transform.position + Vector3.up * 0.5f)).normalized;
-    }
-
-    //種の発射用メソッド
-    private void ShotSeed()
-    {
-        seedObjects[seedNumber].SetActive(true);
-        Vector3 shotPos = transform.position + Vector3.up * 0.5f;
-        float rotX = Camera.main.transform.rotation.x - correctionX;
-        float rotY = Camera.main.transform.rotation.y;
-        float rotZ = Camera.main.transform.rotation.z;
-        float rotW = Camera.main.transform.rotation.w;
-        Quaternion shotRot = isTarget ? Quaternion.LookRotation(targetVec) :
-                                          new Quaternion(rotX, rotY, rotZ, rotW);
-        seedObjects[seedNumber].transform.position = shotPos;
-        seedObjects[seedNumber].transform.rotation = shotRot;
-        seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot();
-        seedNumber++;
-        if (seedNumber < seedCount) return;
-        seedNumber = 0;
     }
 
     //ダメージ用メソッド
@@ -180,10 +152,9 @@ public class Player : MonoBehaviour
         life -= inDamage;
     }
 
-    //残弾補充用メソッド
+    //給弾用メソッド
     public void ChargeBullet()
     {
-        if (seed >= maxSeed) return;
-        seed++;
+        seedManagerScript.ChargeBullet();
     }
 }

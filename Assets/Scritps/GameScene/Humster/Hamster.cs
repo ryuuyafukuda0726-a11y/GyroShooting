@@ -49,12 +49,12 @@ public class Hamster : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         myAnimator = transform.GetChild(0).GetComponent<Animator>();
-        hp = maxHp;
     }
 
     //初期設定用メソッド
     public void Init(Transform inCanvas)
     {
+        hp = maxHp;
         hungryGage = GameObject.Instantiate(hungryGagePrefab, inCanvas);
         hungryGageScript = hungryGage.GetComponent<HungryGage>();
         hungryGageScript.Init();
@@ -90,6 +90,12 @@ public class Hamster : MonoBehaviour
         }
         return false;
     }
+
+    ////トラップの発見処理用メソッド
+    //private bool FeedingBoxDiscovery()
+    //{
+    //    Vector3 rayVec = 
+    //}
 
     //目的地設定用メソッド
     private void SetDestination()
@@ -185,12 +191,12 @@ public class Hamster : MonoBehaviour
     }
 
     //当たり判定用メソッド
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(collision.gameObject.tag);
-        if (collision.gameObject.tag == "Bullet")
+        Debug.Log(other.gameObject.tag);
+        if (other.gameObject.tag == "Bullet")
         {
-            collision.transform.GetComponent<SunflowerSeed>().DisappearanceAndHitDetection();
+            other.transform.GetComponent<SunflowerSeed>().DisappearanceAndHitDetection();
             hp--;
             hungryGageScript.Display(hp * 10);
             if (hp > 0) return;

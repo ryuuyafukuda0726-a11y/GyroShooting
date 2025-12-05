@@ -110,7 +110,6 @@ public class PlayerCamera : MonoBehaviour
     private void CameraOperation()
     {
         Vector3 angle = new Vector3(horiz * 100.0f * Time.deltaTime, vert * 100.0f * Time.deltaTime, 0.0f);
-        Debug.Log(angle);
         if (transform.rotation.x > 0.5f && angle.y > 0.0f)
         {
             angle.y = 0.0f;

@@ -23,7 +23,7 @@ public class HamusuterManager
     private GameObject[] hamsterObjects;
     private GameObject hamsterParent;
     private List<GameObject> hamsters = new List<GameObject>();
-    private List<Hamster> hamsterScripts = new List<Hamster>();
+    //private List<Hamster> hamsterScripts = new List<Hamster>();
 
     //ハムスターの生成用メソッド
     private void CreateHamster()
@@ -70,9 +70,9 @@ public class HamusuterManager
         if (hamsters.Count == 0) return true;
         for (int i = 0; i < hamsters.Count; i++)
         {
-            if (hamsters[i] == hamsterObjects[hamsterNumber]) return true;
+            if (hamsters[i] == hamsterObjects[hamsterNumber]) return false;
         }
-        return false;
+        return true;
     }
 
     //出現したハムスターのリスト登録用メソッド
@@ -86,7 +86,7 @@ public class HamusuterManager
         hamsterScript.SetCallBack();
         hamsterScript.destroyCallBack = DestroyHamster;
         hamsters.Add(hamsterObjects[hamsterNumber]);
-        hamsterScripts.Add(hamsterScript);
+        //hamsterScripts.Add(hamsterScript);
     }
 
     //ハムスターの出現用メソッド
@@ -96,10 +96,10 @@ public class HamusuterManager
         while (!isFlag)
         {
             isFlag = CheckActiveHamster();
+            if(isFlag) SetListSpawnHamster();
             hamsterNumber++;
             if (hamsterNumber == hamsterMaxCount) hamsterNumber = 0;
-        }
-        SetListSpawnHamster();
+        }        
     }
 
     //ハムスターのプレイ中処理用メソッド
@@ -108,7 +108,7 @@ public class HamusuterManager
         int size = hamsters.Count;
         for(int i = 0; i < size; i++)
         {
-            hamsterScripts[i].Play();
+            hamsters[i].GetComponent<Hamster>().Play();
         }
     }
 
@@ -129,7 +129,7 @@ public class HamusuterManager
         {
             if (hamsters[i].gameObject != inTransform.gameObject) continue;
             hamsters.RemoveAt(i);
-            hamsterScripts.RemoveAt(i);
+            //hamsterScripts.RemoveAt(i);
         }
     }
 
