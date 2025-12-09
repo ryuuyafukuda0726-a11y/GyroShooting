@@ -6,6 +6,8 @@ public class FeedingBox : MonoBehaviour
     //箱のモデル用変数
     [SerializeField]
     private GameObject[] boxObjects = new GameObject[4];
+    //接触判定用変数
+    private bool isFlag = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,6 +29,22 @@ public class FeedingBox : MonoBehaviour
     {
         Init();
         boxObjects[0].SetActive(true);
+    }
+
+    //接触用メソッド
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Wall" || other.tag == "SunFlower")
+        {
+            isFlag = true;
+        }
+        else isFlag = false;
+    }
+
+    //
+    public bool GetFlag()
+    {
+        return isFlag;
     }
 
     // Update is called once per frame

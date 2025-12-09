@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     private FeedingBoxManager feedingBoxManagerScript;
     //カメラ用変数
     [SerializeField]
-    private CinemachineCamera playerCamera;
+    private GameObject playerCamera;
     private PlayerCamera playerCameraScript;
     //コールバック用変数
     public Action<int> bulletGageDisplayCallBack;
@@ -108,9 +108,9 @@ public class Player : MonoBehaviour
         inputMoveAxis = move.ReadValue<Vector2>();
         inputDirection.z = inputMoveAxis.x;
         inputDirection.x = inputMoveAxis.y;
-        cameraForward = Vector3.Scale(playerCamera.transform.forward, cameraCorrection);
+        cameraForward = Vector3.Scale(Camera.main.transform.forward, cameraCorrection);
         moveDirection = cameraForward * inputDirection.x 
-            + playerCamera.transform.right * inputDirection.z;
+            + Camera.main.transform.right * inputDirection.z;
     }
 
     //移動用メソッド
@@ -122,8 +122,17 @@ public class Player : MonoBehaviour
     //餌箱の設置用メソッド
     private void InstallationTrap()
     {
-        if (!Keyboard.current.tKey.wasPressedThisFrame) return;
-        feedingBoxManagerScript.InputInstallation(transform.position);
+        //if (!Keyboard.current.tKey.wasPressedThisFrame) return;
+        if (Keyboard.current.tKey.isPressed)
+        {
+            feedingBoxManagerScript.CheckInstallationSpace(transform.position);
+        }
+        if (Keyboard.current.tKey.wasReleasedThisFrame)
+        {
+           // if()
+            feedingBoxManagerScript.CheckInstallationSpaceEnd(transform.position);
+        }
+        //feedingBoxManagerScript.InputInstallation(transform.position);
     }
 
     //プレイ用メソッド

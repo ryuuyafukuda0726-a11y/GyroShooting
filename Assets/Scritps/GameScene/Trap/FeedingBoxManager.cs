@@ -60,7 +60,7 @@ public class FeedingBoxManager
             isFlag = CheckInstallation();
             if(isFlag) SetList(inPos);
             trapNumber++;
-            if (trapNumber >= trapCount) trapNumber = 0;
+            if (trapNumber >= trapCount) trapNumber = 1;
         }        
     }
 
@@ -70,6 +70,22 @@ public class FeedingBoxManager
         if (feedingBoxs.Count >= maxTrap) return;
         if (feedingBoxs.Count == 0) SetList(inPos);
         else Installation(inPos);
+    }
+
+    //設置場所確認用メソッド
+    public void CheckInstallationSpace(Vector3 inPos)
+    {
+        feedingBoxObjects[0].SetActive(true);
+        feedingBoxObjects[0].transform.position = inPos;
+    }
+
+    //確認終了時用メソッド
+    public void CheckInstallationSpaceEnd(Vector3 inPos)
+    {
+        feedingBoxObjects[0].transform.position = Vector3.zero;
+        feedingBoxObjects[0].SetActive(false);
+        if (!feedingBoxObjects[0].GetComponent<FeedingBox>().GetFlag()) return;
+        InputInstallation(inPos);
     }
 
     //コンストラクター

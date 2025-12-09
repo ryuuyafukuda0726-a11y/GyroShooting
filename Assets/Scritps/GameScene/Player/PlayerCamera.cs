@@ -36,7 +36,7 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         cameraAction = GetComponent<PlayerInput>().actions["Look"];
-        follow = GetComponent<CinemachineFollow>();
+        follow = transform.GetChild(0).GetComponent<CinemachineFollow>();
         raycaster = canvas.GetComponent<GraphicRaycaster>();
         myPlatformInstance = Platform.GetPlatformInstance;
         EnhancedTouchSupport.Enable();
@@ -118,6 +118,7 @@ public class PlayerCamera : MonoBehaviour
         {
             angle.y = 0.0f;
         }
+        //transform.Rotate(angle.)
         //if (transform.rotation.y > 0.5f && angle.x > 0.0f)
         //{
         //    angle.x = 0.0f;
@@ -126,8 +127,8 @@ public class PlayerCamera : MonoBehaviour
         //{
         //    angle.x = 0.0f;
         //}
-        transform.RotateAround(targetPos, Vector3.up, angle.x);
-        transform.RotateAround(targetPos, Vector3.right, angle.y);
+        //transform.RotateAround(targetPos, transform.up, angle.x);
+        //transform.RotateAround(targetPos, transform.right, angle.y);
         //SetPos(Vector3.up, angle.x);
         //SetPos(Vector3.right, angle.y);
     }
