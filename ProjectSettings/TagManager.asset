@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - Wall
   - SunFlower
+  - FeedingBox
   layers:
   - Default
   - TransparentFX

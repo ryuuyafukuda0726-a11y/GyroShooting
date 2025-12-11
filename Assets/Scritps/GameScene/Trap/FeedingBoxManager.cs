@@ -8,7 +8,7 @@ public class FeedingBoxManager
     private GameObject feedingBoxPrefab;
     private int maxTrap = 0;
     private int trapCount = 0;
-    private int trapNumber = 0;
+    private int trapNumber = 1;
     private GameObject[] feedingBoxObjects;
     private GameObject feedingBoxParent;
     private List<GameObject> feedingBoxs = new List<GameObject>();
@@ -75,17 +75,22 @@ public class FeedingBoxManager
     //設置場所確認用メソッド
     public void CheckInstallationSpace(Vector3 inPos)
     {
-        feedingBoxObjects[0].SetActive(true);
         feedingBoxObjects[0].transform.position = inPos;
+        feedingBoxObjects[0].SetActive(true);
+        feedingBoxObjects[0].transform.GetChild(0).gameObject.SetActive(true);
     }
 
     //確認終了時用メソッド
     public void CheckInstallationSpaceEnd(Vector3 inPos)
     {
-        feedingBoxObjects[0].transform.position = Vector3.zero;
+        bool isFlag = feedingBoxObjects[0].GetComponent<FeedingBox>().GetFlag();
+        if (isFlag)
+        {
+            InputInstallation(inPos);
+        }
+        Debug.Log(isFlag);
         feedingBoxObjects[0].SetActive(false);
-        if (!feedingBoxObjects[0].GetComponent<FeedingBox>().GetFlag()) return;
-        InputInstallation(inPos);
+        feedingBoxObjects[0].transform.position = Vector3.zero;
     }
 
     //コンストラクター

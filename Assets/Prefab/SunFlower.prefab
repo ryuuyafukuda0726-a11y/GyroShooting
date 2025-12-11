@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 421658410912974619}
   - component: {fileID: 6902263385679380352}
+  - component: {fileID: 1615554980138127482}
+  - component: {fileID: 4002887642037895504}
   m_Layer: 0
   m_Name: SunFlower
   m_TagString: Untagged
@@ -45,7 +47,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e862849a3d4d5ab4aba3075c2b2bf6ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SunFlower
-  hp: 0
+  chargeBulletInterval: 0
+  chargeDistance: 0
+  maxHp: 0
+  player: {fileID: 0}
+--- !u!54 &1615554980138127482
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8507164393571605626}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &4002887642037895504
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8507164393571605626}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2405171831477394713
 PrefabInstance:
   m_ObjectHideFlags: 0

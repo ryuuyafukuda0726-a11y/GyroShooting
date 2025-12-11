@@ -31,17 +31,17 @@ public class FeedingBox : MonoBehaviour
         boxObjects[0].SetActive(true);
     }
 
-    //接触用メソッド
-    private void OnTriggerEnter(Collider other)
+    //接触判定用メソッド
+    private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Wall" || other.tag == "SunFlower")
+        if (other.tag == "Untagged")
         {
             isFlag = true;
         }
         else isFlag = false;
     }
 
-    //
+    //接触確認用メソッド
     public bool GetFlag()
     {
         return isFlag;

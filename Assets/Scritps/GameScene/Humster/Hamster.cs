@@ -193,7 +193,6 @@ public class Hamster : MonoBehaviour
     //当たり判定用メソッド
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.tag);
         if (other.gameObject.tag == "Bullet")
         {
             other.transform.GetComponent<SunflowerSeed>().DisappearanceAndHitDetection();
