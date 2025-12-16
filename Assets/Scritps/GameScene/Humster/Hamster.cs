@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor.Timeline.Actions;
 
 //ハムスター用スクリプトクラス
 public class Hamster : MonoBehaviour
@@ -10,10 +12,13 @@ public class Hamster : MonoBehaviour
     //ターゲット判定用変数
     private Ray ray;
     private RaycastHit hit;
+    [SerializeField]
+    private float trapRange = 0.0f;
     //ナビ用変数
     private NavMeshAgent agent;
     private Transform target;
     private Transform player;
+    private List<GameObject> trapList;
     //HP用変数
     [SerializeField]
     private int maxHp = 0;
@@ -91,16 +96,29 @@ public class Hamster : MonoBehaviour
         return false;
     }
 
-    ////トラップの発見処理用メソッド
-    //private bool FeedingBoxDiscovery()
-    //{
-    //    Vector3 rayVec = 
-    //}
+    //トラップの発見処理用メソッド
+    private bool FeedingBoxDiscovery()
+    {
+        if (trapList == null) return false;
+        Transform trap = trapList[0].transform;
+        float distance = Vector3.Distance(trap.position, transform.position);
+        for (int i = 1; i < trapList.Count; i++)
+        {
+            float nextDistance = Vector3.Distance(trapList[i].transform.position, transform.position);
+            if (distance > nextDistance) trap = trapList[i].transform;
+        }
+        if (Vector3.Distance(trap.position, transform.position) > trapRange) return false;
+        agent.destination = trap.position;
+        return true;
+    }
 
     //目的地設定用メソッド
     private void SetDestination()
     {
-        agent.destination = PlayerDiscovery() ? player.position : target.position;
+        if (!FeedingBoxDiscovery())
+        {
+            agent.destination = PlayerDiscovery() ? player.position : target.position;
+        }
     }
 
     //アイドル用メソッド
@@ -188,6 +206,12 @@ public class Hamster : MonoBehaviour
         Move();
         Idle();
         HungryGage();
+    }
+
+    //トラップのリスト登録用メソッド
+    public void SetTrapList(List<GameObject> inTrapList)
+    {
+        trapList = inTrapList;
     }
 
     //当たり判定用メソッド

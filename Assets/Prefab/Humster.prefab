@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89624c4ce93117b43b75547dbddfe7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Humster
+  trapRange: 10
   maxHp: 10
   moveSpeed: 1.75
   maxInterval: 4

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 //餌箱トラップを管理するマネージャースクリプトクラス
 public class FeedingBoxManager
@@ -12,6 +13,8 @@ public class FeedingBoxManager
     private GameObject[] feedingBoxObjects;
     private GameObject feedingBoxParent;
     private List<GameObject> feedingBoxs = new List<GameObject>();
+    //コールバック用変数
+    public Action<List<GameObject>> setTrapListCallBack;
 
     //餌箱の生成用メソッド
     private void CreateFeedingBox()
@@ -51,8 +54,8 @@ public class FeedingBoxManager
         return true;
     }
 
-    //設置用メソッド
-    private void Installation(Vector3 inPos)
+    //生成用メソッド
+    private void CreateTrap(Vector3 inPos)
     {
         bool isFlag = false;
         while (!isFlag)
@@ -64,20 +67,27 @@ public class FeedingBoxManager
         }        
     }
 
-    //設置入力用メソッド
-    public void InputInstallation(Vector3 inPos)
+    //設置用メソッド
+    public void Installation(Vector3 inPos)
     {
         if (feedingBoxs.Count >= maxTrap) return;
         if (feedingBoxs.Count == 0) SetList(inPos);
-        else Installation(inPos);
+        else CreateTrap(inPos);
+        SetTrapList();
+    }
+
+    //設置入力用メソッド
+    public void InputInstallation()
+    {
+        feedingBoxObjects[0].SetActive(true);
+        feedingBoxObjects[0].transform.GetChild(0).gameObject.SetActive(true);
+        feedingBoxObjects[0].GetComponent<FeedingBox>().InputInstallation();
     }
 
     //設置場所確認用メソッド
     public void CheckInstallationSpace(Vector3 inPos)
     {
         feedingBoxObjects[0].transform.position = inPos;
-        feedingBoxObjects[0].SetActive(true);
-        feedingBoxObjects[0].transform.GetChild(0).gameObject.SetActive(true);
     }
 
     //確認終了時用メソッド
@@ -86,11 +96,16 @@ public class FeedingBoxManager
         bool isFlag = feedingBoxObjects[0].GetComponent<FeedingBox>().GetFlag();
         if (isFlag)
         {
-            InputInstallation(inPos);
+            Installation(inPos);
         }
-        Debug.Log(isFlag);
         feedingBoxObjects[0].SetActive(false);
         feedingBoxObjects[0].transform.position = Vector3.zero;
+    }
+
+    //トラップのリスト登録用メソッド
+    private void SetTrapList()
+    {
+        setTrapListCallBack(feedingBoxs);
     }
 
     //コンストラクター

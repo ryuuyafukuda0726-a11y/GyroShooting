@@ -1,5 +1,6 @@
 using Fusion;
 using System;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -47,13 +48,6 @@ public class Player : MonoBehaviour
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
-    ////コールバックの設定用メソッド
-    //private void SetCallBack()
-    //{
-    //    playerCameraScript.SetTargetCallBack = SetTargetTransform;
-    //    playerCameraScript.ShotCallBack = CreateSeed;
-    //}
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -85,6 +79,12 @@ public class Player : MonoBehaviour
                                                         maxTrap,
                                                         trapCount);
         feedingBoxManagerScript.Init();
+    }
+
+    //トラップのリスト登録コールバックの設定用メソッド
+    public void SetTrapListCallBack(Action<List<GameObject>> inAction)
+    {
+        feedingBoxManagerScript.setTrapListCallBack = inAction;
     }
 
     //初期設定用メソッド
@@ -122,7 +122,10 @@ public class Player : MonoBehaviour
     //餌箱の設置用メソッド
     private void InstallationTrap()
     {
-        //if (!Keyboard.current.tKey.wasPressedThisFrame) return;
+        if (Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            feedingBoxManagerScript.InputInstallation();
+        }
         if (Keyboard.current.tKey.isPressed)
         {
             feedingBoxManagerScript.CheckInstallationSpace(transform.position);

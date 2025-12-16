@@ -601,9 +601,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -3692,6 +3692,14 @@ PrefabInstance:
     - target: {fileID: 2804153176016632562, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: m_LocalScale.z
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288061865337380936, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
+      propertyPath: m_TagString
+      value: SunFlower
+      objectReference: {fileID: 0}
+    - target: {fileID: 4002887642037895504, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
+      propertyPath: m_Radius
+      value: 0.0125
       objectReference: {fileID: 0}
     - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: hp

@@ -24,6 +24,8 @@ public class HamusuterManager
     private GameObject hamsterParent;
     private List<GameObject> hamsters = new List<GameObject>();
     //private List<Hamster> hamsterScripts = new List<Hamster>();
+    //トラップ用変数
+    private List<GameObject> trapList;
 
     //ハムスターの生成用メソッド
     private void CreateHamster()
@@ -86,6 +88,7 @@ public class HamusuterManager
         hamsterScript.SetCallBack();
         hamsterScript.destroyCallBack = DestroyHamster;
         hamsters.Add(hamsterObjects[hamsterNumber]);
+        SetTrapList();
         //hamsterScripts.Add(hamsterScript);
     }
 
@@ -131,6 +134,24 @@ public class HamusuterManager
             hamsters.RemoveAt(i);
             //hamsterScripts.RemoveAt(i);
         }
+    }
+
+    //トラップのリスト登録用変数
+    private void SetTrapList()
+    {
+        if (trapList == null) return;
+        for (int i = 0; i < hamsters.Count; i++)
+        {
+            hamsters[i].GetComponent<Hamster>().SetTrapList(trapList);
+        }
+    }
+
+    //トラップリストの登録コールバック用メソッド
+    public void SetTrapListCallBack(List<GameObject> inList)
+    {
+        trapList = inList;
+        if (hamsters == null) return;
+        SetTrapList();
     }
 
     //コンストラクター

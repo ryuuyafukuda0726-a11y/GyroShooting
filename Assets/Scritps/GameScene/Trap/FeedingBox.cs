@@ -31,6 +31,12 @@ public class FeedingBox : MonoBehaviour
         boxObjects[0].SetActive(true);
     }
 
+    //設置入力用メソッド
+    public void InputInstallation()
+    {
+        isFlag = false;
+    }
+
     //接触判定用メソッド
     private void OnTriggerStay(Collider other)
     {
@@ -39,6 +45,7 @@ public class FeedingBox : MonoBehaviour
             isFlag = true;
         }
         else isFlag = false;
+        Debug.Log(isFlag);
     }
 
     //接触確認用メソッド

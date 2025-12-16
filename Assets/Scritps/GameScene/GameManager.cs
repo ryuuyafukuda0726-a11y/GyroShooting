@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
     {
         playerScript.bulletGageDisplayCallBack = bulletGageScript.Display;
         playerScript.lifeGageDisplayCallBack = lifeGageScript.Display;
+        playerScript.SetTrapListCallBack(hamsterManagerScript.SetTrapListCallBack);
     }
 
     //ひまわりのコールバック設定用メソッド
@@ -117,15 +118,15 @@ public class GameManager : MonoBehaviour
     //初期設定用メソッド
     private void Init()
     {
-        SetPlayerCallBack();
-        SetMobileControlCallBack();
-        SetSunFlowerCallBack();
         ShotButtonInit();
         HamsterInit();
         playerScript.Init();
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();
+        SetPlayerCallBack();
+        SetMobileControlCallBack();
+        SetSunFlowerCallBack();
         doMyGameDelegate = InGameEasing;
     }
 

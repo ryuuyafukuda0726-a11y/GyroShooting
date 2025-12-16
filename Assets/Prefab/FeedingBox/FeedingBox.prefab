@@ -9,9 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 381686889758048905}
-  - component: {fileID: 860161840437917620}
   - component: {fileID: 54939868649849882}
   - component: {fileID: -4232733476420544366}
+  - component: {fileID: 3073521569128561251}
+  - component: {fileID: 6838748152083377557}
+  - component: {fileID: 5257079626396031110}
+  - component: {fileID: 717338838860834378}
   m_Layer: 0
   m_Name: FeedingBox
   m_TagString: FeedingBox
@@ -38,23 +41,6 @@ Transform:
   - {fileID: 5088445164107385755}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &860161840437917620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5566229304336866586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85d8ef9235d4f00489409c8a9417ad3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FeedingBox
-  boxObjects:
-  - {fileID: 7089945962825942064}
-  - {fileID: 2754286519883978328}
-  - {fileID: 2913626288454431260}
-  - {fileID: 5608698175903535393}
 --- !u!65 &54939868649849882
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -74,8 +60,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.7, y: 0.3, z: 2.3}
-  m_Center: {x: 0, y: 0.25, z: 0}
+  m_Size: {x: 0.25, y: 0.3, z: 2.3}
+  m_Center: {x: 0.8, y: 0.25, z: 0}
 --- !u!54 &-4232733476420544366
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -103,6 +89,86 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3073521569128561251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5566229304336866586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d8ef9235d4f00489409c8a9417ad3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FeedingBox
+  boxObjects:
+  - {fileID: 7089945962825942064}
+  - {fileID: 2754286519883978328}
+  - {fileID: 2913626288454431260}
+  - {fileID: 5608698175903535393}
+--- !u!65 &6838748152083377557
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5566229304336866586}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.25, y: 0.3, z: 2.3}
+  m_Center: {x: -0.8, y: 0.25, z: 0}
+--- !u!65 &5257079626396031110
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5566229304336866586}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 0.3, z: 0.25}
+  m_Center: {x: 0, y: 0.25, z: 1.1}
+--- !u!65 &717338838860834378
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5566229304336866586}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 0.3, z: 0.25}
+  m_Center: {x: 0, y: 0.25, z: -1.1}
 --- !u!1001 &835307723889622214
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,6 +228,10 @@ PrefabInstance:
     - target: {fileID: 7634471885222197494, guid: ada92fdd275ffdf48914eea9b8b022c8, type: 3}
       propertyPath: m_Name
       value: feedingBox_Max
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634471885222197494, guid: ada92fdd275ffdf48914eea9b8b022c8, type: 3}
+      propertyPath: m_TagString
+      value: FeedingBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -230,6 +300,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: feedingBox_SmallAmount
       objectReference: {fileID: 0}
+    - target: {fileID: 4493465669103873355, guid: c35b2ed746da7814b8c2a758ad5e82f8, type: 3}
+      propertyPath: m_TagString
+      value: FeedingBox
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -296,6 +370,10 @@ PrefabInstance:
     - target: {fileID: 904192746711309112, guid: 948d124c06e7dce459f05a5420f5743a, type: 3}
       propertyPath: m_Name
       value: feedingBox_Half
+      objectReference: {fileID: 0}
+    - target: {fileID: 904192746711309112, guid: 948d124c06e7dce459f05a5420f5743a, type: 3}
+      propertyPath: m_TagString
+      value: FeedingBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -371,6 +449,10 @@ PrefabInstance:
     - target: {fileID: 9079597050023558916, guid: e020a157457b74e4d8e770984857640f, type: 3}
       propertyPath: m_Name
       value: feedingBox_Empty
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079597050023558916, guid: e020a157457b74e4d8e770984857640f, type: 3}
+      propertyPath: m_TagString
+      value: FeedingBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
