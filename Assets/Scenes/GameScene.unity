@@ -1364,7 +1364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   canvas: {fileID: 812165827}
   hamsterPrefab: {fileID: 3524578030236818814, guid: 2dd2271434aabff43a46361f66723f56, type: 3}
-  spawnCount: 5
+  spawnCount: 1
   playerObject: {fileID: 392135725}
   virtualPadObject: {fileID: 1161459610}
   shotButtonObject: {fileID: 997101561}

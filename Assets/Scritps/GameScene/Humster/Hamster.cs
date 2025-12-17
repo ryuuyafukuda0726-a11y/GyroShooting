@@ -19,6 +19,7 @@ public class Hamster : MonoBehaviour
     private Transform target;
     private Transform player;
     private List<GameObject> trapList;
+    private Transform trap;
     //HP用変数
     [SerializeField]
     private int maxHp = 0;
@@ -69,7 +70,7 @@ public class Hamster : MonoBehaviour
     //コールバックの設定用メソッド
     public void SetCallBack()
     {
-        transform.GetChild(0).GetComponent<Hamster_Model>().AttackCallBack = Damage;
+        transform.GetChild(0).GetComponent<Hamster_Model>().AttackCallBack = AttackCallBack;
     }
 
     //ターゲットの設定用メソッド
@@ -99,15 +100,20 @@ public class Hamster : MonoBehaviour
     //トラップの発見処理用メソッド
     private bool FeedingBoxDiscovery()
     {
+        trap = null;
         if (trapList == null) return false;
-        Transform trap = trapList[0].transform;
+        trap = trapList[0].transform;
         float distance = Vector3.Distance(trap.position, transform.position);
         for (int i = 1; i < trapList.Count; i++)
         {
             float nextDistance = Vector3.Distance(trapList[i].transform.position, transform.position);
             if (distance > nextDistance) trap = trapList[i].transform;
         }
-        if (Vector3.Distance(trap.position, transform.position) > trapRange) return false;
+        if (Vector3.Distance(trap.position, transform.position) > trapRange)
+        {
+            trap = null;
+            return false;
+        }
         agent.destination = trap.position;
         return true;
     }
@@ -153,9 +159,16 @@ public class Hamster : MonoBehaviour
         MoveInterval();
     }
 
-    //距離の判定用メソッド
-    private Transform CheckDistance()
+    //攻撃距離の判定用メソッド
+    private Transform CheckAttackDistance()
     {
+        if (trap != null)
+        {
+            float trapDistance = Vector3.Distance(transform.position, trap.position);
+            Debug.Log("距離 : " + trapDistance);
+            if (trapDistance < attackDistance) return trap;
+            else return null;
+        }
         float playerDistance = Vector3.Distance(transform.position, player.position);
         float targetDistance = Vector3.Distance(transform.position, target.position);
         if (playerDistance < targetDistance)
@@ -169,18 +182,20 @@ public class Hamster : MonoBehaviour
     //攻撃開始用メソッド
     private void AttackStart()
     {
-        attackTarget = CheckDistance();
+        attackTarget = CheckAttackDistance();
         if (attackTarget == null) return;
         agent.speed = 0.0f;
-        transform.rotation = Quaternion.LookRotation(attackTarget.position - transform.position);
+        transform.rotation = 
+            Quaternion.LookRotation(attackTarget.position - transform.position);
         isAttack = true;
     }
 
-    //ダメージ用メソッド
-    private void Damage()
+    //攻撃時コールバック用メソッド
+    private void AttackCallBack()
     {
         if (attackTarget == player) player.GetComponent<Player>().Damage(power);
         else if (attackTarget == target) target.GetComponent<SunFlower>().Damage(power);
+        else if (attackTarget == trap) Damage();
     }
 
     //攻撃用メソッド
@@ -214,19 +229,25 @@ public class Hamster : MonoBehaviour
         trapList = inTrapList;
     }
 
+    //体力減少用メソッド
+    private void Damage()
+    {
+        hp--;
+        hungryGageScript.Display(hp * 10);
+        if (hp > 0) return;
+        destroyCallBack(transform);
+        transform.position = transform.parent.position;
+        hungryGage.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
     //当たり判定用メソッド
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Bullet")
         {
             other.transform.GetComponent<SunflowerSeed>().DisappearanceAndHitDetection();
-            hp--;
-            hungryGageScript.Display(hp * 10);
-            if (hp > 0) return;
-            destroyCallBack(transform);
-            transform.position = transform.parent.position;
-            hungryGage.SetActive(false);
-            gameObject.SetActive(false);
+            Damage();
         }
     }
 
