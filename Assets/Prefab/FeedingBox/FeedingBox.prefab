@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85d8ef9235d4f00489409c8a9417ad3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FeedingBox
+  maxDurability: 20
   boxObjects:
   - {fileID: 7089945962825942064}
   - {fileID: 2754286519883978328}

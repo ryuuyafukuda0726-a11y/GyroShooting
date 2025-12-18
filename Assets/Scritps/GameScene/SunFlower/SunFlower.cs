@@ -18,6 +18,12 @@ public class SunFlower : MonoBehaviour
     //プレイヤー用変数
     [SerializeField]
     private Transform player;
+    //イージング用変数
+    private EasingSequence easingSequence = EasingSequence.SetEasing;
+    private float percent = 0.0f;
+    private const float maxPercent = 1.0f;
+    private const float minPercent = 0.0f;
+    private Quaternion startRot, endRot;
     //コールバック用変数
     public Action<float> sunFlowerGageDisplayCallBack;
     public Action chargeBulletCallBack;
@@ -26,6 +32,7 @@ public class SunFlower : MonoBehaviour
     void Start()
     {
         hp = maxHp;
+        easingSequence = EasingSequence.SetEasing;
     }
 
     //距離の判定用メソッド
@@ -47,11 +54,57 @@ public class SunFlower : MonoBehaviour
         }
     }
 
+    //イージング設定用メソッド
+    private void SetEasing()
+    {
+        startRot = transform.rotation;
+        endRot = new Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
+        percent = minPercent;
+    }
+
+    //イージング用メソッド
+    private bool Easing()
+    {
+        percent += Time.deltaTime;
+        transform.rotation = Quaternion.Lerp(startRot, endRot, percent);
+        transform.Rotate(Vector3.up * percent * Time.deltaTime);
+        return percent >= maxPercent ? true : false;
+    }
+
+    //イージング管理用メソッド
+    private void EasingControl()
+    {
+        switch (easingSequence)
+        {
+            case EasingSequence.SetEasing:
+                SetEasing();
+                easingSequence++;
+                break;
+            case EasingSequence.Easing:
+                if (Easing()) easingSequence++;
+                break;
+            case EasingSequence.EasingEnd:
+                easingSequence = EasingSequence.SetEasing;
+                break;
+            default:
+                break;
+        }
+    }
+
+    //破壊時用メソッド
+    private void Destroy()
+    {
+        if (hp > 0) return;
+        EasingControl();
+    }
+
     //プレイ用メソッド
     public void Play()
     {
-        PlayerChargeBullet();
+        Destroy();
         sunFlowerGageDisplayCallBack(hp);
+        if (hp <= 0) return;
+        PlayerChargeBullet();
     }
 
     //ダメージ用メソッド

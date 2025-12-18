@@ -1,13 +1,20 @@
+using System;
 using UnityEngine;
 
 //餌箱トラップ用スクリプトクラス
 public class FeedingBox : MonoBehaviour
 {
+    //トラップの耐久用変数
+    [SerializeField]
+    private int maxDurability = 0;
+    private int durability = 0;
     //箱のモデル用変数
     [SerializeField]
     private GameObject[] boxObjects = new GameObject[4];
     //接触判定用変数
     private bool isFlag = false;
+    //コールバック用変数
+    public Action<Transform> destroyCallBack;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,6 +35,7 @@ public class FeedingBox : MonoBehaviour
     public void Installation()
     {
         Init();
+        durability = maxDurability;
         boxObjects[0].SetActive(true);
     }
 
@@ -35,6 +43,14 @@ public class FeedingBox : MonoBehaviour
     public void InputInstallation()
     {
         isFlag = false;
+    }
+
+    //耐久値減少用メソッド
+    public void durabilityDown()
+    {
+        durability--;
+        if (durability > 0) return;
+        destroyCallBack(transform);
     }
 
     //接触判定用メソッド

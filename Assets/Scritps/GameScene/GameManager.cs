@@ -1,5 +1,13 @@
 using UnityEngine;
 
+//イージング管理
+public enum EasingSequence
+{
+    SetEasing,
+    Easing,
+    EasingEnd
+}
+
 //ゲームシーンを管理するマネージャースクリプトクラス
 public class GameManager : MonoBehaviour
 {

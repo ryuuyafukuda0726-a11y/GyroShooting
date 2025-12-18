@@ -18,7 +18,7 @@ public class Hamster : MonoBehaviour
     private NavMeshAgent agent;
     private Transform target;
     private Transform player;
-    private List<GameObject> trapList;
+    private List<GameObject> trapList = new List<GameObject>();
     private Transform trap;
     //HP用変数
     [SerializeField]
@@ -101,7 +101,7 @@ public class Hamster : MonoBehaviour
     private bool FeedingBoxDiscovery()
     {
         trap = null;
-        if (trapList == null) return false;
+        if (trapList.Count <= 0 || trapList == null) return false;
         trap = trapList[0].transform;
         float distance = Vector3.Distance(trap.position, transform.position);
         for (int i = 1; i < trapList.Count; i++)
@@ -165,7 +165,7 @@ public class Hamster : MonoBehaviour
         if (trap != null)
         {
             float trapDistance = Vector3.Distance(transform.position, trap.position);
-            Debug.Log("距離 : " + trapDistance);
+            //Debug.Log("距離 : " + trapDistance);
             if (trapDistance < attackDistance) return trap;
             else return null;
         }
@@ -195,7 +195,10 @@ public class Hamster : MonoBehaviour
     {
         if (attackTarget == player) player.GetComponent<Player>().Damage(power);
         else if (attackTarget == target) target.GetComponent<SunFlower>().Damage(power);
-        else if (attackTarget == trap) Damage();
+        else if (attackTarget == trap) {
+            Damage();
+            trap.GetComponent<FeedingBox>().durabilityDown();
+        }
     }
 
     //攻撃用メソッド

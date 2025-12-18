@@ -25,6 +25,7 @@ public class FeedingBoxManager
         {
             feedingBoxObjects[i] = GameObject.Instantiate(feedingBoxPrefab, feedingBoxParent.transform);
             feedingBoxObjects[i].GetComponent<FeedingBox>().Init();
+            feedingBoxObjects[i].GetComponent<FeedingBox>().destroyCallBack = destroyTrap;
             feedingBoxObjects[i].SetActive(false);
         }
     }
@@ -106,6 +107,19 @@ public class FeedingBoxManager
     private void SetTrapList()
     {
         setTrapListCallBack(feedingBoxs);
+    }
+
+    //トラップ破壊コールバック用メソッド
+    private void destroyTrap(Transform inTrap)
+    {
+        for(int i = 0; i < feedingBoxs.Count; i++)
+        {
+            if (feedingBoxs[i] != inTrap.gameObject) continue;
+            feedingBoxs.RemoveAt(i);
+            inTrap.gameObject.SetActive(false);
+            inTrap.position = Vector3.zero;
+        }
+        SetTrapList();
     }
 
     //コンストラクター

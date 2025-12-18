@@ -139,10 +139,11 @@ public class HamusuterManager
     //トラップのリスト登録用変数
     private void SetTrapList()
     {
-        if (trapList == null) return;
         for (int i = 0; i < hamsters.Count; i++)
         {
-            hamsters[i].GetComponent<Hamster>().SetTrapList(trapList);
+            Hamster hamster = hamsters[i].GetComponent<Hamster>();
+            if (trapList == null) hamster.SetTrapList(null);
+            else hamster.SetTrapList(trapList);
         }
     }
 
