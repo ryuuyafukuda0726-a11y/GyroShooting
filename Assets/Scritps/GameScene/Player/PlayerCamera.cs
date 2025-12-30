@@ -45,8 +45,17 @@ public class PlayerCamera : MonoBehaviour
     //PCでのカメラ操作入力用メソッド
     private void PCInputCameraOperation()
     {
+        //if (Keyboard.current.gKey.isPressed)
+        //{
+        //    vert += 1.0f * Time.deltaTime;
+        //}
+        //if (Keyboard.current.fKey.isPressed)
+        //{
+        //    vert -= 1.0f * Time.deltaTime;
+        //}
         vert = -cameraAction.ReadValue<Vector2>().y;
-        horiz = cameraAction.ReadValue<Vector2>().x;        
+        horiz = cameraAction.ReadValue<Vector2>().x;
+        Debug.Log(vert);
     }
 
     //操作開始用メソッド
@@ -127,8 +136,8 @@ public class PlayerCamera : MonoBehaviour
         //{
         //    angle.x = 0.0f;
         //}
-        //transform.RotateAround(targetPos, transform.up, angle.x);
-        //transform.RotateAround(targetPos, transform.right, angle.y);
+        transform.RotateAround(targetPos, transform.up, angle.x);
+        transform.RotateAround(targetPos, transform.right, angle.y);
         //SetPos(Vector3.up, angle.x);
         //SetPos(Vector3.right, angle.y);
     }
