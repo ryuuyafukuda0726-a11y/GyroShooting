@@ -114,6 +114,12 @@ public class SunFlower : MonoBehaviour
         hp -= inDamage;
     }
 
+    //最大HPの取得用メソッド
+    public float GetMaxHP()
+    {
+        return maxHp;
+    }
+
     // Update is called once per frame
     void Update()
     {

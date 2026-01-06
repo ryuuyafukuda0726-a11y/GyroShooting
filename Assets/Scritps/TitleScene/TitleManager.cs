@@ -30,8 +30,8 @@ public class TitleManager : MonoBehaviour
     //シーン遷移用変数
     private bool sceneChange = false;
     //進行管理用デリゲート変数
-    private delegate void DoMyTitleDelegate();
-    private DoMyTitleDelegate doMyTitleDelegate;
+    private delegate void MyTitleDelegate();
+    private MyTitleDelegate myTitleDelegate;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -42,7 +42,7 @@ public class TitleManager : MonoBehaviour
         myPlatformInstance = Platform.GetPlatformInstance;
         touchScreenScript = touchScreenUI.GetComponent<TouchScreenImage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
-        doMyTitleDelegate = Init;
+        myTitleDelegate = Init;
         loadBar.transform.localScale = new Vector3(0.0f, 1.0f, 1.0f);
     }
 
@@ -51,14 +51,14 @@ public class TitleManager : MonoBehaviour
     {
         touchScreenScript.Init();
         sceneChangeUIScript.Init();
-        doMyTitleDelegate = TitleEasing;
+        myTitleDelegate = TitleEasing;
     }
 
     //タイトルへのイージング用メソッド
     private void TitleEasing()
     {
         if (!sceneChangeUIScript.EasingControl("Open")) return;
-        doMyTitleDelegate = Title;
+        myTitleDelegate = Title;
     }
 
     //PCでの入力確認用メソッド
@@ -92,7 +92,7 @@ public class TitleManager : MonoBehaviour
     //シーン遷移のコルーチン用メソッド
     private IEnumerator LoadSceneCoroutine()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameScene");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("LobbyScene");
 
         while (!asyncLoad.isDone)
         {
@@ -126,6 +126,6 @@ public class TitleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        doMyTitleDelegate();
+        myTitleDelegate();
     }
 }

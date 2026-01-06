@@ -18,7 +18,7 @@ public class Hamster : MonoBehaviour
     private NavMeshAgent agent;
     private Transform target;
     private Transform player;
-    private List<GameObject> trapList = new List<GameObject>();
+    private List<GameObject> trapList;
     private Transform trap;
     //HP用変数
     [SerializeField]
@@ -55,6 +55,7 @@ public class Hamster : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         myAnimator = transform.GetChild(0).GetComponent<Animator>();
+        trapList = new List<GameObject>();
     }
 
     //初期設定用メソッド
@@ -101,7 +102,7 @@ public class Hamster : MonoBehaviour
     private bool FeedingBoxDiscovery()
     {
         trap = null;
-        if (trapList.Count <= 0 || trapList == null) return false;
+        if (trapList.Count == 0 || trapList == null) return false;
         trap = trapList[0].transform;
         float distance = Vector3.Distance(trap.position, transform.position);
         for (int i = 1; i < trapList.Count; i++)

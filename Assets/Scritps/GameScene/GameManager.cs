@@ -55,8 +55,8 @@ public class GameManager : MonoBehaviour
     private GameObject sceneChangeUI;
     private SceneChangeUI sceneChangeUIScript;
     //進行管理用デリゲート変数
-    private delegate void DoMyGameDelegate();
-    private DoMyGameDelegate doMyGameDelegate;
+    private delegate void MyGameDelegate();
+    private MyGameDelegate myGameDelegate;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         lifeGageScript = lifeGageImage.GetComponent<LifeGage>();
         bulletGageScript = bulletGageImage.GetComponent<BulletGage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
-        doMyGameDelegate = Init;
+        myGameDelegate = Init;
     }
 
     //モバイル操作のコールバック設定用メソッド
@@ -132,17 +132,18 @@ public class GameManager : MonoBehaviour
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();
+        sunFlowerGageScript.Init(sunFlowerScript.GetMaxHP());
         SetPlayerCallBack();
         SetMobileControlCallBack();
         SetSunFlowerCallBack();
-        doMyGameDelegate = InGameEasing;
+        myGameDelegate = InGameEasing;
     }
 
     //インゲームへのイージング用メソッド
     private void InGameEasing()
     {
         if (!sceneChangeUIScript.EasingControl("Open")) return;
-        doMyGameDelegate = InGame;
+        myGameDelegate = InGame;
     }
 
     //インゲーム用メソッド
@@ -158,6 +159,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        doMyGameDelegate();
+        myGameDelegate();
     }
 }

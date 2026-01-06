@@ -27,7 +27,7 @@ public class PlayerCamera : MonoBehaviour
     private float valueCorrection = 0.0f;
     //カメラの制御用変数
     private bool isControl = false;
-    private CinemachineFollow follow;
+    //private CinemachineFollow follow;
     private Vector3 targetPos;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
@@ -36,7 +36,7 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         cameraAction = GetComponent<PlayerInput>().actions["Look"];
-        follow = transform.GetChild(0).GetComponent<CinemachineFollow>();
+        //follow = transform.GetChild(0).GetComponent<CinemachineFollow>();
         raycaster = canvas.GetComponent<GraphicRaycaster>();
         myPlatformInstance = Platform.GetPlatformInstance;
         EnhancedTouchSupport.Enable();
@@ -45,17 +45,8 @@ public class PlayerCamera : MonoBehaviour
     //PCでのカメラ操作入力用メソッド
     private void PCInputCameraOperation()
     {
-        //if (Keyboard.current.gKey.isPressed)
-        //{
-        //    vert += 1.0f * Time.deltaTime;
-        //}
-        //if (Keyboard.current.fKey.isPressed)
-        //{
-        //    vert -= 1.0f * Time.deltaTime;
-        //}
         vert = -cameraAction.ReadValue<Vector2>().y;
         horiz = cameraAction.ReadValue<Vector2>().x;
-        Debug.Log(vert);
     }
 
     //操作開始用メソッド
@@ -105,15 +96,15 @@ public class PlayerCamera : MonoBehaviour
     }
 
     //配置用メソッド
-    private void SetPos(Vector3 axis, float angle)
-    {
-        Vector3 vector = follow.FollowOffset;
-        Quaternion quaternion = Quaternion.AngleAxis(angle, axis);
-        Vector3 vector2 = vector - targetPos;
-        vector2 = quaternion * vector2;
-        vector = targetPos + vector2;
-        follow.FollowOffset = vector;
-    }
+    //private void SetPos(Vector3 axis, float angle)
+    //{
+    //    Vector3 vector = follow.FollowOffset;
+    //    Quaternion quaternion = Quaternion.AngleAxis(angle, axis);
+    //    Vector3 vector2 = vector - targetPos;
+    //    vector2 = quaternion * vector2;
+    //    vector = targetPos + vector2;
+    //    follow.FollowOffset = vector;
+    //}
 
     //カメラ操作用メソッド
     private void CameraOperation()
@@ -127,19 +118,10 @@ public class PlayerCamera : MonoBehaviour
         {
             angle.y = 0.0f;
         }
-        //transform.Rotate(angle.)
-        //if (transform.rotation.y > 0.5f && angle.x > 0.0f)
-        //{
-        //    angle.x = 0.0f;
-        //}
-        //else if (transform.rotation.y < -0.5f && angle.x < 0.0f)
-        //{
-        //    angle.x = 0.0f;
-        //}
         transform.RotateAround(targetPos, transform.up, angle.x);
         transform.RotateAround(targetPos, transform.right, angle.y);
-        //SetPos(Vector3.up, angle.x);
-        //SetPos(Vector3.right, angle.y);
+        Vector3 dis = (targetPos + Vector3.up) - transform.position;
+        transform.rotation = Quaternion.LookRotation(dis);
     }
 
     //ターゲット取得用メソッド

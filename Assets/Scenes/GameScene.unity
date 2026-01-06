@@ -2444,11 +2444,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1335536527192778672, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9925462
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1335536527192778672, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.12186928
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1335536527192778672, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalRotation.y
@@ -2460,19 +2460,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1335536527192778672, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 14
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3394745482602633972, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3394745482602633972, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: LookAtOffset.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: FollowOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: FollowOffset.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: TrackerSettings.BindingMode
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: TrackerSettings.PositionDamping.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: TrackerSettings.PositionDamping.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451728414272161927, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: TrackerSettings.PositionDamping.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4607970188223218312, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_Enabled
@@ -2508,11 +2532,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5881194336645915224, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9925462
       objectReference: {fileID: 0}
     - target: {fileID: 5881194336645915224, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.12186928
       objectReference: {fileID: 0}
     - target: {fileID: 5881194336645915224, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalRotation.y
@@ -2524,7 +2548,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5881194336645915224, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8286818995187452995, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalPosition.x
