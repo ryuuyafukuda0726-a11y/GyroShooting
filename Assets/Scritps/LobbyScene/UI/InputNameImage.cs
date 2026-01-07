@@ -6,7 +6,7 @@ using System;
 using TMPro;
 
 //名前イメージ用スクリプトクラス
-public class NameImage : MonoBehaviour
+public class InputNameImage : MonoBehaviour
 {
     //名前用変数
     private int maxNameLength = 10;
@@ -29,14 +29,15 @@ public class NameImage : MonoBehaviour
     [NonSerialized]
     public bool isEnd = false;
     [SerializeField]
-    private GameObject inputEndPanel;
-    //[NonSerialized]
-    //public InputEndPanel inputEndPanelScript;
+    private GameObject inputEndImage;
+    [NonSerialized]
+    public InputEndImage inputEndImageScript;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rt = GetComponent<RectTransform>();
+        inputEndImageScript = inputEndImage.GetComponent<InputEndImage>();
     }
 
     //名前の取得用メソッド
@@ -55,7 +56,7 @@ public class NameImage : MonoBehaviour
     //名前の入力完了パネルの初期化用メソッド
     private void InputEndInit()
     {
-        //inputEndPanelScript.doInit();
+        inputEndImageScript.Init();
     }
 
     //名前の入力パネルの初期化用メソッド
@@ -69,7 +70,7 @@ public class NameImage : MonoBehaviour
     private void TextInit()
     {
         nameTMP.text = "";
-        nameLengthTMP.text = "あと" + maxNameLength + "文字入力可能";
+        nameLengthTMP.text = "You can enter " + maxNameLength + " more characters.";
     }
 
     //Flagの初期化用メソッド
@@ -110,9 +111,9 @@ public class NameImage : MonoBehaviour
     private void BackSpaceName()
     {
         //doInputKeyboardSECallBack();
-        //名前の入力数を確認
-        if (nameTMP.text.Length < 1) return;
         int size = nameTMP.text.Length;
+        //名前の入力数を確認
+        if (size < 1) return;
         string name = null;
         for (int i = 0; i < size; i++)
         {
@@ -136,7 +137,7 @@ public class NameImage : MonoBehaviour
     private void DisplayNameLength()
     {
         int nameLength = nameTMP.text.Length;
-        nameLengthTMP.text = "あと" + (maxNameLength - nameLength) + "文字入力可能";
+        nameLengthTMP.text = "You can enter " + (maxNameLength - nameLength) + " more characters.";
     }
 
     //入力の終了用メソッド
@@ -147,16 +148,16 @@ public class NameImage : MonoBehaviour
         if (!Keyboard.current.enterKey.wasPressedThisFrame) return;
         //doInputKeyboardSECallBack();
         isInputEnd = true;
-        inputEndPanel.SetActive(true);
+        inputEndImage.SetActive(true);
     }
 
     //入力の終了確認用メソッド
     private void CheckInputEnd()
     {
         if (!isInputEnd) return;
-        //if (!inputEndPanelScript.doEasingControl() || !inputEndPanelScript.isEnd) return;
+        if (!inputEndImageScript.EasingControl() || !inputEndImageScript.isEnd) return;
         if (!doEasingControl("Close")) return;
-        inputEndPanel.SetActive(false);
+        inputEndImage.SetActive(false);
         transform.gameObject.SetActive(false);
         //dataManagerInstance.playerName = nameTMP.text;
         Keyboard.current.onTextInput -= InputNameProcess;

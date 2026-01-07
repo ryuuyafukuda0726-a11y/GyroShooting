@@ -13,7 +13,7 @@ public class LobbyManager : MonoBehaviour
     //名前UI用変数
     [SerializeField]
     private GameObject nameImage;
-    private NameImage nameImageScript;
+    private InputNameImage nameImageScript;
     private string playerName = "";
     //シーン遷移時UI用変数
     [SerializeField]
@@ -33,7 +33,7 @@ public class LobbyManager : MonoBehaviour
     void Start()
     {
         EnhancedTouchSupport.Enable();
-        nameImageScript = nameImage.GetComponent<NameImage>();
+        nameImageScript = nameImage.GetComponent<InputNameImage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
         myPlatformInstance = Platform.GetPlatformInstance;
         myLobbyDelegate = Init;
@@ -65,6 +65,7 @@ public class LobbyManager : MonoBehaviour
     //名前入力へのイージング用メソッド
     private void InputNameDataEasing()
     {
+        nameImage.SetActive(true);
         if (!nameImageScript.doEasingControl("Open")) return;
         myLobbyDelegate = InputNameData;
     }
