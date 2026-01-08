@@ -118,7 +118,7 @@ public class InputEndImage : MonoBehaviour
     //OkButtonの入力用メソッド
     public void OnOkClick()
     {
-        doClickSECallBack();
+        //doClickSECallBack();
         SetEasing("Close");
         easing = global::EasingControl.Easing;
         isEnd = true;
@@ -127,7 +127,7 @@ public class InputEndImage : MonoBehaviour
     //NoButtonの入力用メソッド
     public void OnNoClick()
     {
-        doClickSECallBack();
+        //doClickSECallBack();
         SetEasing("Close");
         easing = global::EasingControl.Easing;
         isReturn = true;

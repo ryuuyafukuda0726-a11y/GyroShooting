@@ -35,7 +35,7 @@ public class Platform : MonoBehaviour
     {
         SetDontDestroyPlatformInstance();
         mobile = UnityEngine.Device.Application.isMobilePlatform;
-        if (!mobile) SetCursor();
+        if (mobile) SetCursor();
     }
 
     //プラットフォームの確認用メソッド

@@ -58,7 +58,10 @@ public class LobbyManager : MonoBehaviour
     private void CheckExistingData()
     {
         if (PlayerPrefs.HasKey("PlayerName"))
+        {
             playerName = PlayerPrefs.GetString("PlayerName");
+            myLobbyDelegate = Lobby;
+        }
         else myLobbyDelegate = InputNameDataEasing;
     }
 
@@ -74,7 +77,13 @@ public class LobbyManager : MonoBehaviour
     private void InputNameData()
     {
         nameImageScript.InputName();
-        Debug.Log("名前を入力してください");
+        if (nameImageScript.isEnd) myLobbyDelegate = Lobby;
+    }
+
+    //ロビー用メソッド
+    private void Lobby()
+    {
+        Debug.Log("ようこそ");
     }
 
     // Update is called once per frame

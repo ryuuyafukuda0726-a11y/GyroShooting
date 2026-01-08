@@ -49,6 +49,7 @@ public class TitleManager : MonoBehaviour
     //初期設定用メソッド
     private void Init()
     {
+        loadBar.SetActive(false);
         touchScreenScript.Init();
         sceneChangeUIScript.Init();
         myTitleDelegate = TitleEasing;
@@ -66,6 +67,7 @@ public class TitleManager : MonoBehaviour
     {
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
         sceneChange = true;
+        loadBar.SetActive(true);
     }
 
     //デバイスでの入力確認用メソッド
@@ -74,6 +76,7 @@ public class TitleManager : MonoBehaviour
         TouchControl touch = Touchscreen.current.primaryTouch;
         if (!touch.press.wasPressedThisFrame) return;
         sceneChange = true;
+        loadBar.SetActive(true);
     }
 
     //入力確認用メソッド

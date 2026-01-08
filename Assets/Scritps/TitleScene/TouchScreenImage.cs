@@ -30,8 +30,8 @@ public class TouchScreenImage : MonoBehaviour
     {
         value += flag ? Time.deltaTime : -Time.deltaTime;
         float alpha = Mathf.Sqrt(Mathf.Pow(1.0f, 2.0f) - Mathf.Pow(value * displaySpeed, 2.0f));
-        if (alpha < minAlpha) flag = true;
-        else if (alpha > maxAlpha) flag = false;
+        if (value < minAlpha) flag = true;
+        else if (value > maxAlpha) flag = false;
         myImage.material.color = new Color(1.0f, 1.0f, 1.0f, Mathf.Pow(alpha, 2.0f));
     }
 }
