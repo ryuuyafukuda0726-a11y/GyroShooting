@@ -19,6 +19,8 @@ public class SunFlower : MonoBehaviour
     [SerializeField]
     private Transform player;
     //イージング用変数
+    [SerializeField]
+    private float breakSpeed = 0.0f;
     private EasingSequence easingSequence = EasingSequence.SetEasing;
     private float percent = 0.0f;
     private const float maxPercent = 1.0f;
@@ -65,9 +67,9 @@ public class SunFlower : MonoBehaviour
     //イージング用メソッド
     private bool Easing()
     {
-        percent += Time.deltaTime;
+        percent += Time.deltaTime * breakSpeed;
         transform.rotation = Quaternion.Lerp(startRot, endRot, percent);
-        transform.Rotate(Vector3.up * percent * Time.deltaTime);
+        transform.Rotate(Vector3.up * breakSpeed * Time.deltaTime);
         return percent >= maxPercent ? true : false;
     }
 

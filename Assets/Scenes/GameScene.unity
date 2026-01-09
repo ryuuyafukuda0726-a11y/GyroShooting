@@ -3766,6 +3766,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 392135732}
     - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
+      propertyPath: breakSpeed
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: chargeDistance
       value: 5
       objectReference: {fileID: 0}
