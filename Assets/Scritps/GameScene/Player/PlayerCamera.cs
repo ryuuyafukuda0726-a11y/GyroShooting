@@ -18,6 +18,11 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField]
     private GameObject canvas;
     private GraphicRaycaster raycaster;
+    //ターゲティング用変数
+    [SerializeField]
+    private GameObject reticleImage;
+    private Transform shotTarget;
+    private bool isTarget = false;
     //入力用変数
     private TouchControl touch;
     private InputAction cameraAction;
@@ -110,32 +115,50 @@ public class PlayerCamera : MonoBehaviour
     private void CameraOperation()
     {
         Vector3 angle = new Vector3(horiz * 100.0f * Time.deltaTime, vert * 100.0f * Time.deltaTime, 0.0f);
-        if (transform.rotation.x > 0.5f && angle.y > 0.0f)
+        if (transform.rotation.x > 0.25f && angle.y > 0.0f)
         {
             angle.y = 0.0f;
         }
-        else if (transform.rotation.x < -0.5f && angle.y < 0.0f)
+        else if (transform.rotation.x < -0.05f && angle.y < 0.0f)
         {
             angle.y = 0.0f;
         }
-        transform.RotateAround(targetPos, transform.up, angle.x);
-        transform.RotateAround(targetPos, transform.right, angle.y);
-        Vector3 dis = (targetPos + Vector3.up) - transform.position;
+        transform.RotateAround(targetPos + Vector3.up * 2.0f, transform.up, angle.x);
+        transform.RotateAround(targetPos + Vector3.up * 2.0f, transform.right, angle.y);
+        Vector3 dis = (targetPos + Vector3.up * 2.0f) - transform.position;
         transform.rotation = Quaternion.LookRotation(dis);
+    }
+
+    //レティクル用メソッド
+    private void SetReticleColor()
+    {
+        reticleImage.GetComponent<Image>().material.color =
+            isTarget ? new Color(1.0f, 0.0f, 0.0f, 1.0f) :
+                     new Color(1.0f, 0.0f, 0.0f, 0.5f);
+    }
+
+    //ターゲティング用メソッド
+    private void Targeting()
+    {
+        shotTarget = null;
+        isTarget = false;
+        Camera camera = Camera.main;
+        int centerX = camera.pixelWidth / 2;
+        int centerY = camera.pixelHeight / 2;
+        ray = camera.ScreenPointToRay(new Vector3(centerX, centerY, 0));
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            if (!(hit.collider.tag == "Hamster")) return;
+            shotTarget = hit.transform;
+            isTarget = true;
+        }
+        SetReticleColor();
     }
 
     //ターゲット取得用メソッド
     public Transform GetTarget()
     {
-        Camera camera = Camera.main;
-        int centerX = camera.pixelWidth / 2;
-        int centerY = camera.pixelHeight / 2;
-        ray = camera.ScreenPointToRay(new Vector3(centerX, centerY, 0));
-        if (!Physics.Raycast(ray, out hit, Mathf.Infinity))
-        {
-            return null;
-        }
-        return hit.collider.tag == "Humster" ? hit.collider.gameObject.transform : null;
+        return shotTarget;
     }
 
     //プレイ用メソッド
@@ -145,5 +168,6 @@ public class PlayerCamera : MonoBehaviour
         if (!myPlatformInstance.CheckPlatform()) PCInputCameraOperation();
         else MobileInputCameraControl();
         CameraOperation();
+        Targeting();
     }
 }
