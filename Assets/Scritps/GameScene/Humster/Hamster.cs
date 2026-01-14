@@ -54,6 +54,8 @@ public class Hamster : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed;
+        agent.isStopped = true;
         myAnimator = transform.GetChild(0).GetComponent<Animator>();
         trapList = new List<GameObject>();
     }
@@ -135,7 +137,7 @@ public class Hamster : MonoBehaviour
         if (!myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) return;
         // アニメーションが再生中の場合
         if (myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1) return;
-        agent.speed = moveSpeed;
+        agent.isStopped = false;
         idleInterval = UnityEngine.Random.Range(minInterval, maxInterval);
         isWalk = true;
     }
@@ -147,7 +149,7 @@ public class Hamster : MonoBehaviour
         if(myTime > idleInterval)
         {
             myTime = 0.0f;
-            agent.speed = 0.0f;
+            agent.isStopped = true;
             isWalk = false;
         }
     } 
@@ -185,7 +187,7 @@ public class Hamster : MonoBehaviour
     {
         attackTarget = CheckAttackDistance();
         if (attackTarget == null) return;
-        agent.speed = 0.0f;
+        agent.isStopped = true;
         transform.rotation = 
             Quaternion.LookRotation(attackTarget.position - transform.position);
         isAttack = true;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1912206308021321963}
   m_Layer: 0
   m_Name: Humster
-  m_TagString: Humster
+  m_TagString: Hamster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   moveSpeed: 1.75
   maxInterval: 4
   minInterval: 10
-  attackDistance: 2
+  attackDistance: 2.5
   power: 1
   hungryGagePrefab: {fileID: 8567868405017922578, guid: a471c0abf69478e43a13ad26641098b3, type: 3}
 --- !u!195 &-1058807561750839395

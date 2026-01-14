@@ -145,12 +145,16 @@ public class PlayerCamera : MonoBehaviour
         Camera camera = Camera.main;
         int centerX = camera.pixelWidth / 2;
         int centerY = camera.pixelHeight / 2;
-        ray = camera.ScreenPointToRay(new Vector3(centerX, centerY, 0));
+        ray = camera.ScreenPointToRay(new Vector2(centerX, centerY));
+        //Debug.DrawRay(ray.origin, transform.forward * 10.0f, Color.red, 5.0f);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            if (!(hit.collider.tag == "Hamster")) return;
-            shotTarget = hit.transform;
-            isTarget = true;
+            Debug.Log("Hit");
+            if ((hit.collider.tag == "Hamster"))
+            {
+                shotTarget = hit.transform;
+                isTarget = true;
+            }
         }
         SetReticleColor();
     }

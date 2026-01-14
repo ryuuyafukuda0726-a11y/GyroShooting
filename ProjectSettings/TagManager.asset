@@ -5,11 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - UI
-  - Humster
   - Bullet
   - Wall
   - SunFlower
   - FeedingBox
+  - Hamster
   layers:
   - Default
   - TransparentFX
