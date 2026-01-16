@@ -21,6 +21,7 @@ public class SeedManager
     private float correctionX = 0.0f;
     //コールバック用変数
     public Func<Transform> getTargetCallBack;
+    public Action<int> shotCallBack;
 
     //種の生成用メソッド
     private void Seed()
@@ -74,7 +75,7 @@ public class SeedManager
     {
         seedObjects[seedNumber].SetActive(true);
         Vector3 shotPos = player.position + Vector3.up * 0.5f;
-        float rotX = Camera.main.transform.rotation.x - correctionX;
+        float rotX = Camera.main.transform.rotation.x /*- correctionX*/;
         float rotY = Camera.main.transform.rotation.y;
         float rotZ = Camera.main.transform.rotation.z;
         float rotW = Camera.main.transform.rotation.w;
@@ -83,6 +84,7 @@ public class SeedManager
         seedObjects[seedNumber].transform.position = shotPos;
         seedObjects[seedNumber].transform.rotation = shotRot;
         seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot();
+        shotCallBack((int)GameSE.Shot);
         seedNumber++;
         if (seedNumber < seedCount) return;
         seedNumber = 0;

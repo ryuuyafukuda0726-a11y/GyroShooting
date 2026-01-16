@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     //キャンバス用変数
     [SerializeField]
     private Transform canvas;
+    //AudioSource用変数
+    [SerializeField]
+    private GameObject audioSource;
+    private GameAudioSource audioSourceScript;
     //ハムスター用変数
     [SerializeField]
     private GameObject hamsterPrefab;
@@ -79,6 +83,7 @@ public class GameManager : MonoBehaviour
         lifeGageScript = lifeGageImage.GetComponent<LifeGage>();
         bulletGageScript = bulletGageImage.GetComponent<BulletGage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
+        audioSourceScript = audioSource.GetComponent<GameAudioSource>();
         myGameDelegate = Init;
     }
 
@@ -143,6 +148,7 @@ public class GameManager : MonoBehaviour
     private void InGameEasing()
     {
         if (!sceneChangeUIScript.EasingControl("Open")) return;
+        audioSourceScript.PlayBGM((int)GameBGM.Main);
         myGameDelegate = InGame;
     }
 
