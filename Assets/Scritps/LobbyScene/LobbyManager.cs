@@ -15,6 +15,10 @@ public class LobbyManager : MonoBehaviour
     private GameObject nameImage;
     private InputNameImage nameImageScript;
     private string playerName = "";
+    //プレイモード選択UI用変数
+    [SerializeField]
+    private GameObject playModeImage;
+    private PlayModeImage playModeImageScript;
     //シーン遷移時UI用変数
     [SerializeField]
     private GameObject sceneChangeUI;
@@ -34,6 +38,7 @@ public class LobbyManager : MonoBehaviour
     {
         EnhancedTouchSupport.Enable();
         nameImageScript = nameImage.GetComponent<InputNameImage>();
+        playModeImageScript = playModeImage.GetComponent<PlayModeImage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
         myPlatformInstance = Platform.GetPlatformInstance;
         myLobbyDelegate = Init;
@@ -69,7 +74,7 @@ public class LobbyManager : MonoBehaviour
     private void InputNameDataEasing()
     {
         nameImage.SetActive(true);
-        if (!nameImageScript.doEasingControl("Open")) return;
+        if (!nameImageScript.EasingControl("Open")) return;
         myLobbyDelegate = InputNameData;
     }
 
@@ -77,7 +82,15 @@ public class LobbyManager : MonoBehaviour
     private void InputNameData()
     {
         nameImageScript.InputName();
-        if (nameImageScript.isEnd) myLobbyDelegate = Lobby;
+        if (!nameImageScript.isEnd) return;
+        myLobbyDelegate = LobbyEasing;
+    }
+
+    //ロビーへのイージング用メソッド
+    private void LobbyEasing()
+    {
+        if (!playModeImageScript.EasingControl("Open")) return;
+        myLobbyDelegate = Lobby;
     }
 
     //ロビー用メソッド

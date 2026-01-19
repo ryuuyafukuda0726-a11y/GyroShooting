@@ -12,7 +12,7 @@ public class InputNameImage : MonoBehaviour
     private int maxNameLength = 10;
     private string playerName = "";
     //イージング用変数
-    private EasingControl easing = EasingControl.SetEasing;
+    private EasingControl easing = global::EasingControl.SetEasing;
     private Vector3 aScale, bScale;
     private float percent = 0.0f;
     private const float minPercent = 0.0f;
@@ -156,7 +156,7 @@ public class InputNameImage : MonoBehaviour
     {
         if (!isInputEnd) return;
         if (!inputEndImageScript.EasingControl() || !inputEndImageScript.isEnd) return;
-        if (!doEasingControl("Close")) return;
+        if (!EasingControl("Close")) return;
         inputEndImage.SetActive(false);
         transform.gameObject.SetActive(false);
         //dataManagerInstance.playerName = nameTMP.text;
@@ -175,7 +175,7 @@ public class InputNameImage : MonoBehaviour
     }
 
     //イージング設定用メソッド
-    private void doSetEasing(string inMove)
+    private void SetEasing(string inMove)
     {
         //引数でイージングの内容をSwitch
         switch (inMove)
@@ -195,7 +195,7 @@ public class InputNameImage : MonoBehaviour
     }
 
     //イージング用メソッド
-    private bool doEasing()
+    private bool Easing()
     {
         float speed = 2.0f;
         percent += Time.deltaTime * speed;
@@ -205,27 +205,25 @@ public class InputNameImage : MonoBehaviour
     }
 
     //イージング管理用メソッド
-    public bool doEasingControl(string inMove)
+    public bool EasingControl(string inMove)
     {
-        bool retBool = false;
         //イージング進行状態でSwitch
         switch (easing)
         {
-            case EasingControl.SetEasing:
-                doSetEasing(inMove);
+            case global::EasingControl.SetEasing:
+                SetEasing(inMove);
                 easing++;
                 break;
-            case EasingControl.Easing:
+            case global::EasingControl.Easing:
                 //イージングの実行状態を確認
-                if (doEasing()) easing++;
+                if (Easing()) easing++;
                 break;
-            case EasingControl.EasingEnd:
-                easing = EasingControl.SetEasing;
-                retBool = true;
-                break;
+            case global::EasingControl.EasingEnd:
+                easing = global::EasingControl.SetEasing;
+                return true;
             default:
                 break;
         }
-        return retBool;
+        return false;
     }
 }
