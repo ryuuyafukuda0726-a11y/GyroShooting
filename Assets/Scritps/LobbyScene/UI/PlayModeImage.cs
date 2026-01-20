@@ -18,6 +18,12 @@ public class PlayModeImage : MonoBehaviour
         rt = GetComponent<RectTransform>();
     }
 
+    //初期設定用メソッド
+    public void Init()
+    {
+        rt.transform.localScale = Vector3.up;
+    }
+
     //イージング設定用メソッド
     private void SetEasing(string inMove)
     {

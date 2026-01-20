@@ -118,11 +118,12 @@ public class HamusuterManager
     //プレイ用メソッド
     public void Play()
     {
-        HamsterPlay();
         if (hamsters.Count < spawnHamsterCount)
         {
             if (SpawnInterval()) SpawnHamster();
         }
+        if (hamsters.Count <= 0) return;
+        HamsterPlay();
     }
 
     //撃破時用メソッド
@@ -132,7 +133,6 @@ public class HamusuterManager
         {
             if (hamsters[i].gameObject != inTransform.gameObject) continue;
             hamsters.RemoveAt(i);
-            //hamsterScripts.RemoveAt(i);
         }
     }
 

@@ -15,6 +15,9 @@ public class SeedManager
     private int seedNumber = 0;
     private GameObject[] seedObjects;
     private GameObject seedParent;
+    //発射レート管理用変数
+    private const float rateTime = 1.0f;
+    private float myTime = 0.0f;
     //ターゲット用変数
     private bool isTarget = false;
     private Vector3 targetVec;
@@ -42,14 +45,34 @@ public class SeedManager
         Seed();
     }
 
+    //発射レート管理用メソッド
+    private bool ShotRateControl()
+    {
+        myTime += Time.deltaTime;
+        if(myTime > rateTime)
+        {
+            myTime = 0.0f;
+            return true;
+        }
+        return false;
+    }
+
     //発射用メソッド
     public void Shot()
     {
         if (seed <= 0) return;
-        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        if (!Mouse.current.leftButton.isPressed) return;
+        if (!ShotRateControl()) return;
         SetTargetTransform(getTargetCallBack());
         ShotSeed();
         seed--;
+    }
+
+    //発射終了用メソッド
+    private void ShotEnd()
+    {
+        if (!Mouse.current.leftButton.wasReleasedThisFrame) return;
+        myTime = 0.0f;
     }
 
     //モバイルの発射用メソッド
@@ -75,7 +98,7 @@ public class SeedManager
     {
         seedObjects[seedNumber].SetActive(true);
         Vector3 shotPos = player.position + Vector3.up * 0.5f;
-        float rotX = Camera.main.transform.rotation.x /*- correctionX*/;
+        float rotX = Camera.main.transform.rotation.x - correctionX;
         float rotY = Camera.main.transform.rotation.y;
         float rotZ = Camera.main.transform.rotation.z;
         float rotW = Camera.main.transform.rotation.w;

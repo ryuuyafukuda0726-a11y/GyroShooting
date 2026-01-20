@@ -1914,6 +1914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyManager
   nameImage: {fileID: 49681001}
+  playModeImage: {fileID: 796759716}
   sceneChangeUI: {fileID: 1877188098}
   loadBar: {fileID: 1116346439}
 --- !u!1 &1363567091

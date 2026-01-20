@@ -53,17 +53,22 @@ public class Hamster : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        agent.speed = moveSpeed;
-        agent.isStopped = true;
-        myAnimator = transform.GetChild(0).GetComponent<Animator>();
-        trapList = new List<GameObject>();
+        //agent = GetComponent<NavMeshAgent>();
+        //agent.speed = moveSpeed;
+        //myAnimator = transform.GetChild(0).GetComponent<Animator>();
+        //trapList = null;
     }
 
     //初期設定用メソッド
     public void Init(Transform inCanvas)
     {
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed;
+        myAnimator = transform.GetChild(0).GetComponent<Animator>();
+        trapList = null;
+
         hp = maxHp;
+        //agent.isStopped = true;
         hungryGage = GameObject.Instantiate(hungryGagePrefab, inCanvas);
         hungryGageScript = hungryGage.GetComponent<HungryGage>();
         hungryGageScript.Init();
@@ -104,7 +109,7 @@ public class Hamster : MonoBehaviour
     private bool FeedingBoxDiscovery()
     {
         trap = null;
-        if (trapList.Count == 0 || trapList == null) return false;
+        if (trapList == null || trapList.Count <= 0) return false;
         trap = trapList[0].transform;
         float distance = Vector3.Distance(trap.position, transform.position);
         for (int i = 1; i < trapList.Count; i++)

@@ -37,6 +37,7 @@ public class GameAudioSource : MonoBehaviour
     {
         audioSource.clip = bgm[inBGMNumber];
         audioSource.Play();
+        audioSource.loop = true ;
     }
 
     //引数に対応したSEを再生するコールバック用メソッド

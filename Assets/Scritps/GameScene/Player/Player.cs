@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
     }
 
     //種の初期設定用メソッド
-    private void SeedInit()
+    private void SeedInit(GameAudioSource inAudioSource)
     {
         seedManagerScript = new SeedManager(transform,
                                             seedPrefab,
@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
                                             playerCamera.transform.rotation.x);
         seedManagerScript.Init();
         seedManagerScript.getTargetCallBack = playerCameraScript.GetTarget;
+        seedManagerScript.shotCallBack = inAudioSource.PlaySECallBack;
     }
 
     //餌箱の初期設定用メソッド
@@ -88,9 +89,9 @@ public class Player : MonoBehaviour
     }
 
     //初期設定用メソッド
-    public void Init()
+    public void Init(GameAudioSource inAudioSource)
     {
-        SeedInit();
+        SeedInit(inAudioSource);
         FeedingBoxInit();
         //move = GetComponent<PlayerInput>().actions["Move"];
         //playerCameraScript = playerCamera.GetComponent<PlayerCamera>();

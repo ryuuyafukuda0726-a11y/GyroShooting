@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     {
         ShotButtonInit();
         HamsterInit();
-        playerScript.Init();
+        playerScript.Init(audioSourceScript);
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();

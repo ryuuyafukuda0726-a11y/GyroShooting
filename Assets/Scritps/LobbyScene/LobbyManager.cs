@@ -48,6 +48,7 @@ public class LobbyManager : MonoBehaviour
     private void Init()
     {
         nameImageScript.Init();
+        playModeImageScript.Init();
         sceneChangeUIScript.Init();
         myLobbyDelegate = CheckExistingDataEasing;
     }
