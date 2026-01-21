@@ -26,9 +26,14 @@ public class GameManager : MonoBehaviour
     private int spawnCount = 0;
     //プレイヤー用変数
     [SerializeField]
-    //private GameObject playerPrefab;
     private GameObject playerObject;
     private Player playerScript;
+    //アイテム用変数
+    private ItemManager itemManagerScript;
+    [SerializeField]
+    private GameObject itemPrefab;
+    [SerializeField]
+    private int maxItemCount = 0;
     //バーチャルパッド用変数
     [SerializeField]
     private GameObject virtualPadObject;
@@ -128,11 +133,18 @@ public class GameManager : MonoBehaviour
         hamsterManagerScript.Init();
     }
 
+    //アイテムの初期設定用メソッド
+    private void ItemInit()
+    {
+        itemManagerScript = new ItemManager(maxItemCount, itemPrefab);
+    }
+
     //初期設定用メソッド
     private void Init()
     {
         ShotButtonInit();
         HamsterInit();
+        ItemInit();
         playerScript.Init(audioSourceScript);
         lifeGageScript.Init();
         bulletGageScript.Init();
