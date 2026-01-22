@@ -16,7 +16,7 @@ public class SeedManager
     private GameObject[] seedObjects;
     private GameObject seedParent;
     //発射レート管理用変数
-    private const float rateTime = 1.0f;
+    private const float rateTime = 0.5f;
     private float myTime = 0.0f;
     //ターゲット用変数
     private bool isTarget = false;
@@ -43,6 +43,7 @@ public class SeedManager
     {
         seed = maxSeed;
         Seed();
+        myTime = rateTime;
     }
 
     //発射レート管理用メソッド

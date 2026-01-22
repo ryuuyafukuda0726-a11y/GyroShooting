@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEditor.Timeline.Actions;
+using Fusion;
 
 //ハムスター用スクリプトクラス
 public class Hamster : MonoBehaviour
@@ -45,8 +46,12 @@ public class Hamster : MonoBehaviour
     private GameObject hungryGagePrefab;
     private GameObject hungryGage;
     private HungryGage hungryGageScript;
+    //アイテム用変数
+    [SerializeField]
+    private float itemDropProbability = 0.0f;
     //コールバック用メソッド
     public Action<Transform> destroyCallBack;
+    public Action<Vector3> itemDropCallBack;
     //時間管理用変数
     private float myTime = 0.0f;
 
@@ -240,16 +245,39 @@ public class Hamster : MonoBehaviour
         trapList = inTrapList;
     }
 
+    //撃破時用メソッド
+    private void Destroy()
+    {
+        destroyCallBack(transform);
+        transform.position = transform.parent.position;
+        hungryGage.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
+    //ドロップ確率確認用メソッド
+    private bool CheckDropProbability()
+    {
+        float min = 0.0f;
+        float max = 1.0f;
+        float probability = UnityEngine.Random.Range(min, max);
+        return probability < itemDropProbability ? true : false;
+    }
+
+    //アイテムドロップ用メソッド
+    private void ItemDrop()
+    {
+        if (!CheckDropProbability()) return;
+        itemDropCallBack(transform.position);
+    }
+
     //体力減少用メソッド
     private void Damage()
     {
         hp--;
         hungryGageScript.Display(hp * 10);
         if (hp > 0) return;
-        destroyCallBack(transform);
-        transform.position = transform.parent.position;
-        hungryGage.SetActive(false);
-        gameObject.SetActive(false);
+        ItemDrop();
+        Destroy();
     }
 
     //当たり判定用メソッド

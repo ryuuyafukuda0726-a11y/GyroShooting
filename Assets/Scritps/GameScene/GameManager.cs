@@ -121,6 +121,12 @@ public class GameManager : MonoBehaviour
         shotButtonObject.SetActive(false);
     }
 
+    //アイテムの初期設定用メソッド
+    private void ItemInit()
+    {
+        itemManagerScript = new ItemManager(maxItemCount, itemPrefab);
+    }
+
     //ハムスターの初期設定用メソッド
     private void HamsterInit()
     {
@@ -131,20 +137,15 @@ public class GameManager : MonoBehaviour
                                                     spawnPoint,
                                                     canvas);
         hamsterManagerScript.Init();
-    }
-
-    //アイテムの初期設定用メソッド
-    private void ItemInit()
-    {
-        itemManagerScript = new ItemManager(maxItemCount, itemPrefab);
+        hamsterManagerScript.SetCallBack(itemManagerScript.ItemDropCallBack);
     }
 
     //初期設定用メソッド
     private void Init()
     {
         ShotButtonInit();
-        HamsterInit();
         ItemInit();
+        HamsterInit();
         playerScript.Init(audioSourceScript);
         lifeGageScript.Init();
         bulletGageScript.Init();

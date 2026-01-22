@@ -55,6 +55,7 @@ MonoBehaviour:
   attackDistance: 2.5
   power: 1
   hungryGagePrefab: {fileID: 8567868405017922578, guid: a471c0abf69478e43a13ad26641098b3, type: 3}
+  itemDropProbability: 0.5
 --- !u!195 &-1058807561750839395
 NavMeshAgent:
   m_ObjectHideFlags: 0

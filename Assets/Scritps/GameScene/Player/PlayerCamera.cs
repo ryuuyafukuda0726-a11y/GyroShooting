@@ -36,6 +36,7 @@ public class PlayerCamera : MonoBehaviour
     private Vector3 targetPos;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
+    private float myTime = 0.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -111,20 +112,32 @@ public class PlayerCamera : MonoBehaviour
     //    follow.FollowOffset = vector;
     //}
 
+    private void Wait()
+    {
+        myTime += Time.deltaTime;
+        if(myTime > 1.0f)
+        {
+            myTime = 0.0f;
+            Debug.Log(transform.rotation.eulerAngles.x);
+        }
+    }
+
     //カメラ操作用メソッド
     private void CameraOperation()
     {
         Vector3 angle = new Vector3(horiz * 100.0f * Time.deltaTime, vert * 100.0f * Time.deltaTime, 0.0f);
-        if (transform.rotation.x > 0.25f && angle.y > 0.0f)
+        float x = transform.rotation.eulerAngles.x;
+        if (x > 25.0f && angle.y > 0.0f)
         {
             angle.y = 0.0f;
         }
-        else if (transform.rotation.x < -0.05f && angle.y < 0.0f)
+        else if (x < -5.0f && angle.y < 0.0f)
         {
             angle.y = 0.0f;
         }
         transform.RotateAround(targetPos + Vector3.up * 2.0f, transform.up, angle.x);
         transform.RotateAround(targetPos + Vector3.up * 2.0f, transform.right, angle.y);
+        Wait();
         Vector3 dis = (targetPos + Vector3.up * 2.0f) - transform.position;
         transform.rotation = Quaternion.LookRotation(dis);
     }
@@ -149,7 +162,6 @@ public class PlayerCamera : MonoBehaviour
         //Debug.DrawRay(ray.origin, transform.forward * 10.0f, Color.red, 5.0f);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            Debug.Log("Hit");
             if ((hit.collider.tag == "Hamster"))
             {
                 shotTarget = hit.transform;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +27,17 @@ public class HamusuterManager
     //private List<Hamster> hamsterScripts = new List<Hamster>();
     //トラップ用変数
     private List<GameObject> trapList;
+
+    //コールバックの設定用メソッド
+    public void SetCallBack(Action<Vector3> inAction)
+    {
+        int size = hamsterObjects.Length;
+        for(int i = 0; i < size; i++)
+        {
+            hamsterObjects[i].GetComponent<Hamster>().itemDropCallBack
+                = inAction;
+        }
+    }
 
     //ハムスターの生成用メソッド
     private void CreateHamster()
@@ -61,7 +73,7 @@ public class HamusuterManager
     //配置用メソッド
     private Vector3 SetPos()
     {
-        int index = Random.Range(0, spawnPoints.childCount);
+        int index = UnityEngine.Random.Range(0, spawnPoints.childCount);
         Vector3 pos = spawnPoints.GetChild(index).position;
         return pos;
     }
