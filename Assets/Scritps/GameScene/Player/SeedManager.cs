@@ -18,6 +18,7 @@ public class SeedManager
     //発射レート管理用変数
     private const float rateTime = 0.5f;
     private float myTime = 0.0f;
+    private bool isRate = false;
     //ターゲット用変数
     private bool isTarget = false;
     private Vector3 targetVec;
@@ -44,35 +45,41 @@ public class SeedManager
         seed = maxSeed;
         Seed();
         myTime = rateTime;
+        isRate = false;
     }
 
     //発射レート管理用メソッド
-    private bool ShotRateControl()
+    private void ShotRateControl()
     {
+        if (!isRate) return;
         myTime += Time.deltaTime;
-        if(myTime > rateTime)
+        if(myTime >= rateTime)
         {
             myTime = 0.0f;
-            return true;
+            isRate = false;
         }
-        return false;
     }
 
     //発射用メソッド
     public void Shot()
     {
+        Debug.Log(isRate);
         if (seed <= 0) return;
-        if (!Mouse.current.leftButton.isPressed) return;
-        if (!ShotRateControl()) return;
-        SetTargetTransform(getTargetCallBack());
-        ShotSeed();
-        seed--;
+        if (Mouse.current.leftButton.isPressed ||
+            Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            ShotRateControl();
+            SetTargetTransform(getTargetCallBack());
+            ShotSeed();
+        }
+        ShotEnd();
     }
 
     //発射終了用メソッド
     private void ShotEnd()
     {
         if (!Mouse.current.leftButton.wasReleasedThisFrame) return;
+        isRate = false;
         myTime = 0.0f;
     }
 
@@ -80,9 +87,10 @@ public class SeedManager
     public void MobileShot()
     {
         if (seed <= 0) return;
+        ShotRateControl();
         SetTargetTransform(getTargetCallBack());
         ShotSeed();
-        seed--;
+        ShotEnd();
     }
 
     //ターゲットの設定用メソッド
@@ -97,6 +105,8 @@ public class SeedManager
     //種の発射用メソッド
     private void ShotSeed()
     {
+        if (isRate) return;
+        isRate = true;
         seedObjects[seedNumber].SetActive(true);
         Vector3 shotPos = player.position + Vector3.up * 0.5f;
         float rotX = Camera.main.transform.rotation.x - correctionX;
@@ -110,6 +120,7 @@ public class SeedManager
         seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot();
         shotCallBack((int)GameSE.Shot);
         seedNumber++;
+        seed--;
         if (seedNumber < seedCount) return;
         seedNumber = 0;
     }

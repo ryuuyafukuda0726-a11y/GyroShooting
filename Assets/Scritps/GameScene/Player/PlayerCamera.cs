@@ -118,7 +118,7 @@ public class PlayerCamera : MonoBehaviour
         if(myTime > 1.0f)
         {
             myTime = 0.0f;
-            Debug.Log(transform.rotation.eulerAngles.x);
+            Debug.Log(transform.rotation.x);
         }
     }
 
@@ -126,12 +126,12 @@ public class PlayerCamera : MonoBehaviour
     private void CameraOperation()
     {
         Vector3 angle = new Vector3(horiz * 100.0f * Time.deltaTime, vert * 100.0f * Time.deltaTime, 0.0f);
-        float x = transform.rotation.eulerAngles.x;
-        if (x > 25.0f && angle.y > 0.0f)
+        float x = transform.rotation.x;
+        if (x > 25.0f / 360.0f && angle.y > 0.0f)
         {
             angle.y = 0.0f;
         }
-        else if (x < -5.0f && angle.y < 0.0f)
+        else if (x < -5.0f / 360.0f && angle.y < 0.0f)
         {
             angle.y = 0.0f;
         }

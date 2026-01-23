@@ -38,6 +38,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int trapCount = 0;
     private FeedingBoxManager feedingBoxManagerScript;
+    //落下用変数
+    [SerializeField]
+    private float fallSpeed = 0.0f;
+    //接触判定用変数
+    private Transform hitTransform;
+    private Vector3 hitPos;
     //カメラ用変数
     [SerializeField]
     private GameObject playerCamera;
@@ -139,6 +145,19 @@ public class Player : MonoBehaviour
         //feedingBoxManagerScript.InputInstallation(transform.position);
     }
 
+    //落下用メソッド
+    private void Fall()
+    {
+        transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
+    }
+
+    //落下判定用メソッド
+    private void CheckFall()
+    {
+        if (hitTransform == null) Fall();
+        else if (hitPos.y <= transform.position.y) Fall();
+    }
+
     //プレイ用メソッド
     public void Play()
     {
@@ -147,6 +166,7 @@ public class Player : MonoBehaviour
         Input();
         Move();
         InstallationTrap();
+        //CheckFall();
         playerCameraScript.Play(transform.position);
         if (myPlatformInstance.CheckPlatform()) return;
         seedManagerScript.Shot();
@@ -169,5 +189,19 @@ public class Player : MonoBehaviour
     public void ChargeBullet()
     {
         seedManagerScript.ChargeBullet();
+    }
+
+    //接触判定用メソッド
+    private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log("Hit");
+        hitTransform = collision.transform;
+        hitPos = collision.contacts[0].point;
+    }
+
+    //
+    private void OnCollisionExit(Collision collision)
+    {
+        hitTransform = null;
     }
 }

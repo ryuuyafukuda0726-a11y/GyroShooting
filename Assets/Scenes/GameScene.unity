@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 13345432}
   m_Layer: 0
   m_Name: Wall (1)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,7 +153,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -572,7 +572,7 @@ GameObject:
   - component: {fileID: 241612724}
   m_Layer: 0
   m_Name: Wall (12)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -607,7 +607,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -844,27 +844,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5352062869898219542, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
   m_PrefabInstance: {fileID: 1279750758}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &392135729
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 392135725}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &392135732 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8286818995187452995, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
@@ -1011,7 +990,7 @@ GameObject:
   - component: {fileID: 479260247}
   m_Layer: 0
   m_Name: Wall (8)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1031,7 +1010,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1241,7 +1220,7 @@ GameObject:
   - component: {fileID: 548978298}
   m_Layer: 0
   m_Name: Wall (13)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1276,7 +1255,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1352,7 +1331,7 @@ GameObject:
   - component: {fileID: 550140642}
   m_Layer: 0
   m_Name: Wall (10)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1372,7 +1351,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1494,7 +1473,7 @@ GameObject:
   - component: {fileID: 644341884}
   m_Layer: 0
   m_Name: Wall (7)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1514,7 +1493,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1605,7 +1584,7 @@ GameObject:
   - component: {fileID: 720078204}
   m_Layer: 0
   m_Name: Wall (5)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1625,7 +1604,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2077,7 +2056,7 @@ GameObject:
   - component: {fileID: 831668034}
   m_Layer: 0
   m_Name: Wall (6)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2097,7 +2076,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2237,7 +2216,7 @@ GameObject:
   - component: {fileID: 874509638}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2257,7 +2236,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2416,19 +2395,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 997101564}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: MobileShot
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &997101564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2481,7 +2448,7 @@ GameObject:
   - component: {fileID: 1039941164}
   m_Layer: 0
   m_Name: Wall (14)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2516,7 +2483,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2669,7 +2636,7 @@ GameObject:
   - component: {fileID: 1098195610}
   m_Layer: 0
   m_Name: Field
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2935,6 +2902,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: fallSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: seedCount
       value: 200
       objectReference: {fileID: 0}
@@ -3110,14 +3081,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8478477744591568592, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478477744591568592, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3040823833061551457, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5352062869898219542, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 392135729}
     - targetCorrespondingSourceObject: {fileID: 783616815946700050, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1279750760}
@@ -3220,7 +3196,7 @@ GameObject:
   - component: {fileID: 1459420441}
   m_Layer: 0
   m_Name: Wall (2)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3240,7 +3216,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3370,7 +3346,7 @@ GameObject:
   - component: {fileID: 1710344045}
   m_Layer: 0
   m_Name: Wall (11)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3405,7 +3381,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3587,7 +3563,7 @@ GameObject:
   - component: {fileID: 1875504403}
   m_Layer: 0
   m_Name: Wall (4)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3607,7 +3583,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3729,7 +3705,7 @@ GameObject:
   - component: {fileID: 1956884199}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3841,7 +3817,7 @@ GameObject:
   - component: {fileID: 1983277615}
   m_Layer: 0
   m_Name: Wall (9)
-  m_TagString: Wall
+  m_TagString: Field
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3861,7 +3837,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

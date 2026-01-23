@@ -54,9 +54,10 @@ public class Item : MonoBehaviour
     }
 
     //取得用メソッド
-    private void GetItem()
+    public int GetItem()
     {
-
+        deleteCallBack(transform);
+        return itemType;
     }
 
     //消滅時間管理用メソッド
