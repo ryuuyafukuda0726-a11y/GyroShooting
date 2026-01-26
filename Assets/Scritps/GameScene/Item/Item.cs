@@ -4,7 +4,7 @@ using UnityEngine;
 //アイテムの種類
 enum ItemType
 {
-    RapidFire,
+    SpeedUp,
     BulletSupply,
     Shooting,
     Recovery
@@ -53,11 +53,11 @@ public class Item : MonoBehaviour
         itemType = inItemType;
     }
 
-    //取得用メソッド
-    public int GetItem()
+    public void OnCollisionEnter(Collision collision)
     {
+        if (collision.transform.tag != "Player") return;
+        collision.transform.GetComponent<Player>().SetItem(itemType);
         deleteCallBack(transform);
-        return itemType;
     }
 
     //消滅時間管理用メソッド

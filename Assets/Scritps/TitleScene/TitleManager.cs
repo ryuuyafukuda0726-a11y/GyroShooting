@@ -44,6 +44,7 @@ public class TitleManager : MonoBehaviour
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
         myTitleDelegate = Init;
         loadBar.transform.localScale = new Vector3(0.0f, 1.0f, 1.0f);
+        loadBar.transform.parent.gameObject.SetActive(false);
     }
 
     //初期設定用メソッド
@@ -67,7 +68,7 @@ public class TitleManager : MonoBehaviour
     {
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
         sceneChange = true;
-        loadBar.SetActive(true);
+        loadBar.transform.parent.gameObject.SetActive(true);
     }
 
     //デバイスでの入力確認用メソッド
@@ -76,7 +77,7 @@ public class TitleManager : MonoBehaviour
         TouchControl touch = Touchscreen.current.primaryTouch;
         if (!touch.press.wasPressedThisFrame) return;
         sceneChange = true;
-        loadBar.SetActive(true);
+        loadBar.transform.parent.gameObject.SetActive(true);
     }
 
     //入力確認用メソッド
@@ -108,19 +109,18 @@ public class TitleManager : MonoBehaviour
         Debug.Log("遷移完了");
     }
 
-    //GameSceneへの遷移用メソッド
-    private void ChengeGameScene()
+    //ロビーシーンへの遷移用メソッド
+    private void ChangeLobbyScene()
     {
         if (!sceneChange) return;
         if (!sceneChangeUIScript.EasingControl("Close")) return;
-        //SceneManager.LoadScene("GameScene");
         LoadSceneAsync();
     }
 
     //タイトル用メソッド
     private void Title()
     {
-        ChengeGameScene();
+        ChangeLobbyScene();
         if (sceneChange) return;
         touchScreenScript.DisplayUI();
         doCheckInput();

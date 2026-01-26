@@ -1,4 +1,3 @@
-using Fusion;
 using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -18,6 +17,7 @@ public class Player : MonoBehaviour
     //移動速度用変数
     [SerializeField]
     private float speed = 0.0f;
+    private float moveSpeed = 0.0f;
     //ライフ用変数
     [SerializeField]
     private int maxLife = 0;
@@ -30,6 +30,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int seedCount = 0;
     private SeedManager seedManagerScript;
+    [SerializeField]
+    private int damageValue = 0;
+    private int damage = 0;
     //餌箱トラップ用変数
     [SerializeField]
     private GameObject feedingBoxPrefab;
@@ -37,10 +40,26 @@ public class Player : MonoBehaviour
     private int maxTrap = 0;
     [SerializeField]
     private int trapCount = 0;
+    [SerializeField]
+    private int seedCost = 0;
     private FeedingBoxManager feedingBoxManagerScript;
     //落下用変数
     [SerializeField]
     private float fallSpeed = 0.0f;
+    //アイテム用変数
+    private bool isItem = false;
+    private ItemType itemType = 0;
+    [SerializeField]
+    private float itemEfficacyTime = 0.0f;
+    private float myTime = 0.0f;
+    [SerializeField]
+    private float speedUpValue = 0.0f;
+    [SerializeField]
+    private int bulletSupplyValue = 0;
+    [SerializeField]
+    private float powerUpValue = 0.0f;
+    [SerializeField]
+    private int recoveryValue = 0;
     //接触判定用変数
     private Transform hitTransform;
     private Vector3 hitPos;
@@ -62,6 +81,7 @@ public class Player : MonoBehaviour
         //playerCameraScript.Init();
         //correctionX = playerCamera.transform.rotation.x;
         //SetCallBack();
+        moveSpeed = speed;
         life = maxLife;
         myPlatformInstance = Platform.GetPlatformInstance;
     }
@@ -86,6 +106,7 @@ public class Player : MonoBehaviour
                                                         maxTrap,
                                                         trapCount);
         feedingBoxManagerScript.Init();
+        feedingBoxManagerScript.setTrapCallBack = SetTrapCallBack;
     }
 
     //トラップのリスト登録コールバックの設定用メソッド
@@ -99,6 +120,7 @@ public class Player : MonoBehaviour
     {
         SeedInit(inAudioSource);
         FeedingBoxInit();
+        damage = damageValue;
         //move = GetComponent<PlayerInput>().actions["Move"];
         //playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
         //playerCameraScript.Init();
@@ -123,7 +145,7 @@ public class Player : MonoBehaviour
     //移動用メソッド
     private void Move()
     {
-        transform.Translate(moveDirection * speed * Time.deltaTime);
+        transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
     }
 
     //餌箱の設置用メソッド
@@ -139,10 +161,17 @@ public class Player : MonoBehaviour
         }
         if (Keyboard.current.tKey.wasReleasedThisFrame)
         {
-           // if()
-            feedingBoxManagerScript.CheckInstallationSpaceEnd(transform.position);
+            // if()
+            bool isCost = seedCount >= seedCost ? true : false; 
+            feedingBoxManagerScript.CheckInstallationSpaceEnd(transform.position, isCost);
         }
         //feedingBoxManagerScript.InputInstallation(transform.position);
+    }
+
+    //餌箱設置時のコールバック用メソッド
+    private void SetTrapCallBack()
+    {
+        seedCount -= seedCost;
     }
 
     //落下用メソッド
@@ -158,6 +187,58 @@ public class Player : MonoBehaviour
         else if (hitPos.y <= transform.position.y) Fall();
     }
 
+    //アイテム使用後プロパティリセット用メソッド
+    private void AfterUseItem()
+    {
+        moveSpeed = speed;
+        damage = damageValue;
+        myTime = 0.0f;
+        isItem = false;
+    }
+
+    //アイテムの効果時間管理用メソッド
+    private void EfficacyTimeControl()
+    {
+        myTime += Time.deltaTime;
+        if (myTime > itemEfficacyTime)
+        {
+            AfterUseItem();
+        }
+    }
+
+    //アイテムの効果用メソッド
+    private void ItemEfficacy()
+    {
+        switch (itemType)
+        {
+            case ItemType.SpeedUp:
+                moveSpeed = speed * 1.5f;
+                break;
+            case ItemType.BulletSupply:
+                seedCount += bulletSupplyValue;
+                if (seedCount > maxSeed) seedCount = maxSeed;
+                break;
+            case ItemType.Shooting:
+                damage = (int)(damageValue * powerUpValue);
+                break;
+            case ItemType.Recovery:
+                life += recoveryValue;
+                if (life > maxLife) life = maxLife;
+                AfterUseItem();
+                break;
+            default:
+                break;
+        }
+    }
+
+    //アイテムの効果管理用メソッド
+    private void EfficacyControl()
+    {
+        if (!isItem) return;
+        EfficacyTimeControl();
+        ItemEfficacy();
+    }
+
     //プレイ用メソッド
     public void Play()
     {
@@ -167,15 +248,22 @@ public class Player : MonoBehaviour
         Move();
         InstallationTrap();
         //CheckFall();
+        EfficacyControl();
         playerCameraScript.Play(transform.position);
         if (myPlatformInstance.CheckPlatform()) return;
-        seedManagerScript.Shot();
+        seedManagerScript.Shot(damage);
     }
 
     //モバイル操作のコールバック用メソッド
     public void MobileControlCallBack(Vector3 inputVec)
     {
         moveDirection = inputVec;
+    }
+
+    //モバイル操作の発射用メソッド
+    public void Shot()
+    {
+        seedManagerScript.MobileShot(damage);
     }
 
     //ダメージ用メソッド
@@ -189,6 +277,13 @@ public class Player : MonoBehaviour
     public void ChargeBullet()
     {
         seedManagerScript.ChargeBullet();
+    }
+
+    //アイテム取得時用メソッド
+    public void SetItem(int inItemType)
+    {
+        itemType = (ItemType)inItemType;
+        isItem = true;
     }
 
     //接触判定用メソッド

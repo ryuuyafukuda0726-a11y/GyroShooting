@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 
-//プレイモード選択画面用スクリプトクラス
-public class PlayModeImage : MonoBehaviour
+//マッチング部屋用スクリプトクラス
+public class MatchingRoomImage : MonoBehaviour
 {
     //レクトトランスフォーム用変数
     private RectTransform rt;
@@ -10,11 +9,19 @@ public class PlayModeImage : MonoBehaviour
     private EasingControl easing;
     private Vector3 aVec, bVec;
     private float percent = 0.0f;
-    private const float maxPercent = 1.0f;
     private const float minPercent = 0.0f;
-    //コールバック用変数
-    public Action singleModeCallBack;
-    public Action multiModeCallBack;
+    private const float maxPercent = 1.0f;
+    //マッチング時間用変数
+    [SerializeField]
+    private GameObject matchingTimeImage;
+    [SerializeField]
+    private float matchingTime = 0.0f;
+    //マッチングプレイヤー用変数
+    [SerializeField]
+    private GameObject[] matchingPlayers = new GameObject[4];
+    //プレイマップ用変数
+    [SerializeField]
+    private GameObject playMapImage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,12 +33,36 @@ public class PlayModeImage : MonoBehaviour
     public void Init()
     {
         rt.transform.localScale = Vector3.up;
+        easing = global::EasingControl.SetEasing;
+    }
+
+    //マップ写真と説明の表示用メソッド
+    private void DisplayMapPictureAndExplanation()
+    {
+
+    }
+
+    //プレイヤーの表示用メソッド
+    private void DisplayPlayer()
+    {
+
+    }
+
+    //タイマー表示用メソッド
+    private void DisplayTimer()
+    {
+
+    }
+
+    //プレイ用メソッド
+    public void Play()
+    {
+
     }
 
     //イージング設定用メソッド
     private void SetEasing(string inMove)
     {
-        //引数でイージングの内容をSwitch
         switch (inMove)
         {
             case "Open":
@@ -59,7 +90,7 @@ public class PlayModeImage : MonoBehaviour
     //イージング管理用メソッド
     public bool EasingControl(string inMove)
     {
-        //イージング進行状態でSwitch
+        //イージングの進行状態でスイッチ
         switch (easing)
         {
             case global::EasingControl.SetEasing:
@@ -79,16 +110,16 @@ public class PlayModeImage : MonoBehaviour
         return false;
     }
 
-    //シングルモードボタン用メソッド
-    public void SingleButton()
+    //戻るボタン用メソッド
+    public void ReturnButton()
     {
-        singleModeCallBack();
+
     }
 
-    //マルチボタン用メソッド
-    public void MultiButton()
+    //ゲーム開始ボタン用メソッド
+    public void GameStartButton()
     {
-        multiModeCallBack();
+
     }
 
     // Update is called once per frame

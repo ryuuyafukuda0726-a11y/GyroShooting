@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEditor.Timeline.Actions;
-using Fusion;
 
 //ハムスター用スクリプトクラス
 public class Hamster : MonoBehaviour
@@ -209,8 +207,9 @@ public class Hamster : MonoBehaviour
         if (attackTarget == player) player.GetComponent<Player>().Damage(power);
         else if (attackTarget == target) target.GetComponent<SunFlower>().Damage(power);
         else if (attackTarget == trap) {
-            Damage();
-            trap.GetComponent<FeedingBox>().durabilityDown();
+            FeedingBox box = trap.GetComponent<FeedingBox>();
+            Damage(box.GetDamageValue());
+            box.durabilityDown();
         }
     }
 
@@ -271,9 +270,9 @@ public class Hamster : MonoBehaviour
     }
 
     //体力減少用メソッド
-    private void Damage()
+    private void Damage(int inDamageValue)
     {
-        hp--;
+        hp -= inDamageValue;
         hungryGageScript.Display(hp * 10);
         if (hp > 0) return;
         ItemDrop();
@@ -285,8 +284,9 @@ public class Hamster : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
-            other.transform.GetComponent<SunflowerSeed>().DisappearanceAndHitDetection();
-            Damage();
+            SunflowerSeed seed = other.transform.GetComponent<SunflowerSeed>();
+            seed.DisappearanceAndHitDetection();
+            Damage(seed.GetDamageValue());
         }
     }
 

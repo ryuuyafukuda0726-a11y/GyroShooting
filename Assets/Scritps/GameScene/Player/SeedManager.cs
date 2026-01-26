@@ -7,6 +7,7 @@ public class SeedManager
 {
     //プレイヤー用変数
     private Transform player;
+    private int damage = 0;
     //種用変数
     private GameObject seedPrefab;
     private int maxSeed = 0;
@@ -61,13 +62,14 @@ public class SeedManager
     }
 
     //発射用メソッド
-    public void Shot()
+    public void Shot(int inDamageValue)
     {
         Debug.Log(isRate);
         if (seed <= 0) return;
         if (Mouse.current.leftButton.isPressed ||
             Mouse.current.leftButton.wasPressedThisFrame)
         {
+            damage = inDamageValue;
             ShotRateControl();
             SetTargetTransform(getTargetCallBack());
             ShotSeed();
@@ -84,9 +86,10 @@ public class SeedManager
     }
 
     //モバイルの発射用メソッド
-    public void MobileShot()
+    public void MobileShot(int inDamageValue)
     {
         if (seed <= 0) return;
+        damage = inDamageValue;
         ShotRateControl();
         SetTargetTransform(getTargetCallBack());
         ShotSeed();
@@ -117,7 +120,7 @@ public class SeedManager
                                           new Quaternion(rotX, rotY, rotZ, rotW);
         seedObjects[seedNumber].transform.position = shotPos;
         seedObjects[seedNumber].transform.rotation = shotRot;
-        seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot();
+        seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot(damage);
         shotCallBack((int)GameSE.Shot);
         seedNumber++;
         seed--;

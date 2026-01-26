@@ -10,15 +10,23 @@ using System.Collections;
 //ロビーシーンを管理するマネージャースクリプトクラス
 public class LobbyManager : MonoBehaviour
 {
-    //名前UI用変数
+    //名前用変数
     [SerializeField]
     private GameObject nameImage;
     private InputNameImage nameImageScript;
     private string playerName = "";
-    //プレイモード選択UI用変数
+    [SerializeField]
+    private int iDLength = 0;
+    private string playerId = "";
+    //プレイモード選択用変数
     [SerializeField]
     private GameObject playModeImage;
     private PlayModeImage playModeImageScript;
+    private bool isMulti = false;
+    //マッチング部屋用変数
+    [SerializeField]
+    private GameObject matchingRoomImage;
+    private MatchingRoomImage matchingRoomScript;
     //シーン遷移時UI用変数
     [SerializeField]
     private GameObject sceneChangeUI;
@@ -32,6 +40,8 @@ public class LobbyManager : MonoBehaviour
     private MyLobbyDelegate myLobbyDelegate;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
+    //通信用変数
+    private MagicOnionController myControllerInstance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,9 +49,18 @@ public class LobbyManager : MonoBehaviour
         EnhancedTouchSupport.Enable();
         nameImageScript = nameImage.GetComponent<InputNameImage>();
         playModeImageScript = playModeImage.GetComponent<PlayModeImage>();
+        matchingRoomScript = matchingRoomImage.GetComponent<MatchingRoomImage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
         myPlatformInstance = Platform.GetPlatformInstance;
+        myControllerInstance = MagicOnionController.GetInstance;
         myLobbyDelegate = Init;
+    }
+
+    //コールバックの設定用メソッド
+    private void SetCallBack()
+    {
+        playModeImageScript.singleModeCallBack = CheckInput;
+        playModeImageScript.multiModeCallBack = MultiModeCallBack;
     }
 
     //初期設定用メソッド
@@ -49,7 +68,10 @@ public class LobbyManager : MonoBehaviour
     {
         nameImageScript.Init();
         playModeImageScript.Init();
+        matchingRoomScript.Init();
         sceneChangeUIScript.Init();
+        loadBar.transform.parent.gameObject.SetActive(false);
+        SetCallBack();
         myLobbyDelegate = CheckExistingDataEasing;
     }
 
@@ -63,10 +85,11 @@ public class LobbyManager : MonoBehaviour
     //既存データの確認用メソッド
     private void CheckExistingData()
     {
-        if (PlayerPrefs.HasKey("PlayerName"))
+        if (PlayerPrefs.HasKey("PlayerID"))
         {
+            playerId = PlayerPrefs.GetString("PlayerID");
             playerName = PlayerPrefs.GetString("PlayerName");
-            myLobbyDelegate = Lobby;
+            myLobbyDelegate = LobbyEasing;
         }
         else myLobbyDelegate = InputNameDataEasing;
     }
@@ -84,6 +107,9 @@ public class LobbyManager : MonoBehaviour
     {
         nameImageScript.InputName();
         if (!nameImageScript.isEnd) return;
+        int newId = UnityEngine.Random.Range(0, iDLength);
+        PlayerPrefs.SetString("PlayerID", "" + newId);
+        PlayerPrefs.SetString("PlayerName", nameImageScript.GetName());
         myLobbyDelegate = LobbyEasing;
     }
 
@@ -94,10 +120,70 @@ public class LobbyManager : MonoBehaviour
         myLobbyDelegate = Lobby;
     }
 
+    //入力確認用メソッド
+    private void CheckInput()
+    {
+        sceneChange = true;
+        loadBar.transform.parent.gameObject.SetActive(true);
+        myLobbyDelegate = ChangeGameScene;
+    }
+
+    //マルチの入力確認用メソッド
+    private void MultiModeCallBack()
+    {
+        isMulti = true;
+    }
+
     //ロビー用メソッド
     private void Lobby()
     {
-        Debug.Log("ようこそ");
+        if (!isMulti) return;
+        if (!playModeImageScript.EasingControl("Close")) return;
+        myLobbyDelegate = MatchingRoomEasing;
+    }
+
+    //マッチングルームへのイージング用メソッド
+    private void MatchingRoomEasing()
+    {
+        if (!matchingRoomScript.EasingControl("Open")) return;
+        myControllerInstance.JoinStart(playerId, playerName);
+        myLobbyDelegate = MatchingRoom;
+    }
+
+    //マッチングルーム用メソッド
+    private void MatchingRoom()
+    {
+
+    }
+
+    //シーン遷移のコルーチン呼び出し用メソッド
+    private void LoadSceneAsync()
+    {
+        StartCoroutine(LoadSceneCoroutine());
+    }
+
+    //シーン遷移のコルーチン用メソッド
+    private IEnumerator LoadSceneCoroutine()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameScene");
+
+        while (!asyncLoad.isDone)
+        {
+            float value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+            loadBar.transform.localScale = new Vector3(value, 1.0f, 1.0f);
+            Debug.Log("進行度 : " + value + "%");
+            yield return null;
+        }
+
+        Debug.Log("遷移完了");
+    }
+
+    //ゲームシーンへの遷移用メソッド
+    private void ChangeGameScene()
+    {
+        if (!sceneChange) return;
+        if (!sceneChangeUIScript.EasingControl("Close")) return;
+        LoadSceneAsync();
     }
 
     // Update is called once per frame

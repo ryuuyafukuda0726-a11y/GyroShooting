@@ -2918,9 +2918,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1279750759}
     - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: recoveryValue
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: feedingBoxPrefab
       value: 
       objectReference: {fileID: 5566229304336866586, guid: 7c816fd2a9cf66540b68aa04c1345338, type: 3}
+    - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: itemEfficacyTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1335536527192778672, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

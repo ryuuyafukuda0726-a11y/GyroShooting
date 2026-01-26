@@ -4,6 +4,9 @@ using UnityEngine;
 //餌箱トラップ用スクリプトクラス
 public class FeedingBox : MonoBehaviour
 {
+    //ダメージ用変数
+    [SerializeField]
+    private int damageValue = 0;
     //トラップの耐久用変数
     [SerializeField]
     private int maxDurability = 0;
@@ -43,6 +46,12 @@ public class FeedingBox : MonoBehaviour
     public void InputInstallation()
     {
         isFlag = false;
+    }
+
+    //ダメージ量の取得用メソッド
+    public int GetDamageValue()
+    {
+        return damageValue;
     }
 
     //耐久値減少用メソッド

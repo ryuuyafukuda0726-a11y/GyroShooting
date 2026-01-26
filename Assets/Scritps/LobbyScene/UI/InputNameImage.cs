@@ -94,7 +94,7 @@ public class InputNameImage : MonoBehaviour
     private void InputNameProcess(char inChar)
     {
         Keyboard keyboard = Keyboard.current;
-        bool isLength = nameTMP.text.Length >= maxNameLength ? true : false;
+        bool isLength = playerName.Length >= maxNameLength ? true : false;
         //文字数と入力を確認
         if (isLength ||
             keyboard.backspaceKey.isPressed ||
@@ -103,7 +103,7 @@ public class InputNameImage : MonoBehaviour
             keyboard.enterKey.wasPressedThisFrame ||
             keyboard.escapeKey.isPressed ||
             keyboard.escapeKey.wasPressedThisFrame) return;
-        nameTMP.text += inChar;
+        playerName += inChar;
         //doInputKeyboardSECallBack();
     }
 
@@ -111,7 +111,7 @@ public class InputNameImage : MonoBehaviour
     private void BackSpaceName()
     {
         //doInputKeyboardSECallBack();
-        int size = nameTMP.text.Length;
+        int size = playerName.Length;
         //名前の入力数を確認
         if (size < 1) return;
         string name = null;
@@ -119,10 +119,10 @@ public class InputNameImage : MonoBehaviour
         {
             //最後の文字か確認
             if (i >= size - 1) continue;
-            name += nameTMP.text[i];
+            name += playerName[i];
         }
-        if (nameTMP.text.Length == 1) nameTMP.text = "";
-        else nameTMP.text = name;
+        if (playerName.Length == 1) playerName = "";
+        else playerName = name;
     }
 
     //キーボードの入力処理用メソッド
@@ -136,14 +136,14 @@ public class InputNameImage : MonoBehaviour
     //入力可能文字数の表示用メソッド
     private void DisplayNameLength()
     {
-        int nameLength = nameTMP.text.Length;
+        int nameLength = playerName.Length;
         nameLengthTMP.text = "You can enter " + (maxNameLength - nameLength) + " more characters.";
     }
 
     //入力の終了用メソッド
     private void InputEnd()
     {
-        int nameLength = nameTMP.text.Length;
+        int nameLength = playerName.Length;
         if (nameLength == 0) return;
         if (!Keyboard.current.enterKey.wasPressedThisFrame) return;
         //doInputKeyboardSECallBack();
@@ -164,9 +164,16 @@ public class InputNameImage : MonoBehaviour
         isEnd = true;
     }
 
+    //名前の表示用メソッド
+    private void DisplayName()
+    {
+        nameTMP.text = playerName;
+    }
+
     //名前の入力用メソッド
     public void InputName()
     {
+        DisplayName();
         CheckInputEnd();
         if (isInputEnd) return;
         InputEnd();

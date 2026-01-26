@@ -15,6 +15,7 @@ public class FeedingBoxManager
     private List<GameObject> feedingBoxs = new List<GameObject>();
     //コールバック用変数
     public Action<List<GameObject>> setTrapListCallBack;
+    public Action setTrapCallBack;
 
     //餌箱の生成用メソッド
     private void CreateFeedingBox()
@@ -92,12 +93,13 @@ public class FeedingBoxManager
     }
 
     //確認終了時用メソッド
-    public void CheckInstallationSpaceEnd(Vector3 inPos)
+    public void CheckInstallationSpaceEnd(Vector3 inPos, bool inCost)
     {
         bool isFlag = feedingBoxObjects[0].GetComponent<FeedingBox>().GetFlag();
-        if (isFlag)
+        if (isFlag && inCost)
         {
             Installation(inPos);
+            setTrapCallBack();
         }
         feedingBoxObjects[0].SetActive(false);
         feedingBoxObjects[0].transform.position = Vector3.zero;
