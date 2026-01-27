@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
     //落下用変数
     [SerializeField]
     private float fallSpeed = 0.0f;
+    private bool isFall = false;
     //アイテム用変数
     private bool isItem = false;
     private ItemType itemType = 0;
@@ -174,17 +175,20 @@ public class Player : MonoBehaviour
         seedCount -= seedCost;
     }
 
+    //落下判定用メソッド
+    private bool CheckFall()
+    {
+        if (hitTransform == null) isFall = true;
+        else if (hitPos.y >= transform.position.y) isFall = true;
+        else isFall = false;
+        return isFall;
+    }
+
     //落下用メソッド
     private void Fall()
     {
+        if (!CheckFall()) return;
         transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
-    }
-
-    //落下判定用メソッド
-    private void CheckFall()
-    {
-        if (hitTransform == null) Fall();
-        else if (hitPos.y <= transform.position.y) Fall();
     }
 
     //アイテム使用後プロパティリセット用メソッド
@@ -247,7 +251,7 @@ public class Player : MonoBehaviour
         Input();
         Move();
         InstallationTrap();
-        //CheckFall();
+        //Fall();
         EfficacyControl();
         playerCameraScript.Play(transform.position);
         if (myPlatformInstance.CheckPlatform()) return;
@@ -286,17 +290,23 @@ public class Player : MonoBehaviour
         isItem = true;
     }
 
-    //接触判定用メソッド
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Hit");
         hitTransform = collision.transform;
         hitPos = collision.contacts[0].point;
     }
 
+    //接触判定用メソッド
+    private void OnCollisionStay(Collision collision)
+    {
+        
+    }
+
     //
     private void OnCollisionExit(Collision collision)
     {
         hitTransform = null;
+        isFall = true;
     }
 }

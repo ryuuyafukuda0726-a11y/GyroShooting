@@ -64,7 +64,7 @@ public class SeedManager
     //発射用メソッド
     public void Shot(int inDamageValue)
     {
-        Debug.Log(isRate);
+        //Debug.Log(isRate);
         if (seed <= 0) return;
         if (Mouse.current.leftButton.isPressed ||
             Mouse.current.leftButton.wasPressedThisFrame)

@@ -118,7 +118,7 @@ public class PlayerCamera : MonoBehaviour
         if(myTime > 1.0f)
         {
             myTime = 0.0f;
-            Debug.Log(transform.rotation.x);
+            //Debug.Log(transform.rotation.x);
         }
     }
 

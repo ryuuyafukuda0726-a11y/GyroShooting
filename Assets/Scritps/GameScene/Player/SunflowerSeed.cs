@@ -4,7 +4,6 @@ using UnityEngine;
 public class SunflowerSeed : MonoBehaviour
 {
     //ダメージ用変数
-    [SerializeField]
     private int damage = 0;
     //弾速用変数
     [SerializeField]
