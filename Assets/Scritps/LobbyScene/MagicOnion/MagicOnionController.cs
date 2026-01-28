@@ -1,3 +1,4 @@
+using System;
 using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,11 +19,20 @@ public class MagicOnionController : MonoBehaviour
     [SerializeField] private Transform _playerParent;
     [SerializeField] private MyGameHubClient _myPrefab;
     [SerializeField] private GameObject _otherPlayerPrefab;
-
     public MyGameHubClient me = null;
+    [NonSerialized] public bool isHost = false;
+
     // MagicOnionController.me.client.XXAsync()
 
     // MagicOnionController.receiver.OnJoinDelegate
+
+    //コールバックの設定用メソッド
+    private void SetCallBack()
+    {
+        receiver.OnJoinDelegate += IAmJoin;//既定の名称の関数を登録
+        receiver.OnJoinDelegate += flag => { Debug.Log("I am Join! : " + flag); }; //匿名関数の登録
+        receiver.OnCheckHostCallBack = () => { isHost = true; };
+    }
 
     //通信開始用メソッド
     public void JoinStart(string userId, string userName)
@@ -30,14 +40,18 @@ public class MagicOnionController : MonoBehaviour
         _selfId = userId;
         _selfName = userName;
         receiver = new MyGameHubReceiver(_playerParent, _otherPlayerPrefab, _selfId);
-        receiver.OnJoinDelegate += IAmJoin;//既定の名称の関数を登録
-        receiver.OnJoinDelegate += flag => { Debug.Log("I am Join! : " + flag); }; //匿名関数の登録
-
+        SetCallBack();
         me = new MyGameHubClient();
         me.InitializeClient(_serverUrl, _selfId, _selfName, receiver);
     }
 
-    //起動用メソッド
+    //タイマー情報の送信用メソッド
+    public void TimerCountTransmission(float inTime)
+    {
+        me._client.MatchingTimerCountAsync(inTime);
+    }
+
+    //起動時用メソッド
     private void Awake()
     {        
         SetDontDestroyPlatformInstance();

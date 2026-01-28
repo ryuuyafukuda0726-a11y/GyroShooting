@@ -29,12 +29,7 @@ public class MyGameHubClient
             DisposeHttpClient = true,
         }); 
         _client = await StreamingHubClient.ConnectAsync<IMyGameHub, IMyGameHubReceiver>(_channel, receiver);
-    }
-
-    //マッチング時間の通信用メソッド
-    public async void OnMatchingTimerCount(float inTime)
-    {
-        await _client.MatchingTimerCountAsync(inTime);
+        await _client.JoinAsync(userId, name);
     }
 
     //async void Update()

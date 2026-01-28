@@ -147,13 +147,14 @@ public class LobbyManager : MonoBehaviour
     {
         if (!matchingRoomScript.EasingControl("Open")) return;
         myControllerInstance.JoinStart(playerId, playerName);
+        matchingRoomScript.SetCallBack();
         myLobbyDelegate = MatchingRoom;
     }
 
     //マッチングルーム用メソッド
     private void MatchingRoom()
     {
-
+        matchingRoomScript.Play();
     }
 
     //シーン遷移のコルーチン呼び出し用メソッド
