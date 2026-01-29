@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System;
 
 //マッチング部屋用スクリプトクラス
 public class MatchingRoomImage : MonoBehaviour
@@ -22,12 +23,14 @@ public class MatchingRoomImage : MonoBehaviour
     //マッチングプレイヤー用変数
     [SerializeField]
     private GameObject[] matchingPlayers = new GameObject[4];
-    private string[] playerNames = new string[4];
     //プレイマップ用変数
     [SerializeField]
     private GameObject playMapImage;
     //通信用変数
     private MagicOnionController myControllerInstance;
+    //コールバック用メソッド
+    public Action gameStartCallBack;
+    public Action returnButtonCallBack;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,9 +45,20 @@ public class MatchingRoomImage : MonoBehaviour
         myControllerInstance.receiver.OnTimerDisplayCallBack = SetTimer;
     }
 
+    //ネームバナーの初期設定用メソッド
+    private void NameBannerInit()
+    {
+        int size = matchingPlayers.Length;
+        for(int i = 0; i < size; i++)
+        {
+            matchingPlayers[i].SetActive(false);
+        }
+    }
+
     //初期設定用メソッド
     public void Init()
     {
+        NameBannerInit();
         rt.transform.localScale = Vector3.up;
         easing = global::EasingControl.SetEasing;
         timer = matchingTime;
@@ -56,33 +70,26 @@ public class MatchingRoomImage : MonoBehaviour
 
     }
 
-    //プレイヤーの取得用メソッド
-    private void SetPlayerNames()
-    {
-
-    }
-
     //プレイヤーの登録用メソッド
-    private void SetPlayer(List<string> inNames)
+    private void SetPlayerName(List<string> inNames)
     {
-        int size = matchingPlayers.Length;
-        for(int i = 0; i < size; i++)
+        int size = inNames.Count;
+        for(int i = 0; i < size + 1; i++)
         {
+            matchingPlayers[i].SetActive(true);
             TextMeshProUGUI tmp = matchingPlayers[i]
                 .transform.GetChild(0)
                 .GetComponent<TextMeshProUGUI>();
-            if(i < inNames.Count)
-            {
-
-            }
+            if (i == 0) tmp.text = PlayerPrefs.GetString("PlayerName");
+            else tmp.text = inNames[i - 1];
         }
     }
 
-    //プレイヤーの表示用メソッド
-    private void DisplayPlayer()
-    {
+    ////プレイヤーの表示用メソッド
+    //private void DisplayPlayer()
+    //{
         
-    }
+    //}
 
     //時間用メソッド
     private void TimerCount()
@@ -106,10 +113,19 @@ public class MatchingRoomImage : MonoBehaviour
         TimerCount();
     }
 
+    //タイマーの終了時用メソッド
+    private void TimerEnd()
+    {
+        if (timer > 0) return;
+        gameStartCallBack();
+    }
+
     //プレイ用メソッド
     public void Play()
     {
         DisplayTimer();
+        SetPlayerName(myControllerInstance.GetOtherPlayerName());
+        TimerEnd();
     }
 
     //イージング設定用メソッド
@@ -165,13 +181,8 @@ public class MatchingRoomImage : MonoBehaviour
     //戻るボタン用メソッド
     public void ReturnButton()
     {
-
-    }
-
-    //ゲーム開始ボタン用メソッド
-    public void GameStartButton()
-    {
-
+        if (!EasingControl("Close")) return;
+        returnButtonCallBack();
     }
 
     // Update is called once per frame

@@ -61,6 +61,8 @@ public class LobbyManager : MonoBehaviour
     {
         playModeImageScript.singleModeCallBack = CheckInput;
         playModeImageScript.multiModeCallBack = MultiModeCallBack;
+        matchingRoomScript.returnButtonCallBack = ReturnButtonCallBack;
+        matchingRoomScript.gameStartCallBack = GameStart;
     }
 
     //初期設定用メソッド
@@ -155,6 +157,18 @@ public class LobbyManager : MonoBehaviour
     private void MatchingRoom()
     {
         matchingRoomScript.Play();
+    }
+
+    //戻るボタンのコールバック用メソッド
+    private void ReturnButtonCallBack()
+    {
+        myLobbyDelegate = LobbyEasing;
+    }
+
+    //ゲーム開始時用メソッド
+    public void GameStart()
+    {
+        myLobbyDelegate = ChangeGameScene;
     }
 
     //シーン遷移のコルーチン呼び出し用メソッド
