@@ -34,6 +34,7 @@ public class MyGameHubReceiver : IMyGameHubReceiver
         else {
             //SpawnOtherPlayer(userId); 
             OnJoinDelegate.Invoke(true);
+            myControllerInstance.SetCommunicatingPlayer(userName);
         }
     }
 

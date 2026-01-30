@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,6 +22,8 @@ public class MagicOnionController : MonoBehaviour
     [SerializeField] private GameObject _otherPlayerPrefab;
     public MyGameHubClient me = null;
     [NonSerialized] public bool isHost = false;
+    //その他のプレイヤー用変数
+    private List<string> otherPlayerName;
 
     // MagicOnionController.me.client.XXAsync()
 
@@ -49,6 +52,18 @@ public class MagicOnionController : MonoBehaviour
     public void TimerCountTransmission(float inTime)
     {
         me._client.MatchingTimerCountAsync(inTime);
+    }
+
+    //通信中のプレイヤーを登録するメソッド
+    public void SetCommunicatingPlayer(string inName)
+    {
+        otherPlayerName.Add(inName);
+    }
+
+    //他プレイヤーの名前取得用メソッド
+    public List<string> GetOtherPlayerName()
+    {
+        return otherPlayerName;
     }
 
     //起動時用メソッド
