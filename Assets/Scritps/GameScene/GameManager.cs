@@ -66,6 +66,8 @@ public class GameManager : MonoBehaviour
     //進行管理用デリゲート変数
     private delegate void MyGameDelegate();
     private MyGameDelegate myGameDelegate;
+    //通信用変数
+    private MagicOnionController myControllerInstance;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -80,6 +82,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         myPlatformInstance = Platform.GetPlatformInstance;
+        myControllerInstance = MagicOnionController.GetInstance;
         sunFlowerScript = sunFlower.GetComponent<SunFlower>();
         sunFlowerGageScript = sunFlowerGage.GetComponent<SunFlowerGage>();
         playerScript = playerObject.GetComponent<Player>();
@@ -154,6 +157,23 @@ public class GameManager : MonoBehaviour
         SetPlayerCallBack();
         SetMobileControlCallBack();
         SetSunFlowerCallBack();
+        myGameDelegate = StayGameStart;
+    }
+
+    //ゲーム開始待機状態用メソッド
+    private void StayGameStart()
+    {
+        if (myControllerInstance.isMulti)
+        {
+            myControllerInstance.receiver.OnPlayStartCallBack = PlayStart;
+            myControllerInstance.me.StayGameStart();
+        }
+        else myGameDelegate = InGameEasing;
+    }
+
+    //プレイ開始の受信時コールバック
+    private void PlayStart()
+    {
         myGameDelegate = InGameEasing;
     }
 

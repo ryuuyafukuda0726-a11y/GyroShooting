@@ -13,6 +13,7 @@ public class MyGameHubClient
     public string userId;
     private string name;
 
+    //通信開始用メソッド
     public async void InitializeClient(string serverUrl, string userId, string name, IMyGameHubReceiver receiver)
     {
         this._serverUrl = serverUrl;
@@ -30,6 +31,24 @@ public class MyGameHubClient
         }); 
         _client = await StreamingHubClient.ConnectAsync<IMyGameHub, IMyGameHubReceiver>(_channel, receiver);
         await _client.JoinAsync(userId, name);
+    }
+
+    //通信切断用メソッド
+    public async void LeaveClient(bool inHost)
+    {
+        await _client.LeaveAsync(inHost);
+    }
+
+    //ゲーム開始の通信用メソッド
+    public async void GameStart()
+    {
+        await _client.GameStartAsync();
+    }
+
+    //待機状態の通信用メソッド
+    public async void StayGameStart()
+    {
+        await _client.StayGameStartAsync();
     }
 
     //async void Update()

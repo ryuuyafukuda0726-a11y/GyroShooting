@@ -1,6 +1,6 @@
+using MagicOnionStudy.Shared;
 using System;
 using System.Collections.Generic;
-using Unity.Android.Gradle.Manifest;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.AudioSettings;
@@ -14,7 +14,7 @@ public class MagicOnionController : MonoBehaviour
     [SerializeField] private string _selfId;
     [SerializeField] private string _selfName;
     [Header("Network Information")]
-    [SerializeField] private string _serverUrl = "http://127.0.0.1:5000";
+    [NonSerialized] public string _serverUrl = "";
     [DoNotSerialize] public MyGameHubReceiver receiver;
     [Header("Players Base")]
     [SerializeField] private Transform _playerParent;
@@ -22,8 +22,9 @@ public class MagicOnionController : MonoBehaviour
     [SerializeField] private GameObject _otherPlayerPrefab;
     public MyGameHubClient me = null;
     [NonSerialized] public bool isHost = false;
+    [NonSerialized] public bool isMulti = false;
     //その他のプレイヤー用変数
-    private List<string> otherPlayerName;
+    private List<OtherPlayer> otherPlayers = new List<OtherPlayer>();
 
     // MagicOnionController.me.client.XXAsync()
 
@@ -32,9 +33,18 @@ public class MagicOnionController : MonoBehaviour
     //コールバックの設定用メソッド
     private void SetCallBack()
     {
-        receiver.OnJoinDelegate += IAmJoin;//既定の名称の関数を登録
-        receiver.OnJoinDelegate += flag => { Debug.Log("I am Join! : " + flag); }; //匿名関数の登録
-        receiver.OnCheckHostCallBack = () => { isHost = true; };
+        //receiver.OnJoinDelegate += IAmJoin;//既定の名称の関数を登録
+        //receiver.OnJoinDelegate += flag => { Debug.Log("I am Join! : " + flag); }; //匿名関数の登録
+        receiver.OnCheckHostCallBack = () => {
+            isHost = true;
+            Debug.Log("ホストになりました。");
+        };
+    }
+
+    //アドレスの設定用メソッド
+    public void SetAddress(string inAddress)
+    {
+        _serverUrl = "http://" + inAddress + ":5000";
     }
 
     //通信開始用メソッド
@@ -48,22 +58,53 @@ public class MagicOnionController : MonoBehaviour
         me.InitializeClient(_serverUrl, _selfId, _selfName, receiver);
     }
 
+    //通信切断用メソッド
+    public void Leave()
+    {
+        me.LeaveClient(isHost);
+        isHost = false;
+    }
+
     //タイマー情報の送信用メソッド
     public void TimerCountTransmission(float inTime)
     {
         me._client.MatchingTimerCountAsync(inTime);
     }
 
-    //通信中のプレイヤーを登録するメソッド
-    public void SetCommunicatingPlayer(string inName)
+    //入室してきたプレイヤーを登録
+    public void SetJoinPlayer(string inId, string inName)
     {
-        otherPlayerName.Add(inName);
+        OtherPlayer otherPlayer = new OtherPlayer(inId, inName);
+        otherPlayers.Add(otherPlayer);
     }
 
-    //他プレイヤーの名前取得用メソッド
-    public List<string> GetOtherPlayerName()
+    //通信中のプレイヤーを登録するメソッド
+    public void SetCommunicatingPlayer(List<MyPlayerData> inUsers)
     {
-        return otherPlayerName;
+        otherPlayers = new List<OtherPlayer>();
+        int size = inUsers.Count;
+        for(int i = 0; i < size; i++)
+        {
+            otherPlayers.Add(inUsers[i].ToOtherPlayer());
+        }
+    }
+
+    //切断されたプレイヤーを削除するメソッド
+    public void DeleteLeavePlayer(string inId)
+    {
+        int size = otherPlayers.Count;
+        for(int i = 0; i < size; i++)
+        {
+            if (otherPlayers[i].userId != inId) continue;
+            otherPlayers.RemoveAt(i);
+            return;
+        }
+    }
+
+    //他プレイヤーの情報取得用メソッド
+    public List<OtherPlayer> GetOtherPlayer()
+    {
+        return otherPlayers;
     }
 
     //起動時用メソッド

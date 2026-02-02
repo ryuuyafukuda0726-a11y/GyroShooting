@@ -9,52 +9,61 @@ public class MyGameHubReceiver : IMyGameHubReceiver
     private Transform _playerParent;
     private GameObject _playerPrefab;
     //コールバック用変数
-    public Action<bool> OnJoinDelegate;
+    //public Action<bool> OnJoinDelegate;
     public Action OnCheckHostCallBack;
     public Action<float> OnTimerDisplayCallBack;
+    public Action OnGameStartCallBack;
+    public Action OnLeavePlayerCallBack;
+    public Action OnPlayStartCallBack;
     //通信用変数
     private MagicOnionController myControllerInstance;
 
     public MyGameHubReceiver(Transform playerParent, GameObject playerPrefab, string selfId)
     {
-        _playerParent = playerParent; _playerPrefab = playerPrefab; this.selfId = selfId;
+        _playerParent = playerParent; 
+        _playerPrefab = playerPrefab; 
+        this.selfId = selfId;
         myControllerInstance = MagicOnionController.GetInstance;
     }
 
     public void OnJoin(string userId, string userName, bool inHost)
     {
         Debug.Log("Join Player:" + userName);
-
         if (selfId == userId)
         {            // 自分の場合は、既にいるので何もしないreturn;
-            Debug.Log("ホスト : " + inHost);
             if (!inHost) return;
             OnCheckHostCallBack();
         }
-        else {
+        else
+        {
+            myControllerInstance.SetJoinPlayer(userId, userName);
             //SpawnOtherPlayer(userId); 
-            OnJoinDelegate.Invoke(true);
-            myControllerInstance.SetCommunicatingPlayer(userName);
+            //OnJoinDelegate.Invoke(true);
         }
     }
 
     public void OnLeave(string userId)
     {
         Debug.Log("Leave Player:" + userId);
-
+        myControllerInstance.DeleteLeavePlayer(userId);
+        OnLeavePlayerCallBack();
         if (_players.TryGetValue(userId, out GameObject player)) GameObject.Destroy(player);
     }
 
-    public void OnInitializeRoom(List<string>[] users)
+    public void OnInitializeRoom(List<MyPlayerData> users)
     {
         Debug.Log("部屋が初期化されました");
-        foreach (var userId in users[1])
-        {
-            if (!_players.TryGetValue(userId, out GameObject player))
-            {
-                SpawnOtherPlayer(userId);
-            }
-        }
+        myControllerInstance.SetCommunicatingPlayer(users);
+
+        //myControllerInstance.SetCommunicatingPlayer(userId, userName);
+
+        //foreach (var userId in users[1])
+        //{
+        //    if (!_players.TryGetValue(userId, out GameObject player))
+        //    {
+        //        SpawnOtherPlayer(userId);
+        //    }
+        //}
     }
 
     public void OnMove(string userId, MyVector3 position, MyQuaternion quaternion)
@@ -76,12 +85,24 @@ public class MyGameHubReceiver : IMyGameHubReceiver
 
     public void OnGameStart()
     {
-        throw new System.NotImplementedException();
+        OnGameStartCallBack();
+    }
+
+    public void OnPlayStart()
+    {
+        OnPlayStartCallBack();
     }
 
     public void OnMatchingTimerCount(float time)
     {
         if (myControllerInstance.isHost) return;
+        if (OnTimerDisplayCallBack == null) return;
         OnTimerDisplayCallBack(time);
+    }
+
+    public void OnSwitchingHost(MyPlayerData inUser)
+    {
+        OtherPlayer user = inUser.ToOtherPlayer();
+        if (selfId == user.userId) OnCheckHostCallBack();
     }
 }

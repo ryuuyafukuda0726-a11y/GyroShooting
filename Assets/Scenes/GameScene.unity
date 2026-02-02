@@ -2938,6 +2938,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: shotTransform
+      value: 
+      objectReference: {fileID: 1279750762}
+    - target: {fileID: 460435453021088928, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: feedingBoxPrefab
       value: 
       objectReference: {fileID: 5566229304336866586, guid: 7c816fd2a9cf66540b68aa04c1345338, type: 3}
@@ -2978,6 +2982,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1335536527192778672, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3185285835255461804, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3185285835255461804, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3185285835255461804, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -3069,6 +3085,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 6756807186610412946, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.125
+      objectReference: {fileID: 0}
     - target: {fileID: 7615693672623713497, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
       propertyPath: m_IsTrigger
       value: 0
@@ -3140,7 +3160,9 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3040823833061551457, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
     - {fileID: 0}
-    m_RemovedGameObjects: []
+    - {fileID: -7016496392739934369, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: -794755915238155312, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 783616815946700050, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
@@ -3200,6 +3222,11 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!4 &1279750762 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3871194835053002794, guid: c5bd434279a18fe47a55b6fd7d0edbfb, type: 3}
+  m_PrefabInstance: {fileID: 1279750758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1391553482
 GameObject:
   m_ObjectHideFlags: 0
