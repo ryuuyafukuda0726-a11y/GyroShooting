@@ -18,6 +18,10 @@ public class LobbyManager : MonoBehaviour
     [SerializeField]
     private int iDLength = 0;
     private string playerId = "";
+    //アドレス用変数
+    [SerializeField]
+    private GameObject addressImage;
+    private InputAddressImage addressImageScript;
     //プレイモード選択用変数
     [SerializeField]
     private GameObject playModeImage;
@@ -48,6 +52,7 @@ public class LobbyManager : MonoBehaviour
     {
         EnhancedTouchSupport.Enable();
         nameImageScript = nameImage.GetComponent<InputNameImage>();
+        addressImageScript = addressImage.GetComponent<InputAddressImage>();
         playModeImageScript = playModeImage.GetComponent<PlayModeImage>();
         matchingRoomScript = matchingRoomImage.GetComponent<MatchingRoomImage>();
         sceneChangeUIScript = sceneChangeUI.GetComponent<SceneChangeUI>();
@@ -69,6 +74,7 @@ public class LobbyManager : MonoBehaviour
     private void Init()
     {
         nameImageScript.Init();
+        addressImageScript.Init();
         playModeImageScript.Init();
         matchingRoomScript.Init();
         sceneChangeUIScript.Init();
@@ -125,7 +131,6 @@ public class LobbyManager : MonoBehaviour
     //入力確認用メソッド
     private void CheckInput()
     {
-        sceneChange = true;
         loadBar.transform.parent.gameObject.SetActive(true);
         myLobbyDelegate = ChangeGameScene;
     }
@@ -141,6 +146,24 @@ public class LobbyManager : MonoBehaviour
     {
         if (!isMulti) return;
         if (!playModeImageScript.EasingControl("Close")) return;
+        myLobbyDelegate = InputAddressEasing;
+    }
+
+    //アドレスの入力へのイージング用メソッド
+    private void InputAddressEasing()
+    {
+        addressImage.SetActive(true);
+        if (!addressImageScript.EasingControl("Open")) return;
+        myLobbyDelegate = InputAddress;
+    }
+
+    //アドレスの入力用メソッド
+    private void InputAddress()
+    {
+        addressImageScript.InputAddress();
+        if (!addressImageScript.isEnd) return;
+        myControllerInstance.SetAddress(addressImageScript.address);
+        myControllerInstance.JoinStart(playerId, playerName);
         myLobbyDelegate = MatchingRoomEasing;
     }
 
@@ -148,7 +171,8 @@ public class LobbyManager : MonoBehaviour
     private void MatchingRoomEasing()
     {
         if (!matchingRoomScript.EasingControl("Open")) return;
-        myControllerInstance.JoinStart(playerId, playerName);
+        matchingRoomScript.GameStartButtonSetActive();
+        myControllerInstance.receiver.OnGameStartCallBack = GameStart;
         matchingRoomScript.SetCallBack();
         myLobbyDelegate = MatchingRoom;
     }
@@ -162,12 +186,16 @@ public class LobbyManager : MonoBehaviour
     //戻るボタンのコールバック用メソッド
     private void ReturnButtonCallBack()
     {
+        isMulti = false;
+        addressImageScript.Init();
+        myControllerInstance.me.LeaveClient(myControllerInstance.receiver);
         myLobbyDelegate = LobbyEasing;
     }
 
     //ゲーム開始時用メソッド
     public void GameStart()
     {
+        myControllerInstance.me._client.GameStartAsync();
         myLobbyDelegate = ChangeGameScene;
     }
 
@@ -196,7 +224,6 @@ public class LobbyManager : MonoBehaviour
     //ゲームシーンへの遷移用メソッド
     private void ChangeGameScene()
     {
-        if (!sceneChange) return;
         if (!sceneChangeUIScript.EasingControl("Close")) return;
         LoadSceneAsync();
     }

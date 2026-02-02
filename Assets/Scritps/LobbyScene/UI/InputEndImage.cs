@@ -3,6 +3,12 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
+enum InputValue
+{
+    Name,
+    Address
+}
+
 //名前の入力完了ButtonのPanel用スクリプトクラス
 public class InputEndImage : MonoBehaviour
 {
@@ -14,6 +20,8 @@ public class InputEndImage : MonoBehaviour
     private float percent = 0.0f;
     private const float minPercent = 0.0f;
     private const float maxPercent = 1.0f;
+    [SerializeField]
+    private InputValue input;
     //入力完了用変数
     [NonSerialized]
     public bool isEnd = false;
@@ -107,9 +115,25 @@ public class InputEndImage : MonoBehaviour
     //入力のやり直し用メソッド
     private void InputReturn()
     {
-        InputNameImage inputNameImageScript = transform.parent.GetComponent<InputNameImage>();
-        inputNameImageScript.nameTMP.GetComponent<TextMeshProUGUI>().text = "";
-        inputNameImageScript.isInputEnd = false;
+        switch (input)
+        {
+            case InputValue.Name:
+                InputNameImage nameScript
+                    = transform.parent.GetComponent<InputNameImage>();
+                nameScript.nameTMP.GetComponent<TextMeshProUGUI>().text = "";
+                nameScript.isInputEnd = false;
+                break;
+            case InputValue.Address:
+                InputAddressImage addressScript
+                    = transform.parent.GetComponent<InputAddressImage>();
+                addressScript.addressTMP.GetComponent<TextMeshProUGUI>().text = "";
+                addressScript.isInputEnd = false;
+                break;
+            default:
+                break;
+        }
+        
+        
         transform.gameObject.SetActive(false);
         easing = global::EasingControl.SetEasing;
         isReturn = false;

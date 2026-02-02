@@ -6,6 +6,9 @@ using System;
 //マッチング部屋用スクリプトクラス
 public class MatchingRoomImage : MonoBehaviour
 {
+    //UI用変数
+    [SerializeField]
+    private GameObject gameStartButton;
     //レクトトランスフォーム用変数
     private RectTransform rt;
     //イージング用変数
@@ -14,12 +17,13 @@ public class MatchingRoomImage : MonoBehaviour
     private float percent = 0.0f;
     private const float minPercent = 0.0f;
     private const float maxPercent = 1.0f;
-    //マッチング時間用変数
+    //マッチング用変数
     [SerializeField]
     private TextMeshProUGUI matchingTimeTMP;
     [SerializeField]
     private float matchingTime = 0.0f;
     private float timer = 0.0f;
+    private bool isReturn = false;
     //マッチングプレイヤー用変数
     [SerializeField]
     private GameObject[] matchingPlayers = new GameObject[4];
@@ -43,6 +47,7 @@ public class MatchingRoomImage : MonoBehaviour
     public void SetCallBack()
     {
         myControllerInstance.receiver.OnTimerDisplayCallBack = SetTimer;
+        myControllerInstance.receiver.OnLeavePlayerCallBack = NameBannerInit;
     }
 
     //ネームバナーの初期設定用メソッド
@@ -51,6 +56,9 @@ public class MatchingRoomImage : MonoBehaviour
         int size = matchingPlayers.Length;
         for(int i = 0; i < size; i++)
         {
+            matchingPlayers[i].transform.GetChild(0)
+                              .GetComponent<TextMeshProUGUI>()
+                              .text = "";
             matchingPlayers[i].SetActive(false);
         }
     }
@@ -70,18 +78,19 @@ public class MatchingRoomImage : MonoBehaviour
 
     }
 
-    //プレイヤーの登録用メソッド
-    private void SetPlayerName(List<string> inNames)
+    //ネームバナー表示用メソッド
+    private void SetPlayerName(List<OtherPlayer> inOtherPlayer)
     {
-        int size = inNames.Count;
-        for(int i = 0; i < size + 1; i++)
+        int size = 0;
+        if (inOtherPlayer != null) size = inOtherPlayer.Count;
+        for (int i = 0; i < size + 1; i++)
         {
             matchingPlayers[i].SetActive(true);
             TextMeshProUGUI tmp = matchingPlayers[i]
                 .transform.GetChild(0)
                 .GetComponent<TextMeshProUGUI>();
             if (i == 0) tmp.text = PlayerPrefs.GetString("PlayerName");
-            else tmp.text = inNames[i - 1];
+            else tmp.text = inOtherPlayer[i - 1].userName;
         }
     }
 
@@ -109,8 +118,12 @@ public class MatchingRoomImage : MonoBehaviour
     private void DisplayTimer()
     {
         matchingTimeTMP.text = "" + (int)timer;
-        if (!myControllerInstance.isHost) return;
-        TimerCount();
+    }
+
+    //ゲームスタートボタンのアクティブ設定用メソッド
+    public void GameStartButtonSetActive()
+    {
+        gameStartButton.SetActive(myControllerInstance.isHost);
     }
 
     //タイマーの終了時用メソッド
@@ -123,8 +136,12 @@ public class MatchingRoomImage : MonoBehaviour
     //プレイ用メソッド
     public void Play()
     {
+        Debug.Log("ホスト : " + myControllerInstance.isHost);
         DisplayTimer();
-        SetPlayerName(myControllerInstance.GetOtherPlayerName());
+        SetPlayerName(myControllerInstance.GetOtherPlayer());
+        Return();
+        if (!myControllerInstance.isHost) return;
+        TimerCount();
         TimerEnd();
     }
 
@@ -181,7 +198,15 @@ public class MatchingRoomImage : MonoBehaviour
     //戻るボタン用メソッド
     public void ReturnButton()
     {
+        isReturn = true;
+    }
+
+    //ひとつ前に戻るメソッド
+    private void Return()
+    {
+        if (!isReturn) return;
         if (!EasingControl("Close")) return;
+        isReturn = false;
         returnButtonCallBack();
     }
 
