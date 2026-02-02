@@ -14,12 +14,15 @@ public class MyGameHubReceiver : IMyGameHubReceiver
     public Action<float> OnTimerDisplayCallBack;
     public Action OnGameStartCallBack;
     public Action OnLeavePlayerCallBack;
+    public Action OnPlayStartCallBack;
     //í êMópïœêî
     private MagicOnionController myControllerInstance;
 
     public MyGameHubReceiver(Transform playerParent, GameObject playerPrefab, string selfId)
     {
-        _playerParent = playerParent; _playerPrefab = playerPrefab; this.selfId = selfId;
+        _playerParent = playerParent; 
+        _playerPrefab = playerPrefab; 
+        this.selfId = selfId;
         myControllerInstance = MagicOnionController.GetInstance;
     }
 
@@ -85,10 +88,21 @@ public class MyGameHubReceiver : IMyGameHubReceiver
         OnGameStartCallBack();
     }
 
+    public void OnPlayStart()
+    {
+        OnPlayStartCallBack();
+    }
+
     public void OnMatchingTimerCount(float time)
     {
         if (myControllerInstance.isHost) return;
         if (OnTimerDisplayCallBack == null) return;
         OnTimerDisplayCallBack(time);
+    }
+
+    public void OnSwitchingHost(MyPlayerData inUser)
+    {
+        OtherPlayer user = inUser.ToOtherPlayer();
+        if (selfId == user.userId) OnCheckHostCallBack();
     }
 }

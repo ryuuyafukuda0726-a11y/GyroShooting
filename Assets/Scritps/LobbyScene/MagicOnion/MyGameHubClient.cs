@@ -34,10 +34,21 @@ public class MyGameHubClient
     }
 
     //通信切断用メソッド
-    public async void LeaveClient(IMyGameHubReceiver receiver)
+    public async void LeaveClient(bool inHost)
     {
-        _client = await StreamingHubClient.ConnectAsync<IMyGameHub, IMyGameHubReceiver>(_channel, receiver);
-        await _client.LeaveAsync();
+        await _client.LeaveAsync(inHost);
+    }
+
+    //ゲーム開始の通信用メソッド
+    public async void GameStart()
+    {
+        await _client.GameStartAsync();
+    }
+
+    //待機状態の通信用メソッド
+    public async void StayGameStart()
+    {
+        await _client.StayGameStartAsync();
     }
 
     //async void Update()

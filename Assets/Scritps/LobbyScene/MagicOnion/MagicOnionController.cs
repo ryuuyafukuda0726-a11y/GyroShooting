@@ -22,6 +22,7 @@ public class MagicOnionController : MonoBehaviour
     [SerializeField] private GameObject _otherPlayerPrefab;
     public MyGameHubClient me = null;
     [NonSerialized] public bool isHost = false;
+    [NonSerialized] public bool isMulti = false;
     //その他のプレイヤー用変数
     private List<OtherPlayer> otherPlayers = new List<OtherPlayer>();
 
@@ -34,7 +35,10 @@ public class MagicOnionController : MonoBehaviour
     {
         //receiver.OnJoinDelegate += IAmJoin;//既定の名称の関数を登録
         //receiver.OnJoinDelegate += flag => { Debug.Log("I am Join! : " + flag); }; //匿名関数の登録
-        receiver.OnCheckHostCallBack = () => { isHost = true; };
+        receiver.OnCheckHostCallBack = () => {
+            isHost = true;
+            Debug.Log("ホストになりました。");
+        };
     }
 
     //アドレスの設定用メソッド
@@ -57,7 +61,8 @@ public class MagicOnionController : MonoBehaviour
     //通信切断用メソッド
     public void Leave()
     {
-
+        me.LeaveClient(isHost);
+        isHost = false;
     }
 
     //タイマー情報の送信用メソッド

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem.Controls;
 using UnityEditor;
 using System.Collections;
+using System;
 
 //ロビーシーンを管理するマネージャースクリプトクラス
 public class LobbyManager : MonoBehaviour
@@ -26,7 +27,6 @@ public class LobbyManager : MonoBehaviour
     [SerializeField]
     private GameObject playModeImage;
     private PlayModeImage playModeImageScript;
-    private bool isMulti = false;
     //マッチング部屋用変数
     [SerializeField]
     private GameObject matchingRoomImage;
@@ -115,8 +115,10 @@ public class LobbyManager : MonoBehaviour
     {
         nameImageScript.InputName();
         if (!nameImageScript.isEnd) return;
-        int newId = UnityEngine.Random.Range(0, iDLength);
-        PlayerPrefs.SetString("PlayerID", "" + newId);
+        Guid guid = new Guid();
+        DateTimeOffset globalTimeOffset = DateTimeOffset.UtcNow;
+        string ID = guid.ToString() + globalTimeOffset;
+        PlayerPrefs.SetString("PlayerID", ID);
         PlayerPrefs.SetString("PlayerName", nameImageScript.GetName());
         myLobbyDelegate = LobbyEasing;
     }
@@ -138,13 +140,13 @@ public class LobbyManager : MonoBehaviour
     //マルチの入力確認用メソッド
     private void MultiModeCallBack()
     {
-        isMulti = true;
+        myControllerInstance.isMulti = true;
     }
 
     //ロビー用メソッド
     private void Lobby()
     {
-        if (!isMulti) return;
+        if (!myControllerInstance.isMulti) return;
         if (!playModeImageScript.EasingControl("Close")) return;
         myLobbyDelegate = InputAddressEasing;
     }
@@ -186,16 +188,16 @@ public class LobbyManager : MonoBehaviour
     //戻るボタンのコールバック用メソッド
     private void ReturnButtonCallBack()
     {
-        isMulti = false;
+        myControllerInstance.isMulti = false;
         addressImageScript.Init();
-        myControllerInstance.me.LeaveClient(myControllerInstance.receiver);
+        myControllerInstance.Leave();
         myLobbyDelegate = LobbyEasing;
     }
 
     //ゲーム開始時用メソッド
     public void GameStart()
     {
-        myControllerInstance.me._client.GameStartAsync();
+        if(myControllerInstance.isHost) myControllerInstance.me.GameStart();
         myLobbyDelegate = ChangeGameScene;
     }
 

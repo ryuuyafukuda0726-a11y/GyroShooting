@@ -33,6 +33,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int damageValue = 0;
     private int damage = 0;
+    //発射地点用変数
+    [SerializeField]
+    private Transform shotTransform;
     //餌箱トラップ用変数
     [SerializeField]
     private GameObject feedingBoxPrefab;
@@ -95,7 +98,7 @@ public class Player : MonoBehaviour
                                             maxSeed,
                                             seedCount,
                                             playerCamera.transform.rotation.x);
-        seedManagerScript.Init();
+        seedManagerScript.Init(shotTransform);
         seedManagerScript.getTargetCallBack = playerCameraScript.GetTarget;
         seedManagerScript.shotCallBack = inAudioSource.PlaySECallBack;
     }
