@@ -201,10 +201,16 @@ public class Hamster : MonoBehaviour
         isAttack = true;
     }
 
+    //ノックバックのベクトル生成用メソッド
+    private Vector3 CreateKnockBack()
+    {
+        return transform.forward - transform.position;
+    }
+
     //攻撃時コールバック用メソッド
     private void AttackCallBack()
     {
-        if (attackTarget == player) player.GetComponent<Player>().Damage(power);
+        if (attackTarget == player) player.GetComponent<Player>().Damage(power, CreateKnockBack());
         else if (attackTarget == target) target.GetComponent<SunFlower>().Damage(power);
         else if (attackTarget == trap) {
             FeedingBox box = trap.GetComponent<FeedingBox>();

@@ -24,7 +24,8 @@ public class MagicOnionController : MonoBehaviour
     [NonSerialized] public bool isHost = false;
     [NonSerialized] public bool isMulti = false;
     //その他のプレイヤー用変数
-    private List<OtherPlayer> otherPlayers = new List<OtherPlayer>();
+    [NonSerialized]
+    public List<OtherPlayer> otherPlayers = new List<OtherPlayer>();
 
     // MagicOnionController.me.client.XXAsync()
 

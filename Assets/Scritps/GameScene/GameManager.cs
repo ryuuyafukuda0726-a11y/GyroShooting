@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject playerObject;
     private Player playerScript;
+    //マルチプレイヤー用変数
+    [SerializeField]
+    private Transform multiPlayerParent;
+    private MultiPlayerParent multiPlayerParentScript;
     //アイテム用変数
     private ItemManager itemManagerScript;
     [SerializeField]
@@ -67,7 +71,7 @@ public class GameManager : MonoBehaviour
     private delegate void MyGameDelegate();
     private MyGameDelegate myGameDelegate;
     //通信用変数
-    private MagicOnionController myControllerInstance;
+    private MagicOnionController myControllerInstance = null;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -86,6 +90,7 @@ public class GameManager : MonoBehaviour
         sunFlowerScript = sunFlower.GetComponent<SunFlower>();
         sunFlowerGageScript = sunFlowerGage.GetComponent<SunFlowerGage>();
         playerScript = playerObject.GetComponent<Player>();
+        multiPlayerParentScript = multiPlayerParent.GetComponent<MultiPlayerParent>();
         //CreatePlayer();
         virtualPadScript = virtualPadObject.GetComponent<VirtualPad>();
         lifeGageScript = lifeGageImage.GetComponent<LifeGage>();
@@ -150,6 +155,7 @@ public class GameManager : MonoBehaviour
         ItemInit();
         HamsterInit();
         playerScript.Init(audioSourceScript);
+        multiPlayerParentScript.Init();
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();
@@ -163,12 +169,15 @@ public class GameManager : MonoBehaviour
     //ゲーム開始待機状態用メソッド
     private void StayGameStart()
     {
-        if (myControllerInstance.isMulti)
+        if (myControllerInstance == null)
+        {
+            myGameDelegate = InGameEasing;            
+        }
+        else if (myControllerInstance.isMulti)
         {
             myControllerInstance.receiver.OnPlayStartCallBack = PlayStart;
             myControllerInstance.me.StayGameStart();
         }
-        else myGameDelegate = InGameEasing;
     }
 
     //プレイ開始の受信時コールバック

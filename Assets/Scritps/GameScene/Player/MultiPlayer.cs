@@ -5,15 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 //プレイヤー用スクリプトクラス
-public class Player : MonoBehaviour
+public class MultiPlayer : MonoBehaviour
 {
-    //軸入力用変数
-    private InputAction move;
-    private Vector2 inputMoveAxis;
-    private Vector3 inputDirection;
     //移動用変数
-    private Vector3 cameraForward;
-    private Vector3 moveDirection;
     private bool isKnockBack = false;
     private Vector3 knockBackVec;
     private const float knockBackTime = 0.25f;
@@ -64,10 +58,6 @@ public class Player : MonoBehaviour
     private float powerUpValue = 0.0f;
     [SerializeField]
     private int recoveryValue = 0;
-    //カメラ用変数
-    [SerializeField]
-    private GameObject playerCamera;
-    private PlayerCamera playerCameraScript;
     //コールバック用変数
     public Action<int> bulletGageDisplayCallBack;
     public Action<int> lifeGageDisplayCallBack;
@@ -77,8 +67,6 @@ public class Player : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        move = GetComponent<PlayerInput>().actions["Move"];
-        playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
         //playerCameraScript.Init();
         //correctionX = playerCamera.transform.rotation.x;
         //SetCallBack();
@@ -95,9 +83,7 @@ public class Player : MonoBehaviour
                                             maxSeed,
                                             seedCount);
         seedManagerScript.Init(shotTransform);
-        //seedManagerScript.getTargetCallBack = playerCameraScript.GetTarget;
         seedManagerScript.shotCallBack = inAudioSource.PlaySECallBack;
-        seedManagerScript.setRotationCallBack = SetRotation;
     }
 
     //餌箱の初期設定用メソッド
@@ -134,19 +120,12 @@ public class Player : MonoBehaviour
     private void Input()
     {
         if (myPlatformInstance.CheckPlatform()) return;
-        Vector3 cameraCorrection = new Vector3(1.0f, 0.0f, 1.0f).normalized;
-        inputMoveAxis = move.ReadValue<Vector2>();
-        inputDirection.z = inputMoveAxis.x;
-        inputDirection.x = inputMoveAxis.y;
-        cameraForward = Vector3.Scale(Camera.main.transform.forward, cameraCorrection);
-        moveDirection = cameraForward * inputDirection.x 
-            + Camera.main.transform.right * inputDirection.z;
     }
 
     //移動用メソッド
     private void Move()
     {
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+
     }
 
     //プレイヤーの角度を操作するメソッド
@@ -171,7 +150,7 @@ public class Player : MonoBehaviour
         if (Keyboard.current.tKey.wasReleasedThisFrame)
         {
             // if()
-            bool isCost = seedCount >= seedCost ? true : false; 
+            bool isCost = seedCount >= seedCost ? true : false;
             feedingBoxManagerScript.CheckInstallationSpaceEnd(transform.position, isCost);
         }
         //feedingBoxManagerScript.InputInstallation(transform.position);
@@ -240,7 +219,7 @@ public class Player : MonoBehaviour
     {
         if (!isKnockBack) return;
         backTime += Time.deltaTime;
-        if(backTime > knockBackTime)
+        if (backTime > knockBackTime)
         {
             backTime = 0.0f;
             isKnockBack = false;
@@ -258,22 +237,22 @@ public class Player : MonoBehaviour
         KnockBack();
         InstallationTrap();
         EfficacyControl();
-        playerCameraScript.Play(transform.position);
+        //playerCameraScript.Play(transform.position);
         if (myPlatformInstance.CheckPlatform()) return;
         seedManagerScript.Shot(damage);
     }
 
     //モバイル操作のコールバック用メソッド
-    public void MobileControlCallBack(Vector3 inputVec)
-    {
-        moveDirection = inputVec;
-    }
+    //public void MobileControlCallBack(Vector3 inputVec)
+    //{
+    //    moveDirection = inputVec;
+    //}
 
-    //モバイル操作の発射用メソッド
-    public void Shot()
-    {
-        seedManagerScript.MobileShot(damage);
-    }
+    ////モバイル操作の発射用メソッド
+    //public void Shot()
+    //{
+    //    seedManagerScript.MobileShot(damage);
+    //}
 
     //ダメージ用メソッド
     public void Damage(int inDamage, Vector3 inVec)

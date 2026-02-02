@@ -21,13 +21,14 @@ public class SeedManager
     private const float rateTime = 0.5f;
     private float myTime = 0.0f;
     private bool isRate = false;
-    //ターゲット用変数
-    private bool isTarget = false;
-    private Vector3 targetVec;
-    private float correctionX = 0.0f;
+    ////ターゲット用変数
+    //private bool isTarget = false;
+    //private Vector3 targetVec;
+    //private float correctionX = 0.0f;
     //コールバック用変数
     public Func<Transform> getTargetCallBack;
     public Action<int> shotCallBack;
+    public Action<float> setRotationCallBack;
 
     //種の生成用メソッド
     private void Seed()
@@ -71,9 +72,13 @@ public class SeedManager
         if (Mouse.current.leftButton.isPressed ||
             Mouse.current.leftButton.wasPressedThisFrame)
         {
+            setRotationCallBack(player.
+                                GetChild(1).
+                                GetComponent<PlayerCamera>().
+                                CreateCharacterRotation());
             damage = inDamageValue;
             ShotRateControl();
-            SetTargetTransform(getTargetCallBack());
+            //SetTargetTransform(getTargetCallBack());
             ShotSeed();
         }
         ShotEnd();
@@ -93,19 +98,19 @@ public class SeedManager
         if (seed <= 0) return;
         damage = inDamageValue;
         ShotRateControl();
-        SetTargetTransform(getTargetCallBack());
+        //SetTargetTransform(getTargetCallBack());
         ShotSeed();
         ShotEnd();
     }
 
-    //ターゲットの設定用メソッド
-    private void SetTargetTransform(Transform target)
-    {
-        isTarget = false;
-        if (target == null) return;
-        isTarget = true;
-        targetVec = (target.position - (player.position + Vector3.up * 0.5f)).normalized;
-    }
+    ////ターゲットの設定用メソッド
+    //private void SetTargetTransform(Transform target)
+    //{
+    //    isTarget = false;
+    //    if (target == null) return;
+    //    isTarget = true;
+    //    targetVec = (target.position - (player.position + Vector3.up * 0.5f)).normalized;
+    //}
 
     //種の発射用メソッド
     private void ShotSeed()
@@ -147,12 +152,12 @@ public class SeedManager
 
     //コンストラクター
     public SeedManager(Transform inPlayer, GameObject inSeedPrefab,
-                       int inMaxSeed, int inSeedCount, float inCorrection)
+                       int inMaxSeed, int inSeedCount)
     {
         player = inPlayer;
         seedPrefab = inSeedPrefab;
         maxSeed = inMaxSeed;
         seedCount = inSeedCount;
-        correctionX = inCorrection;
+        //correctionX = inCorrection;
     }
 }
