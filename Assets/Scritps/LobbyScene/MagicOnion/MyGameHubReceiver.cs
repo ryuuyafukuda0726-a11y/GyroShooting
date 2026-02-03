@@ -5,6 +5,7 @@ using UnityEngine;
 public class MyGameHubReceiver : IMyGameHubReceiver
 {
     private string selfId;
+    public Transform otherPlayersParent;
     private Dictionary<string, GameObject> _players = new();
     private Transform _playerParent;
     private GameObject _playerPrefab;
@@ -68,11 +69,18 @@ public class MyGameHubReceiver : IMyGameHubReceiver
 
     public void OnMove(string userId, MyVector3 position, MyQuaternion quaternion)
     {
-        if (_players.TryGetValue(userId, out GameObject player))
+        if (selfId == userId) return;
+        foreach (Transform user in otherPlayersParent.GetComponent<MultiPlayerParent>().players)
         {
-            if (player.name == selfId) return; // 自身の動きはサーバーから送られてくる情報を反映しなくてよい
-            player.transform.SetPositionAndRotation(position.ToUnityVector3(), quaternion.ToUnityQuaternion());
+            if (user.GetComponent<MultiPlayer>().myData.userId != userId) continue;
+            user.SetPositionAndRotation(position.ToUnityVector3(), quaternion.ToUnityQuaternion());
         }
+
+        //if (_players.TryGetValue(userId, out GameObject player))
+        //{
+        //    if (player.name == selfId) return; // 自身の動きはサーバーから送られてくる情報を反映しなくてよい
+        //    player.transform.SetPositionAndRotation(position.ToUnityVector3(), quaternion.ToUnityQuaternion());
+        //}
     }
 
     private void SpawnOtherPlayer(string userId)

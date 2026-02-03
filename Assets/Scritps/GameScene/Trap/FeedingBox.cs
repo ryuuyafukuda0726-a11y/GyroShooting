@@ -15,7 +15,7 @@ public class FeedingBox : MonoBehaviour
     [SerializeField]
     private GameObject[] boxObjects = new GameObject[4];
     //接触判定用変数
-    private bool isFlag = false;
+    private bool isFlag = true;
     //コールバック用変数
     public Action<Transform> destroyCallBack;
 
@@ -45,7 +45,7 @@ public class FeedingBox : MonoBehaviour
     //設置入力用メソッド
     public void InputInstallation()
     {
-        isFlag = false;
+        isFlag = true;
     }
 
     //ダメージ量の取得用メソッド
@@ -65,7 +65,8 @@ public class FeedingBox : MonoBehaviour
     //接触判定用メソッド
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Untagged")
+        Debug.Log(other.tag);
+        if (other.tag != "Wall" && other.tag != "SunFlower")
         {
             isFlag = true;
         }
@@ -76,6 +77,7 @@ public class FeedingBox : MonoBehaviour
     //接触確認用メソッド
     public bool GetFlag()
     {
+        Debug.Log(isFlag);
         return isFlag;
     }
 

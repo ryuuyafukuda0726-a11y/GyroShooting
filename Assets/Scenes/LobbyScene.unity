@@ -3918,7 +3918,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 320, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1188042046
 MonoBehaviour:
@@ -4458,7 +4458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MatchingRoomImage
   gameStartButton: {fileID: 1792556076}
   matchingTimeTMP: {fileID: 885372114}
-  matchingTime: 300
+  matchingTime: 120
   matchingPlayers:
   - {fileID: 1664320216}
   - {fileID: 1624167497}
@@ -5351,7 +5351,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 320, y: 60}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1792556078
 MonoBehaviour:

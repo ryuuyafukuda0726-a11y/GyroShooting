@@ -43,6 +43,7 @@ public class Item : MonoBehaviour
     {
         mainModule = ps.main;
         myRend = itemObject.GetComponent<Renderer>();
+        myTime = 0.0f;
     }
 
     //出現時用メソッド

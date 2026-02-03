@@ -173,7 +173,7 @@ public class LobbyManager : MonoBehaviour
     private void MatchingRoomEasing()
     {
         if (!matchingRoomScript.EasingControl("Open")) return;
-        matchingRoomScript.GameStartButtonSetActive();
+        //matchingRoomScript.GameStartButtonSetActive();
         myControllerInstance.receiver.OnGameStartCallBack = GameStart;
         matchingRoomScript.SetCallBack();
         myLobbyDelegate = MatchingRoom;

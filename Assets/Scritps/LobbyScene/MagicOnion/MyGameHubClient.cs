@@ -51,6 +51,12 @@ public class MyGameHubClient
         await _client.StayGameStartAsync();
     }
 
+    //ˆÚ“®‚Ìî•ñ‚ğ‘—M‚·‚é
+    public async void Move(Vector3 inPos, Quaternion inRot)
+    {
+        await _client.MoveAsync(inPos.ToMyVector3(), inRot.ToMyQuaternion());
+    }
+
     //async void Update()
     //{
     //    try

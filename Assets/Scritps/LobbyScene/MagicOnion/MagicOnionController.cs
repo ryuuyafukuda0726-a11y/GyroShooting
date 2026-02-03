@@ -7,7 +7,7 @@ using static UnityEngine.AudioSettings;
 
 public class MagicOnionController : MonoBehaviour
 {
-    //
+    //通信用のインスタンスを保持しておく変数
     private static MagicOnionController myControllerInstance;
     //通信用変数
     [Header("Self Information")]
@@ -23,6 +23,8 @@ public class MagicOnionController : MonoBehaviour
     public MyGameHubClient me = null;
     [NonSerialized] public bool isHost = false;
     [NonSerialized] public bool isMulti = false;
+    //コールバック用変数
+    public Action setStartButtonCallBack;
     //その他のプレイヤー用変数
     [NonSerialized]
     public List<OtherPlayer> otherPlayers = new List<OtherPlayer>();
@@ -38,6 +40,7 @@ public class MagicOnionController : MonoBehaviour
         //receiver.OnJoinDelegate += flag => { Debug.Log("I am Join! : " + flag); }; //匿名関数の登録
         receiver.OnCheckHostCallBack = () => {
             isHost = true;
+            setStartButtonCallBack();
             Debug.Log("ホストになりました。");
         };
     }

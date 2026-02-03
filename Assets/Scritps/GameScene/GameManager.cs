@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 //イージング管理
 public enum EasingSequence
@@ -14,6 +17,12 @@ public class GameManager : MonoBehaviour
     //キャンバス用変数
     [SerializeField]
     private Transform canvas;
+    //タイマー用変数
+    [SerializeField]
+    private GameObject timer;
+    private Timer timerScript;
+    [SerializeField]
+    private float time = 0.0f;
     //AudioSource用変数
     [SerializeField]
     private GameObject audioSource;
@@ -28,6 +37,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject playerObject;
     private Player playerScript;
+    [SerializeField]
+    private Transform playerSpawnPoint;
     //マルチプレイヤー用変数
     [SerializeField]
     private Transform multiPlayerParent;
@@ -63,6 +74,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject sunFlowerGage;
     private SunFlowerGage sunFlowerGageScript;
+    //クリア用変数
+    private bool isClear = false;
+    [SerializeField]
+    private Result resultScript;
     //シーン遷移時UI用変数
     [SerializeField]
     private GameObject sceneChangeUI;
@@ -87,6 +102,7 @@ public class GameManager : MonoBehaviour
     {
         myPlatformInstance = Platform.GetPlatformInstance;
         myControllerInstance = MagicOnionController.GetInstance;
+        timerScript = timer.GetComponent<Timer>();
         sunFlowerScript = sunFlower.GetComponent<SunFlower>();
         sunFlowerGageScript = sunFlowerGage.GetComponent<SunFlowerGage>();
         playerScript = playerObject.GetComponent<Player>();
@@ -119,6 +135,7 @@ public class GameManager : MonoBehaviour
     {
         sunFlowerScript.sunFlowerGageDisplayCallBack = sunFlowerGageScript.Display;
         sunFlowerScript.chargeBulletCallBack = playerScript.ChargeBullet;
+        sunFlowerScript.destroyCallBack = ResultEasing;
     }
 
     //PC操作時の初期設定用メソッド
@@ -151,6 +168,8 @@ public class GameManager : MonoBehaviour
     //初期設定用メソッド
     private void Init()
     {
+        resultScript.Init();
+        timerScript.Init(time);
         ShotButtonInit();
         ItemInit();
         HamsterInit();
@@ -169,20 +188,43 @@ public class GameManager : MonoBehaviour
     //ゲーム開始待機状態用メソッド
     private void StayGameStart()
     {
-        if (myControllerInstance == null)
+        if (myControllerInstance == null || !myControllerInstance.isMulti)
         {
+            SetPlayerRandomPos();
             myGameDelegate = InGameEasing;            
         }
         else if (myControllerInstance.isMulti)
         {
+            myControllerInstance.receiver.otherPlayersParent = multiPlayerParent;
             myControllerInstance.receiver.OnPlayStartCallBack = PlayStart;
             myControllerInstance.me.StayGameStart();
+        }
+    }
+
+    //プレイヤーをランダムに配置するメソッド
+    private void SetPlayerRandomPos()
+    {
+        int size = 1;
+        if (myControllerInstance != null && 
+            myControllerInstance.isMulti) size += myControllerInstance.otherPlayers.Count;
+        List<Transform> posList = new List<Transform>();
+        for (int i = 0; i < size; i++)
+        {
+            posList.Add(playerSpawnPoint.GetChild(i));
+        }
+        for(int i = 0; i < size; i++)
+        {
+            int index = UnityEngine.Random.Range(0, posList.Count);
+            if (i == 0) playerObject.transform.position = posList[index].position;
+            else multiPlayerParent.GetChild(i -1).position = posList[index].position;
+            posList.RemoveAt(index);
         }
     }
 
     //プレイ開始の受信時コールバック
     private void PlayStart()
     {
+        SetPlayerRandomPos();
         myGameDelegate = InGameEasing;
     }
 
@@ -200,8 +242,33 @@ public class GameManager : MonoBehaviour
         sunFlowerScript.Play();
         playerScript.Play();
         hamsterManagerScript.Play();
+        if (timerScript.TimerCount()) ResultEasing(true);
         if (!myPlatformInstance.CheckPlatform()) return;
         virtualPadScript.Play();
+    }
+
+    //リザルトへのイージング用メソッド
+    private void ResultEasing(bool inFlag)
+    {
+        isClear = inFlag;
+        myGameDelegate = Result;
+    }
+
+    //結果表示
+    private void Result()
+    {
+        if (!resultScript.ResultEasingControl(isClear)) return;
+        myGameDelegate = End;
+    }
+
+    //終了メソッド
+    private void End()
+    {
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene("TitleScene");
+        }
+        Debug.Log("終了");
     }
 
     // Update is called once per frame

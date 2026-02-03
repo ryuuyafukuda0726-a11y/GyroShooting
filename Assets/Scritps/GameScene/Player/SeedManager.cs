@@ -28,7 +28,7 @@ public class SeedManager
     //コールバック用変数
     public Func<Transform> getTargetCallBack;
     public Action<int> shotCallBack;
-    public Action<float> setRotationCallBack;
+    public Action<Vector3> setRotationCallBack;
 
     //種の生成用メソッド
     private void Seed()

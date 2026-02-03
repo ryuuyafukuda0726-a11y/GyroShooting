@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
   canvas: {fileID: 0}
-  reticleImage: {fileID: 0}
+  player: {fileID: 0}
   valueCorrection: 0
 --- !u!114 &8054705054817680405
 MonoBehaviour:
@@ -91,7 +91,8 @@ GameObject:
   - component: {fileID: 460435453021088928}
   - component: {fileID: 1560653690228142369}
   - component: {fileID: 8478477744591568592}
-  - component: {fileID: 8637669582515820011}
+  - component: {fileID: 4292727809360681262}
+  - component: {fileID: 5049900357573895428}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -130,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   speed: 5
   maxLife: 0
+  maxRefreshTime: 0
   seedPrefab: {fileID: 7549976707407912971, guid: 7b5b75d8837948644aa1f23adbee035d, type: 3}
   maxSeed: 0
   seedCount: 0
@@ -139,7 +141,6 @@ MonoBehaviour:
   maxTrap: 0
   trapCount: 0
   seedCost: 0
-  fallSpeed: 0
   itemEfficacyTime: 0
   speedUpValue: 0
   bulletSupplyValue: 0
@@ -203,7 +204,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!135 &8637669582515820011
+--- !u!136 &4292727809360681262
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5352062869898219542}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 1.2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.7, z: 0}
+--- !u!135 &5049900357573895428
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,8 +246,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.25
-  m_Center: {x: 0, y: 0.25, z: 0}
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!1 &5613374610488816670
 GameObject:
   m_ObjectHideFlags: 0

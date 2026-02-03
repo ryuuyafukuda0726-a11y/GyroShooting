@@ -66,6 +66,7 @@ public class MatchingRoomImage : MonoBehaviour
     //初期設定用メソッド
     public void Init()
     {
+        myControllerInstance.setStartButtonCallBack = GameStartButtonSetActive;
         NameBannerInit();
         rt.transform.localScale = Vector3.up;
         easing = global::EasingControl.SetEasing;

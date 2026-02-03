@@ -63,6 +63,7 @@ public class ItemManager
         for(int i = 0; i < size; i++)
         {
             if (itemList[i].transform != inItem) continue;
+            itemList[i].gameObject.SetActive(false);
             itemList.RemoveAt(i);
         }
     }

@@ -26,6 +26,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int maxLife = 0;
     private int life = 0;
+    //撃破時用変数
+    [SerializeField]
+    private float maxRefreshTime = 0.0f;
+    private float refreshTime = 0.0f;
+    private float healTime = 0.0f;
+    private bool isDie = false;
+    private bool isRefresh = false;
     //種用変数
     [SerializeField]
     private GameObject seedPrefab;
@@ -71,6 +78,8 @@ public class Player : MonoBehaviour
     //コールバック用変数
     public Action<int> bulletGageDisplayCallBack;
     public Action<int> lifeGageDisplayCallBack;
+    //通信用変数
+    private MagicOnionController myControllerInstance;
     //プラットフォーム用変数
     private Platform myPlatformInstance;
 
@@ -84,7 +93,9 @@ public class Player : MonoBehaviour
         //SetCallBack();
         moveSpeed = speed;
         life = maxLife;
+        healTime = maxRefreshTime / maxLife;
         myPlatformInstance = Platform.GetPlatformInstance;
+        myControllerInstance = MagicOnionController.GetInstance;
     }
 
     //種の初期設定用メソッド
@@ -147,14 +158,15 @@ public class Player : MonoBehaviour
     private void Move()
     {
         transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+        if (!CheckMulti()) return;
+        myControllerInstance.me.Move(transform.position, 
+                                     transform.GetChild(0).rotation);
     }
 
     //プレイヤーの角度を操作するメソッド
-    private void SetRotation(float inXRot)
+    private void SetRotation(Vector3 vec)
     {
-        Vector3 a = transform.GetChild(0).rotation.eulerAngles;
-        a.x = inXRot;
-        transform.GetChild(0).rotation = Quaternion.Euler(a);
+        transform.GetChild(0).rotation = Quaternion.Euler(vec);
     }
 
     //餌箱の設置用メソッド
@@ -245,7 +257,44 @@ public class Player : MonoBehaviour
             backTime = 0.0f;
             isKnockBack = false;
         }
-        transform.Translate(knockBackVec * 0.25f * Time.deltaTime);
+        transform.Translate(knockBackVec * Time.deltaTime);
+    }
+
+    //時間経過での回復用メソッド
+    private void TimeHeal()
+    {
+        if (isRefresh)
+        {
+                life++;
+                isRefresh = false;
+                Debug.Log("回復");
+        }
+    }
+
+    //撃破時用メソッド
+    private void Die()
+    {
+        if (!isDie) return;
+        refreshTime += Time.deltaTime;
+        if(refreshTime > maxRefreshTime)
+        {
+            refreshTime = 0.0f;
+            isDie = false;
+            isRefresh = false;
+        }
+        if (refreshTime % healTime <= 0.5f) isRefresh = true;
+        else TimeHeal();
+        Debug.Log((int)refreshTime % healTime);
+    }
+
+    //マルチの確認用メソッド
+    private bool CheckMulti()
+    {
+        if (myControllerInstance != null)
+        {
+            if (myControllerInstance.isMulti) return true;
+        }
+        return false;
     }
 
     //プレイ用メソッド
@@ -253,6 +302,8 @@ public class Player : MonoBehaviour
     {
         bulletGageDisplayCallBack(seedManagerScript.GetSeed());
         lifeGageDisplayCallBack(life);
+        Die();
+        if (isDie) return;
         Input();
         Move();
         KnockBack();
@@ -278,10 +329,11 @@ public class Player : MonoBehaviour
     //ダメージ用メソッド
     public void Damage(int inDamage, Vector3 inVec)
     {
+        if (isDie) return;
         isKnockBack = true;
         knockBackVec = inVec;
-        if (life <= 0) return;
         life -= inDamage;
+        if (life <= 0) isDie = true;
     }
 
     //給弾用メソッド
@@ -295,5 +347,6 @@ public class Player : MonoBehaviour
     {
         itemType = (ItemType)inItemType;
         isItem = true;
+        Debug.Log("アイテムゲット : " + (ItemType)inItemType);
     }
 }

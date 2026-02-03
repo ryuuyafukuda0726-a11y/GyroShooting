@@ -29,6 +29,7 @@ public class SunFlower : MonoBehaviour
     //コールバック用変数
     public Action<float> sunFlowerGageDisplayCallBack;
     public Action chargeBulletCallBack;
+    public Action<bool> destroyCallBack;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -86,6 +87,7 @@ public class SunFlower : MonoBehaviour
                 if (Easing()) easingSequence++;
                 break;
             case EasingSequence.EasingEnd:
+                destroyCallBack(false);
                 easingSequence = EasingSequence.SetEasing;
                 break;
             default:

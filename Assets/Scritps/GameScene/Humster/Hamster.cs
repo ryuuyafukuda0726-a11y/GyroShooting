@@ -204,7 +204,7 @@ public class Hamster : MonoBehaviour
     //ノックバックのベクトル生成用メソッド
     private Vector3 CreateKnockBack()
     {
-        return transform.forward - transform.position;
+        return (player.position - transform.position).normalized;
     }
 
     //攻撃時コールバック用メソッド
@@ -272,7 +272,7 @@ public class Hamster : MonoBehaviour
     private void ItemDrop()
     {
         if (!CheckDropProbability()) return;
-        itemDropCallBack(transform.position);
+        itemDropCallBack(transform.position + Vector3.up * 0.6f);
     }
 
     //体力減少用メソッド

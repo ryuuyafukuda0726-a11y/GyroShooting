@@ -127,10 +127,12 @@ public class PlayerCamera : MonoBehaviour
     }
 
     //キャラクターの向きを生成するメソッド
-    public float CreateCharacterRotation()
+    public Vector3 CreateCharacterRotation()
     {
-        float xRot = baseXRot - transform.rotation.eulerAngles.x * 2.0f;        
-        return xRot;
+        float xRot = baseXRot - transform.rotation.eulerAngles.x * 2.0f;
+        Vector3 rot = transform.rotation.eulerAngles;
+        rot.x = xRot;
+        return rot;
     }
 
     //カメラ操作用メソッド

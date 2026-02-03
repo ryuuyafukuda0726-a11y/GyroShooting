@@ -96,6 +96,7 @@ public class FeedingBoxManager
     public void CheckInstallationSpaceEnd(Vector3 inPos, bool inCost)
     {
         bool isFlag = feedingBoxObjects[0].GetComponent<FeedingBox>().GetFlag();
+        Debug.Log("設置可能 : " + isFlag + ", コスト : " + inCost );
         if (isFlag && inCost)
         {
             Installation(inPos);

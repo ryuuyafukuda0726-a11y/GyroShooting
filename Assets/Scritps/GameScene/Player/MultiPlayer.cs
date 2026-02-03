@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 //プレイヤー用スクリプトクラス
 public class MultiPlayer : MonoBehaviour
 {
+    //プレイヤー情報用変数
+    [SerializeField]
+    public OtherPlayer myData;
     //移動用変数
     private bool isKnockBack = false;
     private Vector3 knockBackVec;
@@ -105,9 +108,10 @@ public class MultiPlayer : MonoBehaviour
     //初期設定用メソッド
     public void Init(GameAudioSource inAudioSource)
     {
-        SeedInit(inAudioSource);
-        FeedingBoxInit();
-        damage = damageValue;
+        //SeedInit(inAudioSource);
+        //FeedingBoxInit();
+        //damage = damageValue;
+
         //move = GetComponent<PlayerInput>().actions["Move"];
         //playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
         //playerCameraScript.Init();
@@ -230,16 +234,15 @@ public class MultiPlayer : MonoBehaviour
     //プレイ用メソッド
     public void Play()
     {
-        bulletGageDisplayCallBack(seedManagerScript.GetSeed());
-        lifeGageDisplayCallBack(life);
-        Input();
-        Move();
-        KnockBack();
-        InstallationTrap();
-        EfficacyControl();
-        //playerCameraScript.Play(transform.position);
-        if (myPlatformInstance.CheckPlatform()) return;
-        seedManagerScript.Shot(damage);
+        //bulletGageDisplayCallBack(seedManagerScript.GetSeed());
+        //lifeGageDisplayCallBack(life);
+        //Input();
+        //Move();
+        //KnockBack();
+        //InstallationTrap();
+        //EfficacyControl();
+        //if (myPlatformInstance.CheckPlatform()) return;
+        //seedManagerScript.Shot(damage);
     }
 
     //モバイル操作のコールバック用メソッド
@@ -257,22 +260,22 @@ public class MultiPlayer : MonoBehaviour
     //ダメージ用メソッド
     public void Damage(int inDamage, Vector3 inVec)
     {
-        isKnockBack = true;
-        knockBackVec = inVec;
-        if (life <= 0) return;
-        life -= inDamage;
+        //isKnockBack = true;
+        //knockBackVec = inVec;
+        //if (life <= 0) return;
+        //life -= inDamage;
     }
 
     //給弾用メソッド
     public void ChargeBullet()
     {
-        seedManagerScript.ChargeBullet();
+        //seedManagerScript.ChargeBullet();
     }
 
     //アイテム取得時用メソッド
     public void SetItem(int inItemType)
     {
-        itemType = (ItemType)inItemType;
-        isItem = true;
+        //itemType = (ItemType)inItemType;
+        //isItem = true;
     }
 }

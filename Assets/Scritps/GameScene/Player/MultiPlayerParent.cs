@@ -4,6 +4,9 @@ using UnityEngine.Playables;
 //マルチプレイヤーを管理する親オブジェクト用スクリプトクラス
 public class MultiPlayerParent : MonoBehaviour
 {
+    //プレイヤー用変数
+    [SerializeField]
+    public Transform[] players = new Transform[3]; 
     //通信用変数
     private MagicOnionController myControllerInstance = null;
 
@@ -13,23 +16,31 @@ public class MultiPlayerParent : MonoBehaviour
         myControllerInstance = MagicOnionController.GetInstance;
     }
 
+    //対象のプレイヤー情報を登録
+    private void SetPlayerData(int inNumber)
+    {
+        players[inNumber].gameObject.SetActive(true);
+        players[inNumber].GetComponent<MultiPlayer>().myData
+            = myControllerInstance.otherPlayers[inNumber];
+    }
+
     //すべての子オブジェクトのアクティブ状態を登録
     private void AllChildSetActive()
     {
-        int size = transform.childCount;
-        if (myControllerInstance == null)
+        int size = players.Length;
+        if (myControllerInstance == null || !myControllerInstance.isMulti)
         {
             for (int i = 0; i < size; i++)
             {
-                transform.GetChild(i).gameObject.SetActive(false);
+                players[i].gameObject.SetActive(false);
             }
         }
         else if (myControllerInstance.isMulti)
         {
             for (int i = 0; i < size; i++) 
             {
-                if (myControllerInstance.otherPlayers.Count > i) transform.GetChild(i).gameObject.SetActive(true);
-                else transform.GetChild(i).gameObject.SetActive(false);
+                if (myControllerInstance.otherPlayers.Count > i)SetPlayerData(i);
+                else players[i].gameObject.SetActive(false);
             }
         }
     }
