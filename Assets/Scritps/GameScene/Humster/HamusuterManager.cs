@@ -1,5 +1,7 @@
+using MagicOnionStudy.Shared;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 //ハムスターを管理するマネージャースクリプトクラス
@@ -27,6 +29,8 @@ public class HamusuterManager
     //private List<Hamster> hamsterScripts = new List<Hamster>();
     //トラップ用変数
     private List<GameObject> trapList;
+    //通信用メソッド
+    private MagicOnionController myControllerInstance;
 
     //コールバックの設定用メソッド
     public void SetCallBack(Action<Vector3> inAction)
@@ -55,6 +59,8 @@ public class HamusuterManager
     //初期設定用メソッド
     public void Init()
     {
+        myControllerInstance = MagicOnionController.GetInstance;
+        myControllerInstance.receiver.OnHamsterMoveCallBack = ReceptionHamsterMoveInput;
         CreateHamster();
     }
 
@@ -117,25 +123,66 @@ public class HamusuterManager
         }        
     }
 
+    //ハムスターの位置情報を送信するメソッド
+    private void HamsterDataTransmission()
+    {
+        if (!CheckHost()) return;
+        int size = hamsters.Count;
+        if (size <= 0) return;
+        MyVector3[] pos = new MyVector3[size];
+        MyQuaternion[] rot = new MyQuaternion[size];
+        for (int i = 0; i < size; i++)
+        {
+            pos[i] = hamsterObjects[i].transform.position.ToMyVector3();
+            rot[i] = hamsterObjects[i].transform.rotation.ToMyQuaternion();
+        }
+        myControllerInstance.me.HamsterDataTransmission(size, pos, rot);
+    }
+
     //ハムスターのプレイ中処理用メソッド
     private void HamsterPlay()
     {
         int size = hamsters.Count;
-        for(int i = 0; i < size; i++)
+        if (size <= 0) return;
+        for (int i = 0; i < size; i++)
         {
             hamsters[i].GetComponent<Hamster>().Play();
         }
+        HamsterDataTransmission();
+    }
+
+    //受信したハムスターの移動を入力用メソッド
+    private void ReceptionHamsterMoveInput(int inCount, 
+                                           MyVector3[] position, 
+                                           MyQuaternion[] quaternion)
+    {
+        for (int i = 0; i < inCount; i++) 
+        {
+            hamsterObjects[i].SetActive(true);
+            hamsterObjects[i].transform.position = position[i].ToUnityVector3();
+            hamsterObjects[i].transform.rotation = quaternion[i].ToUnityQuaternion();
+        }
+    }
+
+    //ホストの確認用メソッド
+    private bool CheckHost()
+    {
+        if (myControllerInstance != null)
+        {
+            if (myControllerInstance.isHost) return true;
+        }
+        return false;
     }
 
     //プレイ用メソッド
     public void Play()
     {
-        if (hamsters.Count < spawnHamsterCount)
-        {
-            if (SpawnInterval()) SpawnHamster();
-        }
-        if (hamsters.Count <= 0) return;
+        if (myControllerInstance != null &&
+           (myControllerInstance.isMulti && 
+           !myControllerInstance.isHost)) return;
         HamsterPlay();
+        if (hamsters.Count >= spawnHamsterCount) return;
+        if (SpawnInterval()) SpawnHamster();
     }
 
     //撃破時用メソッド

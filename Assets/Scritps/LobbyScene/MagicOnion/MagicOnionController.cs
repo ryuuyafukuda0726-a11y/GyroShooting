@@ -24,7 +24,7 @@ public class MagicOnionController : MonoBehaviour
     [NonSerialized] public bool isHost = false;
     [NonSerialized] public bool isMulti = false;
     //コールバック用変数
-    public Action setStartButtonCallBack;
+    public Action<bool> setStartButtonCallBack;
     //その他のプレイヤー用変数
     [NonSerialized]
     public List<OtherPlayer> otherPlayers = new List<OtherPlayer>();
@@ -38,10 +38,10 @@ public class MagicOnionController : MonoBehaviour
     {
         //receiver.OnJoinDelegate += IAmJoin;//既定の名称の関数を登録
         //receiver.OnJoinDelegate += flag => { Debug.Log("I am Join! : " + flag); }; //匿名関数の登録
-        receiver.OnCheckHostCallBack = () => {
-            isHost = true;
-            setStartButtonCallBack();
-            Debug.Log("ホストになりました。");
+        receiver.OnCheckHostCallBack = (inHost) => {
+            isHost = inHost;
+            setStartButtonCallBack(inHost);
+            Debug.Log("ホスト : " + inHost);
         };
     }
 

@@ -11,11 +11,12 @@ public class MyGameHubReceiver : IMyGameHubReceiver
     private GameObject _playerPrefab;
     //コールバック用変数
     //public Action<bool> OnJoinDelegate;
-    public Action OnCheckHostCallBack;
+    public Action<bool> OnCheckHostCallBack;
     public Action<float> OnTimerDisplayCallBack;
     public Action OnGameStartCallBack;
     public Action OnLeavePlayerCallBack;
     public Action OnPlayStartCallBack;
+    public Action<int, MyVector3[], MyQuaternion[]> OnHamsterMoveCallBack;
     //通信用変数
     private MagicOnionController myControllerInstance;
 
@@ -32,8 +33,7 @@ public class MyGameHubReceiver : IMyGameHubReceiver
         Debug.Log("Join Player:" + userName);
         if (selfId == userId)
         {            // 自分の場合は、既にいるので何もしないreturn;
-            if (!inHost) return;
-            OnCheckHostCallBack();
+            OnCheckHostCallBack(inHost);
         }
         else
         {
@@ -72,6 +72,7 @@ public class MyGameHubReceiver : IMyGameHubReceiver
         if (selfId == userId) return;
         foreach (Transform user in otherPlayersParent.GetComponent<MultiPlayerParent>().players)
         {
+            if (user.GetComponent<MultiPlayer>().myData == null) continue;
             if (user.GetComponent<MultiPlayer>().myData.userId != userId) continue;
             user.SetPositionAndRotation(position.ToUnityVector3(), quaternion.ToUnityQuaternion());
         }
@@ -108,9 +109,15 @@ public class MyGameHubReceiver : IMyGameHubReceiver
         OnTimerDisplayCallBack(time);
     }
 
-    public void OnSwitchingHost(MyPlayerData inUser)
+    public void OnSwitchingHost(MyPlayerData inUser, bool inHost)
     {
         OtherPlayer user = inUser.ToOtherPlayer();
-        if (selfId == user.userId) OnCheckHostCallBack();
+        if (selfId == user.userId) OnCheckHostCallBack(inHost);
+    }
+
+    public void OnHamsterMove(int count, MyVector3[] position, MyQuaternion[] quaternion)
+    {
+        if (myControllerInstance.isHost) return;
+        OnHamsterMoveCallBack(count, position, quaternion);
     }
 }

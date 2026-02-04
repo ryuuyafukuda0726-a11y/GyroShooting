@@ -66,6 +66,7 @@ public class MatchingRoomImage : MonoBehaviour
     //初期設定用メソッド
     public void Init()
     {
+        gameStartButton.SetActive(false);
         myControllerInstance.setStartButtonCallBack = GameStartButtonSetActive;
         NameBannerInit();
         rt.transform.localScale = Vector3.up;
@@ -122,9 +123,9 @@ public class MatchingRoomImage : MonoBehaviour
     }
 
     //ゲームスタートボタンのアクティブ設定用メソッド
-    public void GameStartButtonSetActive()
+    public void GameStartButtonSetActive(bool inHost)
     {
-        gameStartButton.SetActive(myControllerInstance.isHost);
+        gameStartButton.SetActive(inHost);
     }
 
     //タイマーの終了時用メソッド

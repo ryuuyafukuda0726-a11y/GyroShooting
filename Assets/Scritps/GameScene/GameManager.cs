@@ -14,6 +14,8 @@ public enum EasingSequence
 //ゲームシーンを管理するマネージャースクリプトクラス
 public class GameManager : MonoBehaviour
 {
+    //待機状態用変数
+    private bool isStay = false;
     //キャンバス用変数
     [SerializeField]
     private Transform canvas;
@@ -185,7 +187,7 @@ public class GameManager : MonoBehaviour
         myGameDelegate = StayGameStart;
     }
 
-    //ゲーム開始待機状態用メソッド
+    //ゲーム開始待機状態送信用メソッド
     private void StayGameStart()
     {
         if (myControllerInstance == null || !myControllerInstance.isMulti)
@@ -195,9 +197,13 @@ public class GameManager : MonoBehaviour
         }
         else if (myControllerInstance.isMulti)
         {
+            if (isStay) return;
             myControllerInstance.receiver.otherPlayersParent = multiPlayerParent;
+            Debug.Log("関数の登録前" + myControllerInstance.receiver.OnPlayStartCallBack);
             myControllerInstance.receiver.OnPlayStartCallBack = PlayStart;
+            Debug.Log("関数の登録前" + myControllerInstance.receiver.OnPlayStartCallBack);
             myControllerInstance.me.StayGameStart();
+            isStay = true;
         }
     }
 
@@ -208,7 +214,7 @@ public class GameManager : MonoBehaviour
         if (myControllerInstance != null && 
             myControllerInstance.isMulti) size += myControllerInstance.otherPlayers.Count;
         List<Transform> posList = new List<Transform>();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < playerSpawnPoint.childCount; i++)
         {
             posList.Add(playerSpawnPoint.GetChild(i));
         }
@@ -224,6 +230,7 @@ public class GameManager : MonoBehaviour
     //プレイ開始の受信時コールバック
     private void PlayStart()
     {
+        isStay = false;
         SetPlayerRandomPos();
         myGameDelegate = InGameEasing;
     }

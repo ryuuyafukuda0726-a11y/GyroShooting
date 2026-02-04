@@ -57,6 +57,12 @@ public class MyGameHubClient
         await _client.MoveAsync(inPos.ToMyVector3(), inRot.ToMyQuaternion());
     }
 
+    //ハムスターの位置情報を送信する
+    public async void HamsterDataTransmission(int count, MyVector3[] pos, MyQuaternion[] rot)
+    {
+        await _client.HamsterMoveAsync(count, pos, rot);
+    }
+
     //async void Update()
     //{
     //    try
