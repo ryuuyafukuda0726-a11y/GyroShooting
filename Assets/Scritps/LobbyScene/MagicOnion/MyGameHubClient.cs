@@ -5,6 +5,8 @@ using MagicOnion.Client;
 using MagicOnionStudy.Shared;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+
 public class MyGameHubClient
 {
     private GrpcChannel _channel;
@@ -57,10 +59,30 @@ public class MyGameHubClient
         await _client.MoveAsync(inPos.ToMyVector3(), inRot.ToMyQuaternion());
     }
 
+    //種の情報を送信する
+    public async void SeedDataTransmission(List<int> numbers,
+                                           MyVector3[] position,
+                                           MyQuaternion[] quaternion)
+    {
+        await _client.SeedDataAsync(userId, numbers, position, quaternion);
+    }
+
+    //種の消滅情報を送信する
+    public async void SeedDestroyTransmission(int number)
+    {
+        await _client.SeedDestroyAsync(userId, number);
+    }
+
     //ハムスターの位置情報を送信する
     public async void HamsterDataTransmission(int count, MyVector3[] pos, MyQuaternion[] rot)
     {
         await _client.HamsterMoveAsync(count, pos, rot);
+    }
+
+    //ハムスターの撃破を送信する
+    public async void DestroyHamster(int number)
+    {
+        await _client.HamsterDestroyAsync(number);
     }
 
     //async void Update()

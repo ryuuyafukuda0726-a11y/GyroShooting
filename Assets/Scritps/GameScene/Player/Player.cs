@@ -158,7 +158,7 @@ public class Player : MonoBehaviour
     private void Move()
     {
         transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
-        if (!CheckMulti()) return;
+        if (/*!CheckMulti()*/!myControllerInstance.isMulti) return;
         myControllerInstance.me.Move(transform.position, 
                                      transform.GetChild(0).rotation);
     }
@@ -303,13 +303,14 @@ public class Player : MonoBehaviour
         bulletGageDisplayCallBack(seedManagerScript.GetSeed());
         lifeGageDisplayCallBack(life);
         Die();
+        playerCameraScript.Play(transform.position);
         if (isDie) return;
         Input();
         Move();
+
         KnockBack();
         InstallationTrap();
         EfficacyControl();
-        playerCameraScript.Play(transform.position);
         if (myPlatformInstance.CheckPlatform()) return;
         seedManagerScript.Shot(damage);
     }

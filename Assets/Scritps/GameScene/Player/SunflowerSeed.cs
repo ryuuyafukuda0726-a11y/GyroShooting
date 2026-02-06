@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 //ひまわりの種用スクリプトクラス
 public class SunflowerSeed : MonoBehaviour
 {
+    [NonSerialized]
+    public int number = 0;
     //ダメージ用変数
     private int damage = 0;
     //弾速用変数
@@ -31,8 +34,9 @@ public class SunflowerSeed : MonoBehaviour
     }
 
     //発射用メソッド
-    public void Shot(int inDamageValue, Vector3 inValue)
+    public void Shot(int inDamageValue, Vector3 inValue, int inNumber)
     {
+        number = inNumber;
         myTime = 0.0f;
         value = inValue * bulletSpeed;
         //Debug.Log(value);
@@ -51,7 +55,7 @@ public class SunflowerSeed : MonoBehaviour
     {
         transform.Translate(value * Time.deltaTime);
         //Debug.Log(value * Time.deltaTime);
-        //sunflowerSeedObject.transform.Rotate(Vector3.forward * rotSpeed * Time.deltaTime);        
+        sunflowerSeedObject.transform.Rotate(Vector3.forward * rotSpeed * Time.deltaTime);        
     }
 
     //重力加速度用メソッド

@@ -115,7 +115,7 @@ public class LobbyManager : MonoBehaviour
     {
         nameImageScript.InputName();
         if (!nameImageScript.isEnd) return;
-        Guid guid = new Guid();
+        Guid guid = Guid.NewGuid();
         DateTimeOffset globalTimeOffset = DateTimeOffset.UtcNow;
         string ID = guid.ToString() + globalTimeOffset;
         PlayerPrefs.SetString("PlayerID", ID);

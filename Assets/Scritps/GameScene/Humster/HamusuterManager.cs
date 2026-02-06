@@ -60,8 +60,12 @@ public class HamusuterManager
     public void Init()
     {
         myControllerInstance = MagicOnionController.GetInstance;
-        myControllerInstance.receiver.OnHamsterMoveCallBack = ReceptionHamsterMoveInput;
         CreateHamster();
+        if (/*myControllerInstance == null || */myControllerInstance.isHost) return;
+        myControllerInstance.receiver.OnHamsterMoveCallBack
+            = ReceptionHamsterMoveInput;
+        myControllerInstance.receiver.OnHamsterDestroyCallBack
+            = HamsterDestroy;
     }
 
     //生成インターバル用メソッド
@@ -126,7 +130,7 @@ public class HamusuterManager
     //ハムスターの位置情報を送信するメソッド
     private void HamsterDataTransmission()
     {
-        if (!CheckHost()) return;
+        if (!/*CheckHost()*/myControllerInstance.isHost) return;
         int size = hamsters.Count;
         if (size <= 0) return;
         MyVector3[] pos = new MyVector3[size];
@@ -164,6 +168,14 @@ public class HamusuterManager
         }
     }
 
+    //ハムスター撃破時コールバック
+    private void HamsterDestroy(int number)
+    {
+        GameObject hamster = hamsterObjects[number];
+        hamster.SetActive(false);
+        hamster.transform.position = Vector3.zero;
+    }
+
     //ホストの確認用メソッド
     private bool CheckHost()
     {
@@ -177,7 +189,7 @@ public class HamusuterManager
     //プレイ用メソッド
     public void Play()
     {
-        if (myControllerInstance != null &&
+        if (/*myControllerInstance != null &&*/
            (myControllerInstance.isMulti && 
            !myControllerInstance.isHost)) return;
         HamsterPlay();
@@ -191,6 +203,7 @@ public class HamusuterManager
         for(int i = 0; i < hamsters.Count; i++)
         {
             if (hamsters[i].gameObject != inTransform.gameObject) continue;
+            myControllerInstance.me.DestroyHamster(i);
             hamsters.RemoveAt(i);
         }
     }

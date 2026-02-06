@@ -50,12 +50,15 @@ public class Hamster : MonoBehaviour
     //コールバック用メソッド
     public Action<Transform> destroyCallBack;
     public Action<Vector3> itemDropCallBack;
+    //通信用変数
+    private MagicOnionController myControllerInstance;
     //時間管理用変数
     private float myTime = 0.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        myControllerInstance = MagicOnionController.GetInstance;
         //agent = GetComponent<NavMeshAgent>();
         //agent.speed = moveSpeed;
         //myAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -285,12 +288,20 @@ public class Hamster : MonoBehaviour
         Destroy();
     }
 
+    //接触した種の消滅情報を送信する
+    private void HitSeedDestroyTransmission(SunflowerSeed seed)
+    {
+        myControllerInstance.me.SeedDestroyTransmission(seed.number);
+    }
+
     //当たり判定用メソッド
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Bullet")
         {
             SunflowerSeed seed = other.transform.GetComponent<SunflowerSeed>();
+            HitSeedDestroyTransmission(seed);
+            if (myControllerInstance.isMulti && !myControllerInstance.isHost) return;
             seed.DisappearanceAndHitDetection();
             Damage(seed.GetDamageValue());
         }

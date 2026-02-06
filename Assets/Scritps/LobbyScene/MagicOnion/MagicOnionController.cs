@@ -67,6 +67,7 @@ public class MagicOnionController : MonoBehaviour
     {
         me.LeaveClient(isHost);
         isHost = false;
+        isMulti = false;
     }
 
     //タイマー情報の送信用メソッド

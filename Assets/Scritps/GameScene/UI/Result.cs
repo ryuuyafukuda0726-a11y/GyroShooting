@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 //リザルトUI用スクリプトクラス
 public class Result : MonoBehaviour
@@ -36,15 +37,17 @@ public class Result : MonoBehaviour
         rt.transform.gameObject.SetActive(true);
         if (inClear)
         {
+            rt.GetComponent<Image>().sprite = gameClear;
             aVec = Vector3.zero;
             bVec = Vector3.one;
         }
         else
         {
+            rt.GetComponent<Image>().sprite = gameOver;
             aVec = rt.transform.localPosition + Vector3.up * 600.0f;
             bVec = rt.transform.localPosition;
             aRot = Quaternion.identity;
-            bRot = new Quaternion(0.0f, 0.0f, 0.25f, 0.0f);
+            bRot = new Quaternion(0.0f, 0.0f, 0.125f, 0.0f);
         }
         percent = minPercent;
     }

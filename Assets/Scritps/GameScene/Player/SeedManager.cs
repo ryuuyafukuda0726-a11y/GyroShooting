@@ -1,4 +1,6 @@
+using MagicOnionStudy.Shared;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,6 +31,8 @@ public class SeedManager
     public Func<Transform> getTargetCallBack;
     public Action<int> shotCallBack;
     public Action<Vector3> setRotationCallBack;
+    //通信用変数
+    private MagicOnionController myConstrollerInstance;
 
     //種の生成用メソッド
     private void Seed()
@@ -112,27 +116,70 @@ public class SeedManager
     //    targetVec = (target.position - (player.position + Vector3.up * 0.5f)).normalized;
     //}
 
+    //種の消滅情報を受信する
+    public void ReceptionSeedDestroy(int number)
+    {
+        seedObjects[number].SetActive(false);
+        seedObjects[number].transform.position = Vector3.zero;
+    }
+
+    //受信した種の情報を入力するメソッド
+    public void ReceptionSeedDataInput(List<int> numbers,
+                                       MyVector3[] position,
+                                       MyQuaternion[] quaternion)
+    {
+        int size = numbers.Count;
+        for(int i = 0; i < size; i++)
+        {
+            seedObjects[numbers[i]].SetActive(true);
+            seedObjects[numbers[i]].transform.position = position[i].ToUnityVector3();
+            seedObjects[numbers[i]].transform.rotation = quaternion[i].ToUnityQuaternion();
+        }
+    }
+
+    //情報を送信する種の選別用メソッド
+    private List<int> CheckTransmissionSeedCount()
+    {
+        int size = seedObjects.Length;
+        List<int> numbers = new List<int>();
+        for(int i = 0; i < size; i++)
+        {
+            if (!seedObjects[i].activeSelf) continue;
+            numbers.Add(i);
+        }
+        return numbers;
+    }
+
+    //種の情報を送信するメソッド
+    private void SeedDataTransmission()
+    {
+        if (!myConstrollerInstance.isMulti) return;
+        List<int> numbers = CheckTransmissionSeedCount();
+        MyVector3[] position = new MyVector3[numbers.Count];
+        MyQuaternion[] quaternion = new MyQuaternion[numbers.Count];
+        for(int i = 0; i < numbers.Count; i++)
+        {
+            position[i] = seedObjects[numbers[i]].transform.position.ToMyVector3();
+            quaternion[i] = seedObjects[numbers[i]].transform.rotation.ToMyQuaternion();
+        }
+        myConstrollerInstance.me.SeedDataTransmission(numbers, position, quaternion);
+    }
+
     //種の発射用メソッド
     private void ShotSeed()
     {
         if (isRate) return;
         isRate = true;
         seedObjects[seedNumber].SetActive(true);
-        //Vector3 shotPos = player.position + Vector3.up * 0.5f;
-        //float rotX = Camera.main.transform.rotation.x - correctionX;
-        //float rotY = Camera.main.transform.rotation.y;
-        //float rotZ = Camera.main.transform.rotation.z;
-        //float rotW = Camera.main.transform.rotation.w;
-        //Quaternion shotRot = isTarget ? Quaternion.LookRotation(targetVec) :
-        //                                  new Quaternion(rotX, rotY, rotZ, rotW);
         seedObjects[seedNumber].transform.position = shotTransform.position;
         seedObjects[seedNumber].transform.GetChild(0).transform.rotation
             = shotTransform.rotation;
         Vector3 shotVec = shotTransform.forward;
-        seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot(damage, shotVec);
+        seedObjects[seedNumber].GetComponent<SunflowerSeed>().Shot(damage, shotVec, seedNumber);
         shotCallBack((int)GameSE.Shot);
         seedNumber++;
         seed--;
+        SeedDataTransmission();
         if (seedNumber < seedCount) return;
         seedNumber = 0;
     }
@@ -154,6 +201,7 @@ public class SeedManager
     public SeedManager(Transform inPlayer, GameObject inSeedPrefab,
                        int inMaxSeed, int inSeedCount)
     {
+        myConstrollerInstance = MagicOnionController.GetInstance;
         player = inPlayer;
         seedPrefab = inSeedPrefab;
         maxSeed = inMaxSeed;

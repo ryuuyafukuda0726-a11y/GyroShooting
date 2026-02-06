@@ -190,12 +190,12 @@ public class GameManager : MonoBehaviour
     //ゲーム開始待機状態送信用メソッド
     private void StayGameStart()
     {
-        if (myControllerInstance == null || !myControllerInstance.isMulti)
+        if (/*myControllerInstance == null || */!myControllerInstance.isMulti)
         {
             SetPlayerRandomPos();
             myGameDelegate = InGameEasing;            
         }
-        else if (myControllerInstance.isMulti)
+        else/* if (myControllerInstance.isMulti)*/
         {
             if (isStay) return;
             myControllerInstance.receiver.otherPlayersParent = multiPlayerParent;
@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour
     private void SetPlayerRandomPos()
     {
         int size = 1;
-        if (myControllerInstance != null && 
+        if (/*myControllerInstance != null &&*/ 
             myControllerInstance.isMulti) size += myControllerInstance.otherPlayers.Count;
         List<Transform> posList = new List<Transform>();
         for (int i = 0; i < playerSpawnPoint.childCount; i++)
@@ -271,11 +271,13 @@ public class GameManager : MonoBehaviour
     //終了メソッド
     private void End()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            SceneManager.LoadScene("TitleScene");
-        }
         Debug.Log("終了");
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        if (/*myControllerInstance != null || */myControllerInstance.isMulti)
+        {
+            myControllerInstance.Leave();
+        }
+        SceneManager.LoadScene("TitleScene");
     }
 
     // Update is called once per frame

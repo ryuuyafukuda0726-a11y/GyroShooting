@@ -30,7 +30,8 @@ public class MultiPlayer : MonoBehaviour
     private int maxSeed = 0;
     [SerializeField]
     private int seedCount = 0;
-    private SeedManager seedManagerScript;
+    [NonSerialized]
+    public SeedManager seedManagerScript;
     [SerializeField]
     private int damageValue = 0;
     private int damage = 0;
@@ -108,9 +109,9 @@ public class MultiPlayer : MonoBehaviour
     //初期設定用メソッド
     public void Init(GameAudioSource inAudioSource)
     {
-        //SeedInit(inAudioSource);
-        //FeedingBoxInit();
-        //damage = damageValue;
+        SeedInit(inAudioSource);
+        FeedingBoxInit();
+        damage = damageValue;
 
         //move = GetComponent<PlayerInput>().actions["Move"];
         //playerCameraScript = playerCamera.GetComponent<PlayerCamera>();
@@ -228,7 +229,7 @@ public class MultiPlayer : MonoBehaviour
             backTime = 0.0f;
             isKnockBack = false;
         }
-        transform.Translate(knockBackVec * 0.25f * Time.deltaTime);
+        transform.Translate(knockBackVec /* 0.25f*/ * Time.deltaTime);
     }
 
     //プレイ用メソッド
