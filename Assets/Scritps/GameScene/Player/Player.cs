@@ -104,7 +104,8 @@ public class Player : MonoBehaviour
         seedManagerScript = new SeedManager(transform,
                                             seedPrefab,
                                             maxSeed,
-                                            seedCount);
+                                            seedCount,
+                                            PlayerPrefs.GetString("PlayerID"));
         seedManagerScript.Init(shotTransform);
         //seedManagerScript.getTargetCallBack = playerCameraScript.GetTarget;
         seedManagerScript.shotCallBack = inAudioSource.PlaySECallBack;
@@ -284,7 +285,7 @@ public class Player : MonoBehaviour
         }
         if (refreshTime % healTime <= 0.5f) isRefresh = true;
         else TimeHeal();
-        Debug.Log((int)refreshTime % healTime);
+        //Debug.Log((int)refreshTime % healTime);
     }
 
     //マルチの確認用メソッド
@@ -304,6 +305,7 @@ public class Player : MonoBehaviour
         lifeGageDisplayCallBack(life);
         Die();
         playerCameraScript.Play(transform.position);
+        seedManagerScript.SeedDataTransmission();
         if (isDie) return;
         Input();
         Move();

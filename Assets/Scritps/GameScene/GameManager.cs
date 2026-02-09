@@ -176,10 +176,11 @@ public class GameManager : MonoBehaviour
         ItemInit();
         HamsterInit();
         playerScript.Init(audioSourceScript);
-        multiPlayerParentScript.Init();
+        multiPlayerParentScript.Init(audioSourceScript);
         lifeGageScript.Init();
         bulletGageScript.Init();
         sceneChangeUIScript.Init();
+        sunFlowerScript.Init();
         sunFlowerGageScript.Init(sunFlowerScript.GetMaxHP());
         SetPlayerCallBack();
         SetMobileControlCallBack();
@@ -199,9 +200,9 @@ public class GameManager : MonoBehaviour
         {
             if (isStay) return;
             myControllerInstance.receiver.otherPlayersParent = multiPlayerParent;
-            Debug.Log("ä÷êîÇÃìoò^ëO" + myControllerInstance.receiver.OnPlayStartCallBack);
+            //Debug.Log("ä÷êîÇÃìoò^ëO" + myControllerInstance.receiver.OnPlayStartCallBack);
             myControllerInstance.receiver.OnPlayStartCallBack = PlayStart;
-            Debug.Log("ä÷êîÇÃìoò^ëO" + myControllerInstance.receiver.OnPlayStartCallBack);
+            //Debug.Log("ä÷êîÇÃìoò^ëO" + myControllerInstance.receiver.OnPlayStartCallBack);
             myControllerInstance.me.StayGameStart();
             isStay = true;
         }

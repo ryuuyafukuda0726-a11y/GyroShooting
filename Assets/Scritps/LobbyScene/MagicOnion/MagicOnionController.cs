@@ -41,7 +41,7 @@ public class MagicOnionController : MonoBehaviour
         receiver.OnCheckHostCallBack = (inHost) => {
             isHost = inHost;
             setStartButtonCallBack(inHost);
-            Debug.Log("ホスト : " + inHost);
+            //Debug.Log("ホスト : " + inHost);
         };
     }
 

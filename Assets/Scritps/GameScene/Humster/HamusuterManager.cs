@@ -61,7 +61,7 @@ public class HamusuterManager
     {
         myControllerInstance = MagicOnionController.GetInstance;
         CreateHamster();
-        if (/*myControllerInstance == null || */myControllerInstance.isHost) return;
+        if (!myControllerInstance.isMulti || myControllerInstance.isHost) return;
         myControllerInstance.receiver.OnHamsterMoveCallBack
             = ReceptionHamsterMoveInput;
         myControllerInstance.receiver.OnHamsterDestroyCallBack
@@ -109,6 +109,7 @@ public class HamusuterManager
         hamsterScript.SetPlayer(player);
         hamsterScript.SetCallBack();
         hamsterScript.destroyCallBack = DestroyHamster;
+        hamsterScript.number = hamsterNumber;
         hamsters.Add(hamsterObjects[hamsterNumber]);
         SetTrapList();
         //hamsterScripts.Add(hamsterScript);
@@ -124,23 +125,38 @@ public class HamusuterManager
             if(isFlag) SetListSpawnHamster();
             hamsterNumber++;
             if (hamsterNumber == hamsterMaxCount) hamsterNumber = 0;
-        }        
+        }
+    }
+
+    //情報を送信するハムスターの選別用メソッド
+    private List<int> CheckTransmissionHamsterCount()
+    {
+        int size = hamsterObjects.Length;
+        List<int> numbers = new List<int>();
+        for (int i = 0; i < size; i++)
+        {
+            if (!hamsterObjects[i].activeSelf) continue;
+            numbers.Add(i);
+        }
+        return numbers;
     }
 
     //ハムスターの位置情報を送信するメソッド
     private void HamsterDataTransmission()
     {
-        if (!/*CheckHost()*/myControllerInstance.isHost) return;
-        int size = hamsters.Count;
-        if (size <= 0) return;
-        MyVector3[] pos = new MyVector3[size];
-        MyQuaternion[] rot = new MyQuaternion[size];
-        for (int i = 0; i < size; i++)
+        if (!myControllerInstance.isHost) return;
+        List<int> numbers = CheckTransmissionHamsterCount();
+        if (numbers.Count <= 0) return;
+        MyVector3[] pos = new MyVector3[numbers.Count];
+        MyQuaternion[] rot = new MyQuaternion[numbers.Count];
+        int[] hp = new int[numbers.Count];
+        for (int i = 0; i < numbers.Count; i++)
         {
-            pos[i] = hamsterObjects[i].transform.position.ToMyVector3();
-            rot[i] = hamsterObjects[i].transform.rotation.ToMyQuaternion();
+            pos[i] = hamsterObjects[numbers[i]].transform.position.ToMyVector3();
+            rot[i] = hamsterObjects[numbers[i]].transform.rotation.ToMyQuaternion();
+            hp[i] = hamsterObjects[numbers[i]].GetComponent<Hamster>().hp;
         }
-        myControllerInstance.me.HamsterDataTransmission(size, pos, rot);
+        myControllerInstance.me.HamsterDataTransmission(numbers, pos, rot, hp);
     }
 
     //ハムスターのプレイ中処理用メソッド
@@ -156,15 +172,18 @@ public class HamusuterManager
     }
 
     //受信したハムスターの移動を入力用メソッド
-    private void ReceptionHamsterMoveInput(int inCount, 
+    private void ReceptionHamsterMoveInput(List<int> inNumber, 
                                            MyVector3[] position, 
-                                           MyQuaternion[] quaternion)
+                                           MyQuaternion[] quaternion,
+                                           int[] inHp)
     {
-        for (int i = 0; i < inCount; i++) 
+        for (int i = 0; i < inNumber.Count; i++) 
         {
-            hamsterObjects[i].SetActive(true);
-            hamsterObjects[i].transform.position = position[i].ToUnityVector3();
-            hamsterObjects[i].transform.rotation = quaternion[i].ToUnityQuaternion();
+            hamsterObjects[inNumber[i]].SetActive(true);
+            hamsterObjects[inNumber[i]].transform.position = position[i].ToUnityVector3();
+            hamsterObjects[inNumber[i]].transform.rotation = quaternion[i].ToUnityQuaternion();
+            hamsterObjects[inNumber[i]].GetComponent<Hamster>().hp = inHp[i];
+            hamsterObjects[inNumber[i]].GetComponent<Hamster>().Play();
         }
     }
 
@@ -189,12 +208,19 @@ public class HamusuterManager
     //プレイ用メソッド
     public void Play()
     {
+        HamsterPlay();
         if (/*myControllerInstance != null &&*/
            (myControllerInstance.isMulti && 
            !myControllerInstance.isHost)) return;
-        HamsterPlay();
         if (hamsters.Count >= spawnHamsterCount) return;
         if (SpawnInterval()) SpawnHamster();
+    }
+
+    //撃破情報の送信用メソッド
+    private void DestroyTransmission(int number)
+    {
+        if (!MagicOnionController.GetInstance.isHost) return;
+        myControllerInstance.me.DestroyHamster(number);
     }
 
     //撃破時用メソッド
@@ -203,7 +229,7 @@ public class HamusuterManager
         for(int i = 0; i < hamsters.Count; i++)
         {
             if (hamsters[i].gameObject != inTransform.gameObject) continue;
-            myControllerInstance.me.DestroyHamster(i);
+            DestroyTransmission(hamsters[i].GetComponent<Hamster>().number);
             hamsters.RemoveAt(i);
         }
     }

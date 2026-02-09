@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Humster
   trapRange: 10
   maxHp: 10
+  displayTime: 10
   moveSpeed: 1.75
   maxInterval: 4
   minInterval: 10

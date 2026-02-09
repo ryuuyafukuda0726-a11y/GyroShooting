@@ -85,7 +85,8 @@ public class MultiPlayer : MonoBehaviour
         seedManagerScript = new SeedManager(transform,
                                             seedPrefab,
                                             maxSeed,
-                                            seedCount);
+                                            seedCount,
+                                            myData.userId);
         seedManagerScript.Init(shotTransform);
         seedManagerScript.shotCallBack = inAudioSource.PlaySECallBack;
     }

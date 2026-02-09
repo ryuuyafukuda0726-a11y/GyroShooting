@@ -62,9 +62,10 @@ public class MyGameHubClient
     //種の情報を送信する
     public async void SeedDataTransmission(List<int> numbers,
                                            MyVector3[] position,
-                                           MyQuaternion[] quaternion)
+                                           MyQuaternion[] quaternion, 
+                                           int[] damage)
     {
-        await _client.SeedDataAsync(userId, numbers, position, quaternion);
+        await _client.SeedDataAsync(userId, numbers, position, quaternion, damage);
     }
 
     //種の消滅情報を送信する
@@ -74,15 +75,24 @@ public class MyGameHubClient
     }
 
     //ハムスターの位置情報を送信する
-    public async void HamsterDataTransmission(int count, MyVector3[] pos, MyQuaternion[] rot)
+    public async void HamsterDataTransmission(List<int> numbers,
+                                              MyVector3[] pos,
+                                              MyQuaternion[] rot,
+                                              int[] hp)
     {
-        await _client.HamsterMoveAsync(count, pos, rot);
+        await _client.HamsterMoveAsync(numbers, pos, rot, hp);
     }
 
     //ハムスターの撃破を送信する
     public async void DestroyHamster(int number)
     {
         await _client.HamsterDestroyAsync(number);
+    }
+
+    //ひまわりの耐久値を送信する
+    public async void SunFlowerHP(int hp)
+    {
+        await _client.SunFlowerHPAsync(hp);
     }
 
     //async void Update()

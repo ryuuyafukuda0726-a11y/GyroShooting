@@ -216,7 +216,7 @@ public class LobbyManager : MonoBehaviour
         {
             float value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
             loadBar.transform.localScale = new Vector3(value, 1.0f, 1.0f);
-            Debug.Log("進行度 : " + value + "%");
+            //Debug.Log("進行度 : " + value + "%");
             yield return null;
         }
 

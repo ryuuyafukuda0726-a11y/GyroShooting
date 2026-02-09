@@ -17,8 +17,9 @@ public class MyGameHubReceiver : IMyGameHubReceiver
     public Action OnGameStartCallBack;
     public Action OnLeavePlayerCallBack;
     public Action OnPlayStartCallBack;
-    public Action<int, MyVector3[], MyQuaternion[]> OnHamsterMoveCallBack;
+    public Action<List<int>, MyVector3[], MyQuaternion[], int[]> OnHamsterMoveCallBack;
     public Action<int> OnHamsterDestroyCallBack;
+    public Action<int> OnSunFlowerHPCallBack;
     //通信用変数
     private MagicOnionController myControllerInstance;
 
@@ -32,7 +33,7 @@ public class MyGameHubReceiver : IMyGameHubReceiver
 
     public void OnJoin(string userId, string userName, bool inHost)
     {
-        Debug.Log("Join Player:" + userName);
+        //Debug.Log("Join Player:" + userName);
         if (selfId == userId)
         {            // 自分の場合は、既にいるので何もしないreturn;
             OnCheckHostCallBack(inHost);
@@ -47,7 +48,7 @@ public class MyGameHubReceiver : IMyGameHubReceiver
 
     public void OnLeave(string userId)
     {
-        Debug.Log("Leave Player:" + userId);
+        //Debug.Log("Leave Player:" + userId);
         myControllerInstance.DeleteLeavePlayer(userId);
         OnLeavePlayerCallBack();
         if (_players.TryGetValue(userId, out GameObject player)) GameObject.Destroy(player);
@@ -55,7 +56,7 @@ public class MyGameHubReceiver : IMyGameHubReceiver
 
     public void OnInitializeRoom(List<MyPlayerData> users)
     {
-        Debug.Log("部屋が初期化されました");
+        //Debug.Log("部屋が初期化されました");
         myControllerInstance.SetCommunicatingPlayer(users);
 
         //myControllerInstance.SetCommunicatingPlayer(userId, userName);
@@ -92,14 +93,17 @@ public class MyGameHubReceiver : IMyGameHubReceiver
     public void OnSeedData(string userId,
                            List<int> numbers,
                            MyVector3[] position,
-                           MyQuaternion[] quaternion)
+                           MyQuaternion[] quaternion,
+                           int[] damage)
     {
         if (selfId == userId) return;
+        //Debug.Log("種の情報が送られてきました。");
         Transform user = GetUser(userId);
         user.GetComponent<MultiPlayer>().seedManagerScript.ReceptionSeedDataInput(
             numbers,
             position,
-            quaternion);
+            quaternion,
+            damage);
     }
 
     public void OnSeedDestroy(string userId, int number)
@@ -140,15 +144,24 @@ public class MyGameHubReceiver : IMyGameHubReceiver
         if (selfId == user.userId) OnCheckHostCallBack(inHost);
     }
 
-    public void OnHamsterMove(int count, MyVector3[] position, MyQuaternion[] quaternion)
+    public void OnHamsterMove(List<int> numbers,
+                              MyVector3[] position,
+                              MyQuaternion[] quaternion,
+                              int[] hp)
     {
         if (myControllerInstance.isHost) return;
-        OnHamsterMoveCallBack(count, position, quaternion);
+        OnHamsterMoveCallBack(numbers, position, quaternion, hp);
     }
 
     public void OnHamsterDestroy(int number)
     {
         if (myControllerInstance.isHost) return;
         OnHamsterDestroyCallBack(number);
+    }
+
+    public void OnSunFlowerHP(int hp)
+    {
+        if (myControllerInstance.isHost) return;
+        OnSunFlowerHPCallBack(hp);
     }
 }

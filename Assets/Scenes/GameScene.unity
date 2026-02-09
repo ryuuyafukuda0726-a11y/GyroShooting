@@ -2826,7 +2826,7 @@ MonoBehaviour:
   time: 90
   audioSource: {fileID: 83603699}
   hamsterPrefab: {fileID: 3524578030236818814, guid: 2dd2271434aabff43a46361f66723f56, type: 3}
-  spawnCount: 30
+  spawnCount: 1
   playerObject: {fileID: 392135725}
   playerSpawnPoint: {fileID: 588263548}
   multiPlayerParent: {fileID: 1885175128}
@@ -6332,7 +6332,7 @@ PrefabInstance:
       objectReference: {fileID: 392135732}
     - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: breakSpeed
-      value: 0.25
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 6902263385679380352, guid: 5fd71501392ab8b4580852551c134ee8, type: 3}
       propertyPath: chargeDistance

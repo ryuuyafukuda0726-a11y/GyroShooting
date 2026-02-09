@@ -30,12 +30,28 @@ public class SunFlower : MonoBehaviour
     public Action<float> sunFlowerGageDisplayCallBack;
     public Action chargeBulletCallBack;
     public Action<bool> destroyCallBack;
+    //通信用変数
+    private MagicOnionController myControllerInstance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        myControllerInstance = MagicOnionController.GetInstance;
+    }
+
+    //コールバックの設定用メソッド
+    private void SetCallBack()
+    {
+        if (!myControllerInstance.isMulti || myControllerInstance.isHost) return;
+        myControllerInstance.receiver.OnSunFlowerHPCallBack = ReceptionSunFlowerHP;
+    }
+
+    //初期設定用メソッド
+    public void Init()
+    {
         hp = maxHp;
         easingSequence = EasingSequence.SetEasing;
+        SetCallBack();
     }
 
     //距離の判定用メソッド
@@ -63,6 +79,7 @@ public class SunFlower : MonoBehaviour
         startRot = transform.rotation;
         endRot = new Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
         percent = minPercent;
+        //myControllerInstance.me.SunFlowerDestroy();
     }
 
     //イージング用メソッド
@@ -102,10 +119,18 @@ public class SunFlower : MonoBehaviour
         EasingControl();
     }
 
+    //耐久値の送信用メソッド
+    private void HpTransmission()
+    {
+        if (!MagicOnionController.GetInstance.isHost) return;
+        myControllerInstance.me.SunFlowerHP(hp);
+    }
+
     //プレイ用メソッド
     public void Play()
     {
         Destroy();
+        HpTransmission();
         sunFlowerGageDisplayCallBack(hp);
         if (hp <= 0) return;
         PlayerChargeBullet();
@@ -122,6 +147,12 @@ public class SunFlower : MonoBehaviour
     public float GetMaxHP()
     {
         return maxHp;
+    }
+
+    //受信した耐久値の入力用メソッド
+    private void ReceptionSunFlowerHP(int inHp)
+    {
+        hp = inHp;
     }
 
     // Update is called once per frame

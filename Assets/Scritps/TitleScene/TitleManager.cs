@@ -102,11 +102,11 @@ public class TitleManager : MonoBehaviour
         {
             float value = Mathf.Clamp01(asyncLoad.progress / 0.9f);
             loadBar.transform.localScale = new Vector3(value, 1.0f, 1.0f);
-            Debug.Log("進行度 : " + value + "%");
+            //Debug.Log("進行度 : " + value + "%");
             yield return null;
         }
 
-        Debug.Log("遷移完了");
+        //Debug.Log("遷移完了");
     }
 
     //ロビーシーンへの遷移用メソッド

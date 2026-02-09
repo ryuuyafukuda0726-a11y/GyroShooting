@@ -6,6 +6,8 @@ using UnityEngine.AI;
 //ハムスター用スクリプトクラス
 public class Hamster : MonoBehaviour
 {
+    [NonSerialized]
+    public int number = 0;
     //アニメーション用変数
     private Animator myAnimator;
     //ターゲット判定用変数
@@ -17,12 +19,14 @@ public class Hamster : MonoBehaviour
     private NavMeshAgent agent;
     private Transform target;
     private Transform player;
-    private List<GameObject> trapList;
+    private List<GameObject> trapList = new List<GameObject>();
     private Transform trap;
     //HP用変数
     [SerializeField]
     private int maxHp = 0;
-    private int hp = 0;
+    [NonSerialized]
+    public int hp = 0;
+    private int beforHp = 0;
     //移動用変数
     private float idleInterval = 0.0f;
     [SerializeField]
@@ -59,6 +63,7 @@ public class Hamster : MonoBehaviour
     void Start()
     {
         myControllerInstance = MagicOnionController.GetInstance;
+        beforHp = maxHp;
         //agent = GetComponent<NavMeshAgent>();
         //agent.speed = moveSpeed;
         //myAnimator = transform.GetChild(0).GetComponent<Animator>();
@@ -129,7 +134,20 @@ public class Hamster : MonoBehaviour
             return false;
         }
         agent.destination = trap.position;
+        Debug.Log("トラップ発見");
         return true;
+    }
+
+    Vector3 A()
+    {
+        //Debug.Log("プレイヤー発見");
+        return player.position;
+    }
+
+    Vector3 B()
+    {
+        //Debug.Log("ひまわり発見");
+        return target.position;
     }
 
     //目的地設定用メソッド
@@ -137,7 +155,7 @@ public class Hamster : MonoBehaviour
     {
         if (!FeedingBoxDiscovery())
         {
-            agent.destination = PlayerDiscovery() ? player.position : target.position;
+            agent.destination = PlayerDiscovery() ? A() : B();
         }
     }
 
@@ -237,14 +255,27 @@ public class Hamster : MonoBehaviour
         hungryGageScript.ControlDisplayTime();
     }
 
+    //前フレームとの体力の差を確認
+    private void CheckBeforFrameHP()
+    {
+        Debug.Log("体力 : " + hp);
+        if (!myControllerInstance.isMulti || myControllerInstance.isHost) return;
+        if (hp == beforHp) return;
+        Debug.Log("体力減少");
+        beforHp = hp;
+        hungryGageScript.Display(hp * 10);        
+    }
+
     //プレイ用メソッド
     public void Play()
     {
+        HungryGage();
+        CheckBeforFrameHP();
+        if (myControllerInstance.isMulti && !myControllerInstance.isHost) return;
         SetDestination();
         Attack();
         Move();
         Idle();
-        HungryGage();
     }
 
     //トラップのリスト登録用メソッド
@@ -283,6 +314,8 @@ public class Hamster : MonoBehaviour
     {
         hp -= inDamageValue;
         hungryGageScript.Display(hp * 10);
+        Debug.Log("ダメージ : " + inDamageValue);
+        Debug.Log("体力 : " + hp);
         if (hp > 0) return;
         ItemDrop();
         Destroy();
@@ -291,6 +324,7 @@ public class Hamster : MonoBehaviour
     //接触した種の消滅情報を送信する
     private void HitSeedDestroyTransmission(SunflowerSeed seed)
     {
+        if (!myControllerInstance.isMulti) return;
         myControllerInstance.me.SeedDestroyTransmission(seed.number);
     }
 

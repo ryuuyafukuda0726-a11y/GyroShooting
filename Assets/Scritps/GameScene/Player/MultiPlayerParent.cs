@@ -6,7 +6,9 @@ public class MultiPlayerParent : MonoBehaviour
 {
     //プレイヤー用変数
     [SerializeField]
-    public Transform[] players = new Transform[3]; 
+    public Transform[] players = new Transform[3];
+    //オーディオソース用変数
+    private GameAudioSource audioSource;
     //通信用変数
     private MagicOnionController myControllerInstance = null;
 
@@ -22,6 +24,7 @@ public class MultiPlayerParent : MonoBehaviour
         players[inNumber].gameObject.SetActive(true);
         players[inNumber].GetComponent<MultiPlayer>().myData
             = myControllerInstance.otherPlayers[inNumber];
+        players[inNumber].GetComponent<MultiPlayer>().Init(audioSource); ;
     }
 
     //すべての子オブジェクトのアクティブ状態を登録
@@ -46,8 +49,9 @@ public class MultiPlayerParent : MonoBehaviour
     }
 
     //初期設定用メソッド
-    public void Init()
+    public void Init(GameAudioSource inAs)
     {
+        audioSource = inAs;
         AllChildSetActive();
     }
 

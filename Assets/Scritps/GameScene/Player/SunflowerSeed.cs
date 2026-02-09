@@ -7,7 +7,8 @@ public class SunflowerSeed : MonoBehaviour
     [NonSerialized]
     public int number = 0;
     //ダメージ用変数
-    private int damage = 0;
+    [NonSerialized]
+    public int damage = 0;
     //弾速用変数
     [SerializeField]
     private float bulletSpeed = 0.0f;
